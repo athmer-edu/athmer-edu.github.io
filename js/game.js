@@ -175,9 +175,9 @@ function drawCert(cv,o){
   stats.forEach((sv,i)=>{const cx=CX+(1-i)*250,y=770,w=220,h=96;x.fillStyle="rgba(255,255,255,.75)";x.strokeStyle="rgba(201,150,43,.55)";x.lineWidth=1.5;x.beginPath();x.roundRect(cx-w/2,y,w,h,18);x.fill();x.stroke();txt(sv[0],cx,y+50,'800 40px Alexandria',INK,"ltr");txt(sv[1],cx,y+80,'500 20px "IBM Plex Sans Arabic"',SOFT)});
   /* التوقيع والتاريخ */
   const SX=CX+300,DX=CX-300,LY=1000;
-  txt(TEACHER,SX,LY-16,'600 58px "Playpen Sans Arabic"',INK);
+  let sf=56;x.font=`600 ${sf}px "Playpen Sans Arabic"`;while(x.measureText(TEACHER).width>330&&sf>34){sf-=2;x.font=`600 ${sf}px "Playpen Sans Arabic"`}txt(TEACHER,SX,LY-16,`600 ${sf}px "Playpen Sans Arabic"`,INK);
   const d=new Date().toLocaleDateString("ar-OM",{year:"numeric",month:"long",day:"numeric"});txt(d,DX,LY-22,'500 30px "IBM Plex Sans Arabic"',INK);
-  x.strokeStyle=INK;x.lineWidth=1.5;[SX,DX].forEach(cx=>{x.beginPath();x.moveTo(cx-140,LY);x.lineTo(cx+140,LY);x.stroke()});
+  x.strokeStyle=INK;x.lineWidth=1.5;[SX,DX].forEach(cx=>{x.beginPath();x.moveTo(cx-175,LY);x.lineTo(cx+175,LY);x.stroke()});
   txt("معلمة المادة",SX,LY+36,'500 22px "IBM Plex Sans Arabic"',SOFT);txt("تاريخ الإتمام",DX,LY+36,'500 22px "IBM Plex Sans Arabic"',SOFT);
   star8(CX,LY-10,16,GOLD,.9);star8(CX,LY-10,7,"#FFFDF7");
 }
