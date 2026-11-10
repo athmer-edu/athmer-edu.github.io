@@ -195,3 +195,131 @@ window.__widgets = () => document.querySelectorAll("[data-widget]").forEach(el =
     el.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{m=b.dataset.m;run()});el.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{s=b.dataset.s;run()});run();
   };
 })();
+
+/* ===== الوحدة الثانية ===== */
+(function(){
+  if(!window.U2ART)return;
+  const st=document.createElement("style");
+  st.textContent=`.u2-tabs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:0 0 10px}
+  .u2-tabs button{border:0;border-radius:10px;padding:7px 12px;font:600 14px var(--body);background:var(--palm-tint);color:var(--palm);cursor:pointer}
+  .u2-tabs button[aria-pressed="true"]{background:var(--palm);color:#fff}
+  .u2-out{border-radius:14px;background:var(--paper);box-shadow:inset 0 0 0 1px var(--rule);padding:12px 16px;margin-top:10px;line-height:1.8;min-height:70px}
+  .u2-out h4{margin:0 0 4px;font:700 17px var(--display);color:var(--palm)}
+  .u2-out .eq{direction:ltr;text-align:center;font:600 15px var(--body);background:var(--sheet);border-radius:8px;padding:6px;margin-top:6px;overflow-x:auto;white-space:nowrap}
+  .u2-fig{background:#fff;border-radius:14px;overflow:hidden;max-width:640px;margin:0 auto}
+  .u2-fig .fz{transition:opacity .25s}
+  .u2-tubes{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  .u2-tubes button{border:0;background:#fff;border-radius:14px;padding:8px;box-shadow:inset 0 0 0 1px var(--rule);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font:600 13px var(--body);max-width:150px;color:#1A2622}
+  .u2-tubes button.on{box-shadow:inset 0 0 0 3px var(--palm)}`;
+  document.head.appendChild(st);
+
+  WIDGETS.extract=el=>{el.className="widget";let k=null;
+    el.innerHTML=`<div class="u2-tabs">${U2ART.METHODS.map(g=>`<button data-k="${g.k}" aria-pressed="false">${g.n.split(" (")[0]}</button>`).join("")}</div><div class="u2-fig"></div><div class="u2-out" aria-live="polite"><span class="soft">اضغطي على طريقة لتعرفي أي الفلزات تُستخلص بها ولماذا.</span></div><div class="w-bar"><span class="w-cap">الجدول 2-2: طرق استخلاص الفلزات حسب نشاطها الكيميائي.</span></div>`;
+    const WHY={el:"فلزات نشطة جدًا، لا يستطيع الكربون اختزالها، وتحتاج طاقة كبيرة تُوفَّر بالكهرباء.",c:"فلزات معتدلة النشاط تقع تحت الكربون، فيختزل الكربون أكاسيدها. خامات الكبريتيد تُسخَّن في الهواء أولًا لتصبح أكاسيد.",s:"النحاس قليل النشاط، يُستخلص بتسخين خام الكبريتيد في الهواء.",n:"غير نشطة كيميائيًا، فتوجد في القشرة الأرضية عناصر منفردة نقية (Native)."};
+    const draw=()=>{el.querySelector(".u2-fig").innerHTML=U2ART.ladder({hl:k});el.querySelectorAll("[data-k]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===k));
+      if(k){const g=U2ART.METHODS.find(x=>x.k===k);el.querySelector(".u2-out").innerHTML=`<h4>${g.n}</h4>${g.m.map(m=>m[1]).join("، ")}<br><b>لماذا؟</b> ${WHY[k]}`}};
+    el.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{k=k===b.dataset.k?null:b.dataset.k;draw()});draw();
+  };
+  WIDGETS.furnace=el=>{el.className="widget";let k=null;const keys=Object.keys(U2ART.FZ);
+    el.innerHTML=`<div class="u2-tabs">${keys.map(z=>`<button data-k="${z}" aria-pressed="false">${U2ART.FZ[z].n.split(":")[0]}</button>`).join("")}</div><div class="u2-fig"></div><div class="u2-out" aria-live="polite"><span class="soft">اضغطي على أي جزء من الفرن أو زر بالأعلى.</span></div><div class="w-bar"><span class="w-cap">الشكل 1-2 والشكل 2-2: الفرن العالي وسلسلة تفاعلاته.</span></div>`;
+    const draw=()=>{const f=el.querySelector(".u2-fig");f.innerHTML=U2ART.furnace({hl:k,click:true});f.querySelectorAll(".fz").forEach(g=>g.onclick=()=>{k=g.dataset.z;draw()});
+      el.querySelectorAll("[data-k]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===k));
+      if(k){const z=U2ART.FZ[k];el.querySelector(".u2-out").innerHTML=`<h4>${z.n}</h4>${z.d}${z.eq?z.eq.split(" • ").map(e=>`<div class="eq">${e}</div>`).join(""):""}`}};
+    el.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{k=b.dataset.k;draw()});draw();
+  };
+  WIDGETS.bos=el=>{el.className="widget";let k=0;
+    el.innerHTML=`<div class="u2-tabs">${["المرحلة (أ)","المرحلة (ب)","المرحلة (ج)"].map((n,i)=>`<button data-k="${i}">${n}</button>`).join("")}</div><div class="u2-fig"></div><div class="u2-out" aria-live="polite"></div><div class="w-bar"><span class="w-cap">الشكل 3-2: عملية الأكسجين الأساسية لصناعة الفولاذ.</span></div>`;
+    const draw=()=>{el.querySelector(".u2-fig").innerHTML=U2ART.bos(k);el.querySelector(".u2-out").innerHTML=U2ART.BOS[k];el.querySelectorAll("[data-k]").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.k===k))};
+    el.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{k=+b.dataset.k;draw()});draw();
+  };
+  WIDGETS.alloyslide=el=>{el.className="widget";
+    el.innerHTML=`<div class="two" style="gap:12px"><div><h4 style="margin:0 0 6px;text-align:center;font-family:var(--display)">فلز نقي</h4><div class="lp"></div></div><div><h4 style="margin:0 0 6px;text-align:center;font-family:var(--display)">سبيكة</h4><div class="la"></div></div></div><div style="text-align:center;margin-top:10px"><button class="btn sm" id="push">اطرقي (طبّقي قوة)</button> <button class="btn ghost sm" id="rst">أعيدي</button></div><div class="u2-out" aria-live="polite"><span class="soft">اضغطي «اطرقي» وقارني بين التركيبين.</span></div>`;
+    const draw=(s1,s2)=>{el.querySelector(".lp").innerHTML=U2ART.lattice("pure",s1);el.querySelector(".la").innerHTML=U2ART.lattice("alloy",s2)};draw(0,0);
+    el.querySelector("#push").onclick=()=>{let f=0;const go=()=>{f+=2;draw(Math.min(f,36),Math.min(f,4));if(f<36)requestAnimationFrame(go);else el.querySelector(".u2-out").innerHTML="في الفلز النقي الذرات متشابهة الحجم وترتيبها منتظم، فتنزلق الطبقات بسهولة. أما في السبيكة فذرات العنصر المختلف تُخلّ بالترتيب المنتظم، فيصعب انزلاق الطبقات: <b>أقل مرونة وأكثر صلادة</b>."};go()};
+    el.querySelector("#rst").onclick=()=>{draw(0,0)};
+  };
+  WIDGETS.rusttubes=el=>{el.className="widget";const seen=new Set();
+    el.innerHTML=`<div class="u2-tubes">${U2ART.TUBES.map((T,i)=>`<button data-i="${i}">${U2ART.tube(i,false,96)}<b>${T.n}</b><span>${T.c}</span></button>`).join("")}</div><div style="text-align:center;margin-top:8px"><button class="btn sm" id="wk">بعد أسبوع…</button></div><div class="u2-out" aria-live="polite"><span class="soft">توقّعي أولًا: في أي الأنابيب ستصدأ المسامير؟ اضغطي على أنبوبة، أو «بعد أسبوع» لكشف الكل.</span></div><div class="w-bar"><span class="w-cap">الشكل 5-2: تجربة استقصاء العوامل التي تؤدي إلى تكوّن الصدأ.</span></div>`;
+    const show=i=>{const b=el.querySelector(`[data-i="${i}"]`),T=U2ART.TUBES[i];b.querySelector("svg").outerHTML=U2ART.tube(i,true,96);b.classList.add("on");el.querySelector(".u2-out").innerHTML=`<b>${T.n}: ${T.rust?"صدأ":"لا صدأ"}</b> — ${T.why}`};
+    el.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>show(+b.dataset.i));
+    el.querySelector("#wk").onclick=()=>{U2ART.TUBES.forEach((_,i)=>show(i));el.querySelector(".u2-out").innerHTML="<b>النتيجة:</b> يصدأ الحديد فقط بوجود <b>الماء والأكسجين معًا</b> (الأنبوبتان 1 و 4)."};
+  };
+  WIDGETS.cuo=el=>{el.className="widget";let d=false;
+    el.innerHTML=`<div class="u2-fig"></div><div style="text-align:center;margin-top:8px"><button class="btn sm" id="ht">سخّني 5 دقائق</button></div><div class="u2-out" aria-live="polite"></div><div class="w-bar"><span class="w-cap">النشاط 1-2: استخلاص النحاس من أكسيده باستخدام الفحم.</span></div>`;
+    const draw=()=>{el.querySelector(".u2-fig").innerHTML=U2ART.cuo(d);el.querySelector(".u2-out").innerHTML=d?`<b>الملاحظات:</b> يظهر نحاس بُنّي محمر حيث يلتقي المسحوقان، ويتعكّر ماء الجير بسبب ثاني أكسيد الكربون.<div class="eq">2CuO(s) + C(s) → 2Cu(s) + CO₂(g)</div>`:"طبقة أكسيد النحاس (II) السوداء في الأسفل، وفوقها طبقة مسحوق الفحم دون خلط.";el.querySelector("#ht").textContent=d?"أعيدي التجربة":"سخّني 5 دقائق"};
+    el.querySelector("#ht").onclick=()=>{d=!d;draw()};draw();
+  };
+})();
+
+/* ===== الوحدة الثانية ===== */
+(function(){
+  const st=document.createElement("style");
+  st.textContent=`.ext{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:14px}@media (max-width:700px){.ext{grid-template-columns:1fr}}
+  .ext ol{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+  .ext li button{width:100%;display:flex;gap:10px;align-items:center;border:0;border-radius:10px;padding:6px 12px;font:600 15px var(--body);cursor:pointer;color:var(--ink);text-align:start;background:var(--c);}
+  .ext li button b{font:700 16px var(--display);min-width:30px;direction:ltr;text-align:center}
+  .ext li button[aria-pressed="true"]{outline:3px solid var(--palm);outline-offset:1px}
+  .ext-card{border-radius:14px;background:var(--paper);box-shadow:inset 0 0 0 1px var(--rule);padding:14px 16px;align-self:start}
+  .ext-card h4{margin:0 0 6px;font:700 19px var(--display);color:var(--palm)}.ext-card .m{display:inline-block;border-radius:999px;padding:3px 12px;font-weight:700;margin-bottom:8px}
+  .ext-card .eq{direction:ltr;font:600 15px var(--body);background:var(--sheet);border-radius:8px;padding:5px 8px;margin-top:6px;overflow-x:auto;white-space:nowrap}
+  .fur{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:14px;align-items:start}@media (max-width:700px){.fur{grid-template-columns:1fr}}
+  .fur svg{width:100%;max-width:380px;display:block;margin:auto}.fur .z{cursor:pointer}.fur .z:hover rect,.fur .z.on rect{stroke:var(--date);stroke-width:4}
+  .alloy-w{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media (max-width:600px){.alloy-w{grid-template-columns:1fr}}
+  .alloy-w figure{margin:0;text-align:center;background:var(--paper);border-radius:14px;padding:10px;box-shadow:inset 0 0 0 1px var(--rule)}
+  .alloy-w svg{width:100%;max-width:300px}.alloy-w figcaption{font-weight:700;margin-top:4px}
+  .rust-t{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}@media (max-width:600px){.rust-t{grid-template-columns:repeat(2,1fr)}}
+  .rust-t button{border:0;background:var(--paper);border-radius:14px;padding:8px;box-shadow:inset 0 0 0 1px var(--rule);cursor:pointer;font:600 14px var(--body);color:var(--ink)}
+  .rust-t button svg{width:100%;max-width:110px;display:block;margin:auto}.rust-t button.on{box-shadow:inset 0 0 0 3px var(--palm)}`;
+  document.head.appendChild(st);
+
+  /* 2-1: طريقة الاستخلاص حسب الموقع في السلسلة */
+  const EX=[["K","البوتاسيوم","e"],["Na","الصوديوم","e","الملح الصخري (NaCl)"],["Ca","الكالسيوم","e"],["Mg","الماغنيسيوم","e"],["Al","الألومنيوم","e","البوكسيت (Al₂O₃)"],["C","الكربون","x"],["Zn","الخارصين","c","بلند الخارصين (ZnS)","2ZnO(s) + C(s) → 2Zn(s) + CO₂(g)"],["Fe","الحديد","c","الهيماتيت (Fe₂O₃)","Fe₂O₃(s) + 3CO(g) → 2Fe(l) + 3CO₂(g)"],["Sn","القصدير","c","حجر القصدير (SnO₂)","SnO₂(s) + C(s) → Sn(s) + CO₂(g)"],["Pb","الرصاص","c","الجالينا (PbS)","2PbO(s) + C(s) → 2Pb(s) + CO₂(g)"],["Cu","النحاس","s","بيريت النحاس (CuFeS₂)","2CuO(s) + C(s) → 2Cu(s) + CO₂(g)"],["Ag","الفضة","n"],["Au","الذهب","n"]];
+  const MT={e:["التحليل الكهربائي للمركب المصهور","#F4D9CF","فلز نشط جدًا (أنشط من الكربون)، فلا يختزله الكربون، ويحتاج طاقة كبيرة توفّرها الكهرباء."],c:["اختزال الأكسيد بالكربون","#D9ECDF","فلز معتدل النشاط (تحت الكربون)، فيختزل الكربون أو أحادي أكسيد الكربون أكسيده. خام الكبريتيد يُسخَّن في الهواء أولًا ليتحوّل إلى أكسيد."],s:["تسخين خام الكبريتيد في الهواء (ثم الاختزال)","#D6E9F2","أقل نشاطًا، ويوجد أحيانًا بصورة طبيعية نقية."],n:["يوجد بصورة طبيعية نقية (غير مندمجة)","#F6EBD9","غير نشط كيميائيًا، فيوجد في القشرة الأرضية عنصرًا منفردًا."],x:["لافلز للمقارنة","#EEF2F5","الحد الفاصل: ما فوقه لا يُختزل بالكربون، وما تحته يُختزل."]};
+  WIDGETS.extract=el=>{el.className="widget";let k=7;
+    el.innerHTML=`<div class="ext"><div><p class="soft" style="margin:0 0 6px;text-align:center">⬆ زيادة النشاط الكيميائي</p><ol>${EX.map((e,i)=>`<li><button data-i="${i}" style="--c:${MT[e[2]][1]}"><b>${e[0]}</b>${e[1]}</button></li>`).join("")}</ol></div><div class="ext-card" aria-live="polite"></div></div><div class="w-bar"><span class="w-cap">الجدول 2-2: طريقة الاستخلاص حسب النشاط. اضغطي على أي عنصر.</span></div>`;
+    const show=()=>{const e=EX[k],m=MT[e[2]];el.querySelector(".ext-card").innerHTML=`<h4><bdi dir="ltr">${e[0]}</bdi> ${e[1]}</h4><span class="m" style="background:${m[1]}">${m[0]}</span><p style="margin:4px 0">${m[2]}</p>${e[3]?`<p style="margin:4px 0"><b>الخام:</b> ${e[3]}</p>`:""}${e[4]?`<div class="eq">${e[4]}</div>`:""}`;el.querySelectorAll(".ext button").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.i===k))};
+    el.querySelectorAll(".ext button").forEach(b=>b.onclick=()=>{k=+b.dataset.i;show()});show()};
+
+  /* 2-2: الفرن العالي التفاعلي */
+  const FZ=[["top","المواد الأولية (الحمولة)","تدخل من أعلى الفرن: خام الحديد (الهيماتيت Fe₂O₃)، وفحم الكوك (C)، والحجر الجيري (CaCO₃).",""],
+    ["gas","خروج الغازات الساخنة","تخرج الغازات العادمة الساخنة من أعلى الفرن، وتُستخدم كمبادلات حرارية لتسخين الهواء الداخل، فتقلّ تكلفة الطاقة.",""],
+    ["c600","المنطقة العليا (~600 °C)","يُختزل خام الحديد بأحادي أكسيد الكربون (العامل المختزل الرئيسي): أكسيد الحديد (III) + أحادي أكسيد الكربون ← حديد + ثاني أكسيد الكربون","Fe₂O₃(s) + 3CO(g) → 2Fe(l) + 3CO₂(g)"],
+    ["c1000","المنطقة الوسطى (~1000 °C)","يُختزل ثاني أكسيد الكربون عندما يصعد عبر الفرن فينتج أحادي أكسيد الكربون. ويتفكك الحجر الجيري حراريًا إلى جير حي.","CO₂(g) + C(s) → 2CO(g)<br>CaCO₃(s) → CaO(s) + CO₂(g)"],
+    ["c1900","المنطقة السفلى (~1900 °C)","يحترق الكربون بشدة في تيارات الهواء الساخن عند قاعدة الفرن.","C(s) + O₂(g) → CO₂(g)"],
+    ["air","دخول الهواء الساخن","تُضخ تيارات قوية من الهواء الساخن عبر ثقوب في أسفل الفرن.",""],
+    ["slag","الخبث (سيليكات الكالسيوم)","الجير الحي (قاعدة) يتفاعل مع السيليكا (شائبة حمضية) فيكوّن الخبث المنصهر، يطفو فوق الحديد لأن كثافته أقل، ويخرج من مخرج منفصل.","CaO(s) + SiO₂(s) → CaSiO₃(l)"],
+    ["iron","الحديد المنصهر","يتدفق الحديد إلى القاع لكثافته العالية، ويُجمع سائلًا لأن الحرارة أعلى من درجة انصهاره. يُسمّى «حديد الصب» وفيه نحو 4% كربون.",""]];
+  WIDGETS.furnace=el=>{el.className="widget";let k=2;const K="#1A2622";
+    el.innerHTML=`<div class="fur"><svg viewBox="0 0 320 430" role="img" aria-label="الفرن العالي"><g font-family="IBM Plex Sans Arabic,Tahoma" font-size="13" fill="${K}">
+      <path d="M130 20h60l-14 30h-32z" fill="#7A7F84"/><path d="M110 60h100l40 230-20 60H90l-20-60z" fill="#E9ECEE" stroke="${K}" stroke-width="3"/>
+      <path d="M118 70h84l34 210H84z" fill="url(#fg)"/><defs><linearGradient id="fg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#F6D27A"/><stop offset="1" stop-color="#D9573D"/></linearGradient></defs>
+      <rect x="92" y="300" width="136" height="22" fill="#8C8F73"/><rect x="92" y="322" width="136" height="26" fill="#3E3E3E"/>
+      <g class="z" data-k="top"><rect x="122" y="2" width="76" height="22" rx="6" fill="#fff" stroke="${K}"/><text x="160" y="18" text-anchor="middle">الحمولة</text></g>
+      <g class="z" data-k="gas"><rect x="222" y="40" width="88" height="24" rx="6" fill="#fff" stroke="${K}"/><text x="266" y="57" text-anchor="middle">غازات ساخنة</text></g>
+      <g class="z" data-k="c600"><rect x="122" y="96" width="76" height="26" rx="6" fill="#fff" stroke="${K}"/><text x="160" y="114" text-anchor="middle" direction="ltr">600 °C</text></g>
+      <g class="z" data-k="c1000"><rect x="118" y="164" width="84" height="26" rx="6" fill="#fff" stroke="${K}"/><text x="160" y="182" text-anchor="middle" direction="ltr">1000 °C</text></g>
+      <g class="z" data-k="c1900"><rect x="114" y="236" width="92" height="26" rx="6" fill="#fff" stroke="${K}"/><text x="160" y="254" text-anchor="middle" direction="ltr">1900 °C</text></g>
+      <g class="z" data-k="air"><rect x="4" y="272" width="74" height="24" rx="6" fill="#fff" stroke="${K}"/><text x="41" y="289" text-anchor="middle">هواء ساخن</text></g>
+      <g class="z" data-k="slag"><rect x="240" y="300" width="74" height="24" rx="6" fill="#fff" stroke="${K}"/><text x="277" y="317" text-anchor="middle">الخبث</text></g>
+      <g class="z" data-k="iron"><rect x="232" y="336" width="84" height="24" rx="6" fill="#fff" stroke="${K}"/><text x="274" y="353" text-anchor="middle">حديد منصهر</text></g>
+      <path d="M78 284h14M242 284h-14" stroke="${K}" stroke-width="3"/><path d="M228 312h12M228 340h4" stroke="${K}" stroke-width="3"/><path d="M200 50l22 2" stroke="${K}" stroke-width="3"/>
+    </g></svg><div class="ext-card" aria-live="polite"></div></div><div class="w-bar"><span class="w-cap">الشكلان 1-2 و 2-2: اضغطي على أي جزء من الفرن لتعرفي ما يحدث فيه.</span></div>`;
+    const show=()=>{const z=FZ.find(f=>f[0]===FZ[k][0]);el.querySelector(".ext-card").innerHTML=`<h4>${z[1]}</h4><p style="margin:4px 0;line-height:1.8">${z[2]}</p>${z[3]?`<div class="eq">${z[3]}</div>`:""}`;el.querySelectorAll(".z").forEach(g=>g.classList.toggle("on",g.dataset.k===z[0]))};
+    el.querySelectorAll(".z").forEach(g=>g.onclick=()=>{k=FZ.findIndex(f=>f[0]===g.dataset.k);show()});show()};
+
+  /* 2-3: فلز نقي مقابل سبيكة عند الطرق */
+  WIDGETS.alloy=el=>{el.className="widget";
+    const grid=(alloy,shift)=>{let s="";for(let r=0;r<5;r++)for(let c=0;c<7;c++){const big=alloy&&((r===1&&c===2)||(r===3&&c===4)||(r===2&&c===6));const dx=r<2?shift:0;s+=`<circle cx="${30+c*36+dx+(big?0:0)}" cy="${30+r*34}" r="${big?22:16}" fill="${big?'#C2852A':'#9FB7C8'}" stroke="#1A2622" stroke-width="1.5"/>`}return s};
+    el.innerHTML=`<div class="alloy-w"><figure><svg viewBox="0 0 290 190" class="pm"></svg><figcaption>فلز نقي: ذرات متشابهة في ترتيب منتظم</figcaption></figure><figure><svg viewBox="0 0 290 190" class="al"></svg><figcaption>سبيكة: ذرات عنصر مختلف تُخلّ بالترتيب</figcaption></figure></div><div class="w-bar"><button class="btn sm" id="hit">اطرقي (طبّقي قوة)</button><button class="btn ghost sm" id="rs">إعادة</button><span class="w-cap" id="ac">الشكل 4-2: قارني ماذا يحدث للطبقات عند تطبيق قوة.</span></div>`;
+    const draw=s=>{el.querySelector(".pm").innerHTML=grid(false,s);el.querySelector(".al").innerHTML=grid(true,Math.min(s,4))};draw(0);
+    el.querySelector("#hit").onclick=()=>{let s=0;const t=setInterval(()=>{s+=3;draw(s);if(s>=36){clearInterval(t);el.querySelector("#ac").innerHTML="في الفلز النقي <b>انزلقت الطبقات</b> فتغيّر الشكل، وفي السبيكة <b>منعت الذرات المختلفة الانزلاق</b>، فهي أصلد وأقل مرونة."}},40)};
+    el.querySelector("#rs").onclick=()=>{draw(0);el.querySelector("#ac").textContent="الشكل 4-2: قارني ماذا يحدث للطبقات عند تطبيق قوة."}};
+
+  /* 2-4: تجربة الصدأ */
+  const RT=[["1","ماء مقطّر + هواء","تجربة ضابطة","يصدأ","الماء والأكسجين متوفران.","#BFE0EA",1,1],["2","هواء جاف (كلوريد الكالسيوم)","","لا يصدأ","لا يوجد ماء: كلوريد الكالسيوم عامل تجفيف.","#fff",0,0],["3","ماء مغلي + طبقة زيت","","لا يصدأ","لا يوجد أكسجين: الغلي أزال الهواء الذائب، والزيت يمنع ذوبانه.","#BFE0EA",0,2],["4","ماء + أكسجين نقي","","صدئ جدًا","أكسجين نقي وماء: صدأ شديد.","#BFE0EA",2,3]];
+  WIDGETS.rust=el=>{el.className="widget";let k=0;
+    const tube=t=>`<svg viewBox="0 0 80 170" aria-hidden="true"><path d="M20 8h40M24 8v130a16 16 0 0 0 32 0V8" fill="#fff" stroke="#1A2622" stroke-width="3"/>${t[5]!=="#fff"?`<path d="M26 80v58a14 14 0 0 0 28 0V80z" fill="${t[5]}"/>`:`<path d="M26 120v18a14 14 0 0 0 28 0v-18z" fill="#eee"/>`}${t[7]===2?`<rect x="26" y="72" width="28" height="8" fill="#F2C94C"/>`:""}<rect x="37" y="30" width="6" height="110" fill="${t[6]===2?'#A0461E':t[6]?'#B8774B':'#8A9096'}"/>${t[6]?`<circle cx="40" cy="100" r="${t[6]*5}" fill="#A0461E" opacity=".7"/>`:""}</svg>`;
+    el.innerHTML=`<div class="rust-t">${RT.map((t,i)=>`<button data-i="${i}">${tube(t)}<div>الأنبوبة ${t[0]}</div><small>${t[1]}</small></button>`).join("")}</div><div class="ext-card" style="margin-top:10px" aria-live="polite"></div><div class="w-bar"><span class="w-cap">الشكل 5-2: تجربة استقصاء العوامل المؤدية إلى الصدأ.</span></div>`;
+    const show=()=>{const t=RT[k];el.querySelector(".ext-card").innerHTML=`<h4>الأنبوبة ${t[0]}: ${t[3]}</h4><p style="margin:0">${t[1]}${t[2]?` (${t[2]})`:""}. ${t[4]}</p>`;el.querySelectorAll(".rust-t button").forEach(b=>b.classList.toggle("on",+b.dataset.i===k))};
+    el.querySelectorAll(".rust-t button").forEach(b=>b.onclick=()=>{k=+b.dataset.i;show()});show()};
+})();
