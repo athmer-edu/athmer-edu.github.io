@@ -114,13 +114,13 @@ function finishBox(id,sk){
 /* ===== الشهادة ===== */
 function medalOf(id){const P=pathState(id);const g=P.T.max?P.T.stars/P.T.max:1;const e=P.nX?(P.ex.best||0)/P.nX:1;const sc=Math.round((g*.5+e*.5)*100);return sc>=85?{k:"ذهبية",c:"#C9962B",c2:"#F2D27A",sc}:sc>=65?{k:"فضية",c:"#8A97A0",c2:"#D9E1E6",sc}:{k:"برونزية",c:"#A3653A",c2:"#E3B08A",sc}}
 async function showCert(id){
-  const f=find(id),s=SUBJECTS[f.sk];S.certName=S.certName||(S.user&&S.user.name)||"";
-  const ov=document.createElement("div");ov.className="cert-ov";ov.innerHTML=`<div class="cert-box" role="dialog" aria-modal="true" aria-label="شهادة إتمام الدرس"><div class="cert-top"><label for="cn">الاسم في الشهادة</label><input id="cn" value="${S.certName.replace(/"/g,"&quot;")}" maxlength="40"><button class="btn ghost sm" id="cx">إغلاق</button></div><canvas id="cv" width="1600" height="1130"></canvas><div class="cert-act"><a class="btn" id="dl" download="شهادة-${f.l[0]}.png">تحميل الشهادة</a><button class="btn ghost" id="pr">طباعة</button></div></div>`;
+  const f=find(id),s=SUBJECTS[f.sk];const acct=(S.user&&S.user.name)||"";if(!S.certNameEdited)S.certName=acct;
+  const ov=document.createElement("div");ov.className="cert-ov";ov.innerHTML=`<div class="cert-box" role="dialog" aria-modal="true" aria-label="شهادة إتمام الدرس"><div class="cert-top"><label for="cn">اسمكِ في الشهادة <small style="font-weight:400;color:var(--soft)">(من حسابكِ، ويمكنكِ تصحيحه)</small></label><input id="cn" value="${S.certName.replace(/"/g,"&quot;")}" maxlength="40"><button class="btn ghost sm" id="cx">إغلاق</button></div><canvas id="cv" width="1600" height="1130"></canvas><div class="cert-act"><a class="btn" id="dl" download="شهادة-${f.l[0]}.png">تحميل الشهادة</a><button class="btn ghost" id="pr">طباعة</button></div></div>`;
   document.body.appendChild(ov);
   try{await Promise.all(['700 60px Alexandria','800 60px Alexandria','500 30px "IBM Plex Sans Arabic"','600 80px "Playpen Sans Arabic"'].map(x=>document.fonts.load(x)))}catch(e){}
   const draw=()=>{drawCert($("#cv"),{name:S.certName||"اسم الطالبة",lesson:f.l[1],code:f.l[0],subj:`${s.name} • ${s.grade} • الوحدة ${ORD[f.u.n]}`,medal:medalOf(id),T:pathState(id)});try{$("#dl").href=$("#cv").toDataURL("image/png")}catch(e){}};
   draw();
-  $("#cn").oninput=e=>{S.certName=e.target.value;save();draw()};
+  $("#cn").oninput=e=>{S.certName=e.target.value;S.certNameEdited=true;save();draw()};
   $("#cx").onclick=()=>ov.remove();ov.onclick=e=>{if(e.target===ov)ov.remove()};
   $("#pr").onclick=()=>{try{const w=window.open("");w.document.write(`<img src="${$("#cv").toDataURL()}" style="width:100%">`);w.document.close();w.onload=()=>w.print();setTimeout(()=>w.print(),400)}catch(e){toast("الطباعة غير متاحة هنا، حمّلي الشهادة ثم اطبعيها")}};
 }
