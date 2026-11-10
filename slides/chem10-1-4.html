@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>نشاط الفلزات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lalezar&family=Baloo+Bhaijaan+2:wght@400;500;600;700&family=Readex+Pro:wght@500;700&display=swap">
+<style>
+/* مسرح 1920×1080 يتكبّر على جهاز العرض. شريط علوي بأقسام الدرس، فكرة واحدة لكل شريحة، وكشف تدريجي بيد المعلمة. */
+:root{
+  --deep:#0b2a45; --sea:#1b5c86; --turq:#119da4; --turq-soft:#d6f1f2; --foam:#f3f9fb; --card:#ffffff;
+  --ink:#0b1e30; --muted:#4d6274; --line:#c5d9e2;
+  --sand:#e3ad3c; --sand-soft:#fbefd2; --ok:#1d8a5a; --ok-soft:#dcf2e6; --no:#c4513e; --no-soft:#fbe3dc;
+  --cu:#b8652f; --cu-soft:#f7e3d6;
+  --display:"Lalezar","Baloo Bhaijaan 2","Tahoma",sans-serif;
+  --body:"Baloo Bhaijaan 2","Tahoma",sans-serif;
+  --num:"Readex Pro","Segoe UI","Tahoma",sans-serif;
+  --fs:1; color-scheme:light;
+}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{background:var(--deep);color:var(--ink);font-family:var(--body);overflow:hidden}
+#vp{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--deep)}
+#stage{width:1920px;height:1080px;flex:none;position:relative;background:var(--foam);display:flex;flex-direction:column;direction:rtl;overflow:hidden;transform-origin:center center;border-radius:6px}
+button{font-family:var(--body);cursor:pointer;color:inherit}
+button:focus-visible,[tabindex]:focus-visible{outline:5px solid var(--sand);outline-offset:3px}
+.n{font-family:var(--num);font-weight:700;direction:ltr;unicode-bidi:isolate;display:inline-block}
+#top{height:92px;flex:none;display:flex;align-items:center;gap:14px;padding:0 26px;background:linear-gradient(90deg,var(--deep),var(--sea));color:#fff}
+#brand{font-family:var(--display);font-size:42px;white-space:nowrap}
+#brand b{color:#8fe3e6;font-weight:400}
+#timer{font-family:var(--num);font-size:28px;background:#ffffff1a;border-radius:12px;padding:4px 14px;min-width:120px;text-align:center}
+#secs{height:58px;flex:none;display:flex;gap:6px;justify-content:center;align-items:center;background:#fff;border-bottom:2px solid var(--line)}
+.sec{border:2px solid transparent;background:none;color:var(--muted);border-radius:999px;padding:0 16px;font-size:24px;white-space:nowrap;min-height:46px}
+.sec small{font-family:var(--num);font-size:18px;opacity:.8;margin-inline-start:6px}
+.sec.on{background:var(--turq);color:#fff;font-weight:700}
+.sec.done{color:var(--turq);border-color:var(--turq-soft)}
+.tb{background:#ffffff1a;border:2px solid #ffffff55;color:#fff;border-radius:14px;font-size:26px;min-height:58px;padding:2px 16px;white-space:nowrap}
+#prog{height:8px;flex:none;background:#d7e7ee}#prog>div{height:100%;background:var(--turq);transition:width .4s}
+#screen{flex:1;min-height:0;position:relative;padding:16px 46px 10px;box-sizing:border-box;font-size:calc(40px*var(--fs));line-height:1.5;overflow:hidden}
+#bottom{height:112px;flex:none;display:flex;align-items:center;gap:14px;padding:0 26px;background:var(--card);border-top:3px solid var(--deep)}
+.cb{font-size:calc(32px*var(--fs));min-height:82px;padding:4px 26px;border-radius:18px;border:3px solid var(--deep);background:var(--card);color:var(--deep);white-space:nowrap}
+.cb.go{background:var(--deep);color:#fff}.cb.rv{background:var(--turq);border-color:var(--turq);color:#fff}
+.cb:disabled{opacity:.33;cursor:default}
+#count{flex:1;text-align:center;font-size:30px;color:var(--muted)}
+.head{display:flex;align-items:center;gap:18px;margin-bottom:10px}
+.chip{font-size:calc(26px*var(--fs));border-radius:999px;padding:0 18px;color:#fff;background:var(--sea);white-space:nowrap}
+h1.t{font-family:var(--display);font-weight:400;color:var(--deep);font-size:calc(58px*var(--fs));line-height:1.15;margin:0;text-wrap:balance}
+.grid2{display:grid;grid-template-columns:1fr 820px;gap:36px;align-items:start}
+.grid2>*{min-width:0}
+.col{display:flex;flex-direction:column;gap:12px;min-width:0}
+.pic{margin:0;background:var(--card);border:3px solid var(--line);border-radius:28px;padding:14px;display:flex;flex-direction:column;gap:8px;align-items:center}
+.pic svg{width:100%;height:auto;display:block;border-radius:18px}
+.simh{width:100%}
+.pic figcaption{font-size:calc(26px*var(--fs));color:var(--muted);text-align:center;line-height:1.3}
+.line{font-size:calc(38px*var(--fs));line-height:1.4;background:var(--card);border-right:12px solid var(--turq);border-radius:18px;padding:8px 22px}
+.line b{color:var(--sea)}
+.line .h{background:#fff27a;border-radius:6px;padding:0 4px}
+.ex{font-size:calc(32px*var(--fs));line-height:1.4;background:var(--turq-soft);border-radius:18px;padding:8px 22px}
+.fix{font-size:calc(34px*var(--fs));line-height:1.35;background:var(--sand-soft);border:4px dashed var(--sand);border-radius:20px;padding:8px 22px;font-weight:700;color:#5c4206}
+.lab{display:inline-block;font-family:var(--display);font-size:calc(30px*var(--fs));margin-left:10px;color:var(--sea)}
+.fix .lab{color:#8a6410}
+[data-s]{transition:opacity .45s,transform .45s}
+[data-s].hid{opacity:0;transform:translateY(18px) scale(.98);pointer-events:none;visibility:hidden}
+.chk{background:var(--card);border:3px solid var(--sea);border-radius:20px;padding:8px 18px}
+.chk .q{font-size:calc(34px*var(--fs));font-weight:700;color:var(--deep);margin-bottom:6px}
+.chk .q::before{content:"سؤال سريع: ";color:var(--turq)}
+.opts{display:flex;gap:10px;flex-wrap:wrap}
+.opt{flex:1;min-width:220px;font-size:calc(29px*var(--fs));min-height:66px;border-radius:16px;border:3px solid var(--sea);background:var(--card);padding:2px 14px;line-height:1.25}
+.opt:hover:not(:disabled){background:#eef7fb}
+.opt.right{background:var(--ok-soft);border-color:var(--ok);color:var(--ok);font-weight:700}
+.opt.wrong{background:var(--no-soft);border-color:var(--no);color:var(--no);opacity:.85}
+.fb{margin-top:8px;border-radius:14px;padding:6px 16px;font-size:calc(29px*var(--fs));line-height:1.4}
+.fb.ok{background:var(--ok-soft);color:var(--ok);border:3px solid var(--ok)}
+.fb.no{background:var(--no-soft);color:var(--no);border:3px solid var(--no)}
+/* home */
+.home{display:grid;grid-template-columns:1fr 820px;gap:46px;align-items:center;height:100%}
+.home h1{font-family:var(--display);font-weight:400;font-size:calc(116px*var(--fs));line-height:1.1;color:var(--deep);margin:0}
+.home h1 span{color:var(--turq)}
+.home .sub{font-size:calc(34px*var(--fs));color:var(--muted)}
+.big{font-size:calc(40px*var(--fs));min-height:96px;padding:6px 44px;border-radius:22px;border:none;background:var(--deep);color:#fff}
+.letter{background:#fff;border:3px solid var(--line);border-radius:28px;padding:16px 36px}
+.letter ol{margin:6px 0 0;padding:0 50px 0 0;font-size:calc(36px*var(--fs));display:grid;gap:2px}
+.letter ol li::marker{font-family:var(--num);color:var(--turq);font-weight:700}
+.plan{display:flex;gap:4px;margin-top:12px}
+.pl{background:var(--turq-soft);border-radius:12px;padding:4px 6px;font-size:21px;line-height:1.25;text-align:center;color:var(--deep);min-width:0}
+.pl b{display:block;font-family:var(--num);color:var(--sea)}
+.outcome{display:inline-block;background:var(--deep);color:#fff;border-radius:14px;padding:2px 20px;font-size:calc(27px*var(--fs));margin-bottom:10px}
+/* reveal cards */
+.qa{display:grid;gap:14px}
+.qa .card{background:#fff;border:3px solid var(--line);border-radius:22px;padding:10px 22px;cursor:pointer}
+.qa .card .q{font-size:calc(36px*var(--fs));font-weight:700;color:var(--deep)}
+.qa .card .q .no{font-family:var(--num);background:var(--sea);color:#fff;border-radius:50%;display:inline-flex;width:50px;height:50px;align-items:center;justify-content:center;font-size:26px;margin-left:12px}
+.qa .card .a{font-size:calc(33px*var(--fs));color:var(--ok);margin-top:6px;border-top:2px dashed var(--line);padding-top:6px}
+.qa .card .tapme{font-size:calc(22px*var(--fs));color:var(--muted)}
+.qa .card.open{border-color:var(--turq);background:#f6fcfc}
+.qa .card:not(.open) .a{display:none}
+.qa .card.open .tapme{display:none}
+/* groups (organise ideas) */
+.cols5{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.c5{background:#fff;border:4px solid var(--c);border-radius:24px;padding:12px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.c5 .no{font-family:var(--num);font-weight:700;width:58px;height:58px;border-radius:50%;background:var(--c);color:#fff;display:flex;align-items:center;justify-content:center;font-size:30px}
+.c5 svg{width:100%;height:170px}
+.c5 .tt{font-family:var(--display);color:var(--c);font-size:calc(36px*var(--fs));line-height:1.15}
+.c5 .why{font-size:calc(27px*var(--fs));line-height:1.35;background:#fbf8ef;border-radius:14px;padding:4px 10px;width:100%;box-sizing:border-box}
+.c5 .why b{color:#c4304f}
+/* terms */
+.terms3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.term{background:#fff;border:4px solid var(--c);border-radius:26px;padding:12px 20px;cursor:pointer;min-height:330px;display:flex;flex-direction:column;gap:8px}
+.term .tt{font-family:var(--display);color:var(--c);font-size:calc(46px*var(--fs));line-height:1.15}
+.term .en{font-family:var(--num);font-size:24px;color:var(--muted);direction:ltr;text-align:right}
+.term .df{font-size:calc(31px*var(--fs));line-height:1.45}
+.term .df .h{background:#fff27a;border-radius:6px;padding:0 4px}
+.term .tapme{font-size:calc(24px*var(--fs));color:var(--muted);margin-top:auto}
+.term:not(.open) .df{filter:blur(12px);user-select:none}
+.term.open .tapme{display:none}
+/* table */
+.cmp{width:100%;border-collapse:separate;border-spacing:8px 6px;font-size:calc(29px*var(--fs))}
+.cmp th{font-family:var(--display);font-weight:400;font-size:calc(34px*var(--fs));background:var(--turq-soft);border-radius:16px;padding:4px 14px;color:var(--deep)}
+.cmp thead th{background:none;font-size:calc(42px*var(--fs))}
+.cmp td{background:var(--card);border:4px dashed var(--sea);border-radius:16px;text-align:center;cursor:pointer;height:60px;line-height:1.2;padding:2px 12px}
+.cmp td .q{font-family:var(--num);color:var(--line);font-size:42px}
+.cmp td.open{border-style:solid;border-color:var(--turq);background:#f2fbfb}
+/* widget bar */
+.wbar{display:flex;gap:14px;align-items:center;justify-content:center;margin-top:8px}
+.wbar button{font-size:calc(30px*var(--fs));min-height:72px;border-radius:16px;padding:2px 28px;border:3px solid var(--deep);background:var(--card)}
+.wbar button.go{background:var(--deep);color:#fff}
+.lat .ion circle{fill:#f7e3d6;stroke:var(--cu);stroke-width:3}
+.lat .ion text{fill:var(--cu);font-family:var(--num);font-weight:700;font-size:30px;text-anchor:middle}
+.lat .e{fill:var(--sand);stroke:#9c6f12;stroke-width:1.5}
+.lat .row{transition:transform 1s cubic-bezier(.5,0,.2,1)}
+.lat .sea{fill:#fdf6e6;stroke:var(--line);stroke-width:3}
+.lab-t{font-family:"Baloo Bhaijaan 2",Tahoma;font-weight:700;font-size:30px;fill:var(--deep)}
+/* activities */
+.act-h{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:8px}
+.act-h .t2{font-family:var(--display);font-size:calc(52px*var(--fs));color:var(--deep);line-height:1.15}
+.act-h .tp{font-size:calc(24px*var(--fs));background:var(--turq-soft);color:var(--sea);border-radius:999px;padding:0 16px;white-space:nowrap}
+.ins{font-size:calc(30px*var(--fs));color:var(--muted);margin:-4px 0 10px}
+.tok{font-size:calc(30px*var(--fs));background:var(--card);border:3px solid var(--sea);border-radius:16px;padding:6px 18px;min-height:66px;cursor:pointer;user-select:none;line-height:1.3;text-align:center}
+.tok.sel{outline:5px solid var(--sand);background:var(--sand-soft)}
+.bank{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;min-height:86px;padding:10px;border:3px dashed var(--line);border-radius:20px}
+.bins{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
+.bin{min-height:330px;border:4px dashed var(--c);border-radius:22px;background:#fff;padding:8px 12px;display:flex;flex-direction:column;gap:8px;cursor:pointer}
+.bin .bt{font-family:var(--display);color:var(--c);font-size:calc(42px*var(--fs));text-align:center}
+.bin .tok.good{border-color:var(--ok);background:var(--ok-soft)}
+.bin .tok.bad{border-color:var(--no);background:var(--no-soft)}
+.abtn{display:flex;gap:12px;justify-content:center;margin-top:10px}
+.abtn button{font-size:calc(30px*var(--fs));min-height:70px;border-radius:16px;padding:2px 30px;border:3px solid var(--deep);background:var(--card)}
+.abtn button.go{background:var(--deep);color:#fff}
+.match{display:grid;grid-template-columns:1fr 1.7fr;gap:16px 140px;position:relative}
+.match svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.mi{font-size:calc(30px*var(--fs));background:var(--card);border:3px solid var(--sea);border-radius:16px;padding:6px 16px;min-height:84px;text-align:right;line-height:1.3;position:relative;z-index:1}
+.mi.term2{font-weight:700;color:var(--deep);text-align:center}
+.mi.sel{outline:5px solid var(--sand)}
+.mi.good{border-color:var(--ok);background:var(--ok-soft)}
+.mi.bad{animation:shake .35s;border-color:var(--no)}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+/* remember */
+.mem{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.mc{background:#fff;border:4px solid var(--c);border-radius:26px;padding:14px 16px;text-align:center;cursor:pointer;min-height:300px;display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center}
+.mc .k{font-family:var(--display);color:var(--c);font-size:calc(66px*var(--fs));line-height:1}
+.mc .ar{font-size:44px;color:var(--sand);line-height:1}
+.mc .v{font-family:var(--display);font-size:calc(40px*var(--fs));color:var(--deep)}
+.mc .x{font-size:calc(26px*var(--fs));color:var(--muted);line-height:1.35}
+.mc:not(.open) .v,.mc:not(.open) .x{visibility:hidden}
+.memo{text-align:center;font-family:var(--display);font-size:calc(50px*var(--fs));color:var(--sea);margin:18px 0 6px}
+.memo .h{background:#fff27a;border-radius:10px;padding:0 10px}
+.note{text-align:center;font-size:calc(24px*var(--fs));color:var(--muted)}
+/* exercise title */
+.exh{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center}
+.exh .k{font-family:var(--display);font-size:calc(96px*var(--fs));color:var(--deep);line-height:1.1}
+.exh .p{display:flex;gap:16px}
+.exh .p span{font-size:calc(38px*var(--fs));background:var(--turq-soft);color:var(--sea);border-radius:999px;padding:4px 30px}
+.exh .s{font-size:calc(44px*var(--fs));color:var(--muted)}
+.exh .s b{color:var(--deep)}
+.bq{background:#fff;border:3px solid var(--line);border-radius:24px;padding:12px 26px;font-size:calc(40px*var(--fs));line-height:1.45}
+.bq .src{font-size:calc(24px*var(--fs));color:var(--muted)}
+.ans{margin-top:12px;background:var(--ok-soft);border:3px solid var(--ok);border-radius:20px;padding:8px 22px;font-size:calc(34px*var(--fs));line-height:1.45}
+.ans b{color:var(--ok)}
+.dt{width:100%;border-collapse:collapse;font-size:calc(28px*var(--fs));background:#fff;border-radius:18px;overflow:hidden}
+.dt th{background:var(--sea);color:#fff;font-weight:700;padding:6px 10px}
+.dt td{border-bottom:2px solid var(--line);padding:4px 10px;text-align:center}
+.dt td:first-child{font-weight:700;color:var(--deep)}
+/* mind map */
+.mm{position:relative;height:calc(100% - 100px)}
+.mm svg.ln{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.mm .core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:320px;height:320px;border-radius:50%;background:radial-gradient(circle at 40% 35%,var(--sea),var(--deep));color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--display);font-size:calc(50px*var(--fs));line-height:1.15;box-shadow:0 0 0 14px var(--turq-soft);z-index:1}
+.mm .br{position:absolute;width:540px;transform:translate(-50%,-50%);background:#fff;border:4px solid var(--c);border-radius:24px;padding:6px 14px 10px;z-index:1}
+.mm .bt{font-family:var(--display);font-size:calc(36px*var(--fs));color:var(--c);cursor:pointer}
+.mm .its{display:flex;flex-wrap:wrap;gap:6px}
+.mm .bi{font-size:calc(26px*var(--fs));border:3px dashed var(--c);border-radius:12px;padding:0 12px;background:#fff;min-width:120px;min-height:44px;cursor:pointer;line-height:1.35}
+.mm .bi.blank{color:transparent;background:repeating-linear-gradient(90deg,#f1f5f8 0 14px,#fff 14px 20px)}
+.mm .bi.shown{border-style:solid;background:color-mix(in srgb,var(--c) 10%,#fff);color:var(--ink)}
+.tabs{display:flex;gap:12px}
+.tabs button{font-size:calc(30px*var(--fs));padding:2px 26px;border-radius:999px;border:3px solid var(--sea);background:var(--card);min-height:62px}
+.tabs button[aria-pressed="true"]{background:var(--sea);color:#fff}
+.ov{position:absolute;inset:0;background:#0b2a45cc;display:flex;align-items:center;justify-content:center;z-index:50}
+.panel{background:#fff;border-radius:28px;padding:30px 40px;width:1300px;max-height:900px;overflow:auto}
+.panel h2{font-family:var(--display);font-weight:400;font-size:52px;color:var(--deep);margin:0 0 14px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mgrid button{text-align:right;font-size:28px;border:3px solid var(--line);background:var(--foam);border-radius:16px;padding:8px 18px;min-height:66px}
+.mgrid button.cur{border-color:var(--sand);background:var(--sand-soft)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="vp"><div id="stage" lang="ar" dir="rtl">
+  <header id="top">
+    <div id="brand">نشاط <b>الفلزات</b></div>
+    <div style="flex:1"></div>
+    <span id="timer" title="مؤقت الحصة">٠٠:٠٠</span>
+    <button class="tb" id="bTimer">تشغيل المؤقت</button>
+    <button class="tb" id="bMenu">الفهرس</button>
+    <button class="tb" id="bDn" aria-label="تصغير الخط">أ−</button>
+    <button class="tb" id="bUp" aria-label="تكبير الخط">أ+</button>
+    <button class="tb" id="bFull">ملء الشاشة</button>
+  </header>
+  <nav id="secs" aria-label="أقسام الدرس"></nav><div id="prog"><div></div></div>
+  <main id="screen"></main>
+  <footer id="bottom">
+    <button class="cb" id="bPrev">→ السابق</button>
+    <button class="cb rv" id="bRev">إظهار التالي ▼</button>
+    <button class="cb" id="bAll">إظهار الكل</button>
+    <button class="cb" id="bReset">إعادة الشريحة</button>
+    <div id="count"></div>
+    <button class="cb go" id="bNext">التالي ←</button>
+  </footer>
+  <div class="ov" id="ov" hidden><div class="panel"><h2>فهرس الشرائح</h2><div class="mgrid" id="mgrid"></div><div style="text-align:left;margin-top:16px"><button class="cb" id="bClose">إغلاق</button></div></div></div>
+</div></div>
+<script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const K='#0b2a45';
+const T=(x,y,t,fs=30,c=K,ex='')=>`<text x="${x}" y="${y}" font-family="Baloo Bhaijaan 2, Tahoma" font-weight="700" font-size="${fs}" fill="${c}" text-anchor="middle" ${ex}>${t}</text>`;
+const arrow=(x1,y1,x2,y2,c='#e3ad3c',w=8)=>{const a=Math.atan2(y2-y1,x2-x1),h=w*2.8;return `<path d="M${x1} ${y1}L${x2-Math.cos(a)*h*.7} ${y2-Math.sin(a)*h*.7}" stroke="${c}" stroke-width="${w}" stroke-linecap="round"/><path d="M${x2} ${y2}L${x2-h*Math.cos(a-.5)} ${y2-h*Math.sin(a-.5)}L${x2-h*Math.cos(a+.5)} ${y2-h*Math.sin(a+.5)}Z" fill="${c}"/>`};
+
+/* ============ رسومات ============ */
+const D={};
+/* شبكة فلز: أيونات موجبة وبحر إلكترونات */
+D.lattice=(o={})=>{const cols=o.cols||6,rows=o.rows||4,g=o.gap||110,r=o.r||40,W=cols*g+20,H=rows*g+20;
+  let s=`<svg viewBox="0 0 ${W} ${H}" class="lat" role="img" aria-label="${o.label||'أيونات فلز موجبة في شبكة منتظمة يحيط بها بحر من الإلكترونات'}"><rect x="3" y="3" width="${W-6}" height="${H-6}" rx="26" class="sea"/>`;
+  for(let y=0;y<rows;y++){s+=`<g class="row" data-row="${y}">`;for(let x=0;x<cols;x++){const cx=10+g/2+x*g,cy=10+g/2+y*g;s+=`<g class="ion"><circle cx="${cx}" cy="${cy}" r="${r}"/><text x="${cx}" y="${cy+11}">+</text></g>`}s+=`</g>`}
+  s+=`<g class="els">`;for(let y=0;y<rows-(o.full?0:1);y++)for(let x=0;x<cols-(o.full?0:1);x++){s+=`<circle class="e" cx="${10+g*(x+1)}" cy="${10+g*(y+1)}" r="11"/>`}
+  return s+`</g></svg>`};
+/* الجدول الدوري المبسّط */
+D.ptable=()=>{const cells=[];const add=(c,r,m)=>cells.push([c,r,m]);
+  add(0,0,'nm');add(17,0,'nm');
+  for(const r of [1,2]){add(0,r,'m');add(1,r,'m');for(let c=12;c<18;c++)add(c,r,(r===1&&c<12)?'m':(c===12&&r===2)?'m':'nm')}
+  for(const r of [3,4,5,6]){for(let c=0;c<18;c++){let m='m';if(c>=13){m=(c-13)<(r-2)?'m':'nm'};if(c===17)m='nm';add(c,r,m)}}
+  const w=44,h=44;return `<svg viewBox="0 0 ${18*w+20} ${7*h+80}" role="img" aria-label="الجدول الدوري: الفلزات تشغل معظمه من اليسار والوسط"><rect width="100%" height="100%" rx="20" fill="#fff"/>
+  <g transform="translate(10 10)" direction="ltr">${cells.map(([c,r,m])=>`<rect x="${c*w}" y="${r*h}" width="${w-4}" height="${h-4}" rx="6" fill="${m==='m'?'#f2b98d':'#9fd3e6'}" stroke="#fff"/>`).join('')}</g>
+  <g transform="translate(0 ${7*h+30})"><rect x="560" y="0" width="34" height="34" rx="6" fill="#f2b98d"/>${T(470,27,'فلزات',30)}<rect x="300" y="0" width="34" height="34" rx="6" fill="#9fd3e6"/>${T(210,27,'لافلزات',30)}</g></svg>`};
+/* أسلاك نحاس وقدر */
+D.copper=`<svg viewBox="0 0 760 360" role="img" aria-label="أسلاك كهربائية من النحاس وقدر طبخ نحاسي"><rect width="760" height="360" rx="22" fill="#fdf3ea"/>
+ <g>${[0,1,2].map(i=>`<path d="M40 ${120+i*36} C140 ${70+i*36} 220 ${190+i*36} 330 ${120+i*36}" fill="none" stroke="${['#c46a2c','#d98b4a','#b8652f'][i]}" stroke-width="16" stroke-linecap="round"/>`).join('')}
+ <path d="M330 120 h40 M330 156 h40 M330 192 h40" stroke="#8a8a8a" stroke-width="10"/>${T(190,300,'أسلاك كهربائية',32)}</g>
+ <g transform="translate(430 70)"><path d="M20 70 h240 v120 q0 50 -50 50 h-140 q-50 0 -50 -50z" fill="#c46a2c" stroke="${K}" stroke-width="4"/><rect x="0" y="52" width="280" height="26" rx="13" fill="#d98b4a" stroke="${K}" stroke-width="4"/><path d="M260 90 h60" stroke="${K}" stroke-width="16" stroke-linecap="round"/>
+ <path d="M80 30 q-14 -20 0 -40 M140 30 q-14 -20 0 -40 M200 30 q-14 -20 0 -40" fill="none" stroke="#9fb3c3" stroke-width="6" stroke-linecap="round"/>${T(140,280,'قدر طبخ',32)}</g></svg>`;
+/* خطوط كهرباء الألومنيوم */
+D.towers=`<svg viewBox="0 0 760 360" role="img" aria-label="أبراج كهرباء تحمل أسلاك ألومنيوم هوائية"><rect width="760" height="360" rx="22" fill="#e8f4fa"/>
+ ${[120,380,640].map(x=>`<g stroke="${K}" stroke-width="5" fill="none"><path d="M${x-50} 320 L${x} 60 L${x+50} 320"/><path d="M${x-70} 110 H${x+70} M${x-55} 160 H${x+55}"/><path d="M${x-36} 240 L${x+36} 200 M${x-36} 200 L${x+36} 240"/></g>`).join('')}
+ ${[110,160].map(y=>`<path d="M50 ${y} Q250 ${y+50} 380 ${y} Q510 ${y+50} 710 ${y}" fill="none" stroke="#9aa7b0" stroke-width="6"/>`).join('')}
+ <rect x="230" y="12" width="300" height="48" rx="14" fill="#fff" stroke="#1b5c86" stroke-width="3"/>${T(380,46,'أسلاك ألومنيوم خفيفة',28,'#1b5c86')}</svg>`;
+/* أيقونات الخصائص */
+D.ic={
+ dense:`<svg viewBox="0 0 220 170"><rect x="30" y="30" width="160" height="120" rx="12" fill="#f7e3d6" stroke="#b8652f" stroke-width="4"/>${[0,1,2].map(r=>[0,1,2,3].map(c=>`<circle cx="${60+c*34}" cy="${60+r*32}" r="15" fill="#e7a77a" stroke="#b8652f" stroke-width="2"/>`).join('')).join('')}</svg>`,
+ melt:`<svg viewBox="0 0 220 170"><rect x="95" y="20" width="30" height="110" rx="15" fill="#fff" stroke="${K}" stroke-width="4"/><rect x="103" y="34" width="14" height="92" fill="#d9573d"/><circle cx="110" cy="138" r="24" fill="#d9573d" stroke="${K}" stroke-width="4"/>${T(170,80,'°C',30,'#d9573d')}</svg>`,
+ malle:`<svg viewBox="0 0 220 170"><rect x="20" y="118" width="180" height="22" rx="6" fill="#c9cdd2" stroke="${K}" stroke-width="3"/><rect x="40" y="20" width="70" height="40" rx="8" fill="#7d8790" stroke="${K}" stroke-width="3" transform="rotate(-20 75 40)"/><path d="M95 50 L150 110" stroke="#8a5a2e" stroke-width="12" stroke-linecap="round"/><path d="M150 140 q20 10 40 0" fill="none" stroke="#e3ad3c" stroke-width="4"/></svg>`,
+ elec:`<svg viewBox="0 0 220 170"><rect x="30" y="70" width="70" height="40" rx="6" fill="#fff" stroke="${K}" stroke-width="4"/><rect x="100" y="80" width="10" height="20" fill="${K}"/><path d="M65 70 V30 H180 V70 M65 110 V140 H180 V110" fill="none" stroke="#c46a2c" stroke-width="7"/><circle cx="180" cy="90" r="22" fill="#fff27a" stroke="${K}" stroke-width="4"/></svg>`,
+ heat:`<svg viewBox="0 0 220 170"><rect x="30" y="80" width="160" height="24" rx="10" fill="#c46a2c" stroke="${K}" stroke-width="3"/>${[50,80,110].map(x=>`<path d="M${x} 150 q-12 -14 0 -30 q12 -14 0 -26" fill="none" stroke="#e8701d" stroke-width="6" stroke-linecap="round"/>`).join('')}${[120,150,180].map(x=>`<path d="M${x} 70 q-8 -12 0 -24 q8 -12 0 -24" fill="none" stroke="#d9573d" stroke-width="5" stroke-linecap="round" opacity=".6"/>`).join('')}</svg>`
+};
+
+/* ============ رسومات الدرس 1-4 ============ */
+const SER=[['K','بوتاسيوم'],['Na','صوديوم'],['Ca','كالسيوم'],['Mg','ماغنيسيوم'],['Al','ألومنيوم'],['C','كربون',1],['Zn','خارصين'],['Fe','حديد'],['Sn','قصدير'],['Pb','رصاص'],['H','هيدروجين',1],['Cu','نحاس'],['Ag','فضة'],['Au','ذهب']];
+D.series=(o={})=>{const h=50,W=520,band=o.band||{};return `<svg viewBox="0 0 ${W} ${SER.length*h+20}" style="max-height:${o.mh||640}px;width:auto" role="img" aria-label="سلسلة النشاط الكيميائي من البوتاسيوم إلى الذهب"><rect width="100%" height="100%" rx="20" fill="#fff"/>
+  ${SER.map((s,i)=>{const y=10+i*h,c=band[s[0]]||(s[2]?'#fbefd2':'#e8f1f6');return `<rect x="110" y="${y}" width="300" height="${h-6}" rx="10" fill="${c}" stroke="${s[2]?'#e3ad3c':'#9fc3d6'}" stroke-width="2"/><text x="170" y="${y+31}" text-anchor="middle" font-family="Readex Pro" font-weight="700" font-size="24" fill="${K}">${s[0]}</text>${T(310,y+31,s[1],24)}`}).join('')}
+  <path d="M60 ${SER.length*h}V40" stroke="#c4513e" stroke-width="8"/><path d="M60 14l-18 34h36z" fill="#c4513e"/>${T(470,SER.length*h/2,'',1)}
+  <text x="80" y="${SER.length*h/2}" transform="rotate(-90 80 ${SER.length*h/2})" text-anchor="middle" font-family="Baloo Bhaijaan 2" font-weight="700" font-size="24" fill="#c4513e" dy="-30">زيادة النشاط</text></svg>`};
+D.beaker=(sol,metal,coat,w=220)=>`<svg viewBox="0 0 220 230" width="${w}" aria-hidden="true"><path d="M40 30v160a20 20 0 0 0 20 20h100a20 20 0 0 0 20-20V30" fill="#fff" stroke="#6e7f88" stroke-width="5" stroke-linecap="round"/><path d="M43 80h134v110a17 17 0 0 1-17 17H60a17 17 0 0 1-17-17z" fill="${sol}"/><rect x="98" y="14" width="24" height="170" rx="4" fill="${metal}" stroke="#555" stroke-width="2"/>${coat?[...Array(14)].map((_,i)=>`<circle cx="${100+(i*7)%22}" cy="${92+i*6.5}" r="${3+(i%3)}" fill="${coat}"/>`).join(''):''}</svg>`;
+D.steam=`<svg viewBox="0 0 760 330" role="img" aria-label="جهاز تفاعل فلز مع بخار الماء وجمع الهيدروجين"><rect width="760" height="330" rx="22" fill="#f6fafc"/>
+ <rect x="40" y="90" width="330" height="56" rx="28" fill="#fff" stroke="${K}" stroke-width="4"/><ellipse cx="85" cy="118" rx="26" ry="18" fill="#cfe3ef" stroke="#1b5c86" stroke-width="3"/><path d="M170 104q10 28 20 0q10 28 20 0q10 28 20 0" fill="none" stroke="#6b7177" stroke-width="7"/>
+ <rect x="360" y="98" width="30" height="40" fill="#555"/><path d="M390 118H520V240H600" fill="none" stroke="${K}" stroke-width="6"/>
+ <path d="M200 150l15 70h-30z" fill="#e8701d"/><rect x="190" y="220" width="20" height="60" fill="#6e7f88"/><rect x="155" y="280" width="90" height="12" rx="4" fill="#6e7f88"/>
+ <rect x="490" y="200" width="230" height="100" fill="#cfe3ef" opacity=".7" stroke="${K}" stroke-width="4"/><rect x="590" y="70" width="44" height="200" rx="10" fill="#fff" stroke="${K}" stroke-width="4"/><rect x="593" y="160" width="38" height="108" fill="#cfe3ef"/>
+ ${[0,1,2,3].map(i=>`<circle cx="612" cy="${240-i*22}" r="6" fill="none" stroke="#1b5c86" stroke-width="2"/>`).join('')}
+ ${T(90,180,'صوف مبلل بالماء',22)}${T(220,72,'صوف حديدي',22)}${T(612,55,'هيدروجين',24,'#c4513e')}${T(200,315,'حرارة',22)}</svg>`;
+
+/* ============ نموذج الشرائح ============ */
+const SECS=[['البداية',2],['التمهيد',3],['سلسلة النشاط',5],['الماء والحمض',8],['الكربون والأكاسيد',6],['محاليل الأملاح',6],['تمرين تكويني',5],['تمرين ختامي',5]];
+const SL=[];const add=(sec,title,render)=>SL.push({sec,title,render});
+let idx=0,S={},cur={};
+const H=(chip,t)=>`<div class="head"><span class="chip">${chip}</span><h1 class="t">${t}</h1></div>`;
+function bindChoice(box,q){box.addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b||b.disabled)return;const ok=+b.dataset.j===q.a;b.classList.add(ok?'right':'wrong');if(ok)$$('.opt',box).forEach(x=>x.disabled=true);else b.disabled=true;$('.fbx',box).innerHTML=`<div class="fb ${ok?'ok':'no'}">${ok?'✔ صحيح! ':'✘ ليست هذه. '}${ok?q.x:(q.w||'فكّري مرة أخرى.')}</div>`})}
+const chk=(q)=>`<div class="chk" data-s="${q.s}"><div class="q">${q.q}</div><div class="opts">${shuffle(q.o.map((o,j)=>[o,j])).map(([o,j])=>`<button class="opt" data-j="${j}">${o}</button>`).join('')}</div><div class="fbx"></div></div>`;
+const reveal=el=>el.addEventListener('click',e=>{const c=e.target.closest('.card,.term,.mc');if(c)c.classList.add('open')});
+const EQ=(t,s)=>`<div class="ex" data-s="${s}" style="direction:ltr;text-align:center"><span class="n" style="font-size:calc(34px*var(--fs))">${t}</span></div>`;
+
+/* ---------- 0. البداية ---------- */
+add(0,'البداية',el=>{el.innerHTML=`<div class="home"><div class="col" style="gap:20px">
+  <div class="sub">الكيمياء • الصف العاشر • الوحدة الأولى: الفلزات وخصائصها</div>
+  <h1>نشاط <span>الفلزات</span></h1>
+  <div class="sub" style="color:var(--turq)">١-٤ • سلسلة النشاط، والماء والأحماض، والكربون، وتفاعلات الإزاحة</div>
+  <div class="sub">إعداد: أ. رتاج الراسبي • كتاب الطالب صـ ٢٣–٣١ • ٤٠ دقيقة</div>
+  <div><button class="big" id="go1">ابدئي الدرس ←</button></div></div>
+  <figure class="pic" style="flex-direction:row;justify-content:center;gap:24px">${D.beaker('#5B9BE0','#AEB6BD',null,200)}<span style="font-size:70px;color:var(--sand)">←</span>${D.beaker('#EEF5F8','#AEB6BD','#B5633A',200)}<figcaption style="align-self:end">من يزيح من؟</figcaption></figure></div>`;
+  $('#go1',el).onclick=()=>go(idx+1)});
+
+add(0,'معايير النجاح',el=>{const plan=SECS.map(([n,m])=>`<span class="pl" style="flex:${m}"><b>${ar(m)} د</b>${n}</span>`).join('');
+  el.innerHTML=`<div class="outcome">الأهداف ١.٥ و ٢.٥ و ٣.٥: ترتيب الفلزات حسب نشاطها، وتفاعلات الإزاحة، واستنتاج الترتيب من النتائج</div>
+  <div class="letter"><h1 class="t" style="font-size:calc(50px*var(--fs))">في نهاية الحصة أستطيع أن:</h1><ol style="font-size:calc(31px*var(--fs))">
+   <li>أحدّد المقصود بـ<b>سلسلة النشاط الكيميائي</b>.</li>
+   <li>أرتّب الفلزات حسب تفاعلها مع <b>الماء وبخار الماء والحمض المخفف</b>، وأكتب معادلاتها.</li>
+   <li>أستخدم <b>اختزال الأكاسيد بالكربون</b> لترتيب الفلزات.</li>
+   <li>أعرّف <b>تفاعل الإزاحة</b>، وأربط النشاط بتكوين <b>أيون موجب</b>.</li>
+   <li>أكتب المعادلات <b>اللفظية والرمزية والأيونية</b> لتفاعلات الإزاحة وأتوقّع حدوثها.</li>
+   <li>أستنتج ترتيب النشاط من <b>نتائج تجريبية</b>.</li></ol></div><div class="plan">${plan}</div>`});
+
+/* ---------- 1. التمهيد ---------- */
+add(1,'التمهيد: تذكّري الدرس السابق',el=>{const Q=[['رتّبي Li و Na و K حسب نشاطها.','Li أقل نشاطًا، ثم Na، ثم K الأكثر نشاطًا.'],['ما ناتجا تفاعل الفلز القلوي مع الماء؟','هيدروكسيد الفلز + هيدروجين.'],['أيهما أنشط: الصوديوم أم الحديد؟ كيف عرفتِ؟','الصوديوم: يتفاعل بشدة مع الماء البارد، أما الحديد فلا. فهل نستطيع ترتيب كل الفلزات بهذه الطريقة؟']];
+  el.innerHTML=`${H('تمهيد','تذكّري: الفلزات القلوية')}
+  <div class="grid2" style="grid-template-columns:1fr 760px"><div class="qa">${Q.map((q,i)=>`<div class="card" tabindex="0"><div class="q"><span class="no">${ar(i+1)}</span>${q[0]}</div><div class="a">${q[1]}</div><div class="tapme">اضغطي لإظهار الإجابة</div></div>`).join('')}</div>
+  <figure class="pic" style="flex-direction:row;justify-content:center">${D.beaker('#BFE0EA','#C9CED3',null,200)}${D.beaker('#BFE0EA','#6B7177',null,200)}<figcaption style="align-self:end">صوديوم… وحديد</figcaption></figure></div>`;reveal(el)});
+
+/* ---------- 2. سلسلة النشاط ---------- */
+add(2,'سلسلة النشاط الكيميائي',el=>{el.innerHTML=`${H('سلسلة النشاط','قائمة ترتيب للفلزات حسب نشاطها')}
+  <div class="grid2" style="grid-template-columns:1fr 600px"><div class="col">
+   <div class="fix" data-s="1"><span class="lab">التعريف:</span>سلسلة النشاط الكيميائي: قائمة ترتيب للفلزات وفقًا لنشاطها الكيميائي.</div>
+   <div class="line" data-s="2">نعرف نشاط الفلز من تفاعله مع: <span class="h">الماء</span> • <span class="h">الأحماض المخففة</span> • <span class="h">الإزاحة</span></div>
+   <div class="line" data-s="3">الكربون والهيدروجين <b>لافلزان</b>، نضعهما لنعرف: هل الفلز أنشط منهما أم أقل؟</div>
+   <div class="ex" data-s="4"><span class="lab">للحفظ:</span>«<b>ك</b>يف <b>ن</b>قرأ <b>ك</b>تب <b>م</b>كتبة <b>أ</b>نيقة، <b>ك</b>ي <b>خ</b>يالنا <b>ح</b>ر <b>ق</b>بل <b>ر</b>حلة <b>ه</b>ادئة <b>ن</b>حو <b>ف</b>جر <b>ذ</b>هبي»</div>
+  </div><figure class="pic">${D.series()}</figure></div>`});
+
+/* ---------- 3. الماء والحمض ---------- */
+add(3,'التفاعل مع الماء',el=>{const C=[['#c4513e','الماء البارد','K • Na • Ca • Mg','هيدروكسيد + هيدروجين'],['#c98b12','بخار الماء فقط','Al • Zn • Fe','أكسيد + هيدروجين'],['#5f6f7a','لا تتفاعل','Pb • Cu • Ag','—']];
+  el.innerHTML=`${H('الماء','ثلاث فئات… من الجدول ٤-١')}<div class="cols5" style="grid-template-columns:repeat(3,1fr)">${C.map((c,i)=>`<div class="c5" style="--c:${c[0]};min-height:330px;justify-content:center" data-s="${i+1}"><div class="tt" style="font-size:calc(44px*var(--fs))">${c[1]}</div><div style="font-size:calc(40px*var(--fs));font-weight:700;direction:ltr">${c[2]}</div><div class="why" style="font-size:calc(30px*var(--fs))">${c[3]}</div></div>`).join('')}</div>
+  ${EQ('Ca(s) + 2H₂O(l) → Ca(OH)₂(aq) + H₂(g)',4)}${EQ('Zn(s) + H₂O(g) → ZnO(s) + H₂(g)',5)}`});
+
+add(3,'النشاط ١-٢: الحديد مع بخار الماء',el=>{el.innerHTML=`${H('النشاط ١-٢','الصوف الحديدي مع بخار الماء')}
+  <div class="grid2" style="grid-template-columns:1fr 860px"><div class="col">
+   <div class="line" data-s="1">نسخّن الصوف الحديدي حتى يتوهّج، ثم نبخّر الماء من الصوف المبلل.</div>
+   <div class="line" data-s="2">نجمع <span class="h">الهيدروجين</span> فوق الماء، ونختبره بعود ثقاب مشتعل: <b>صوت فرقعة</b>.</div>
+   <div class="fix" data-s="3"><span class="lab">سلامة:</span>نُخرج أنبوبة التوصيل من الماء <u>قبل</u> إيقاف التسخين، ونضع شاشات واقية.</div>
+   ${EQ('Fe(s) + H₂O(g) → FeO(s) + H₂(g)',4)}
+  </div><figure class="pic">${D.steam}</figure></div>`});
+
+add(3,'التفاعل مع الحمض المخفف',el=>{el.innerHTML=`${H('الحمض','فلز + حمض ← ملح + هيدروجين')}
+  <div class="fix" data-s="1" style="text-align:center;font-size:calc(42px*var(--fs))">فلز + حمض الهيدروكلوريك ← كلوريد الفلز + هيدروجين</div>
+  ${EQ('Mg(s) + 2HCl(aq) → MgCl₂(aq) + H₂(g)',2)}${EQ('2Al(s) + 6HCl(aq) → 2AlCl₃(aq) + 3H₂(g)',3)}
+  <div class="cols5" style="grid-template-columns:repeat(3,1fr);margin-top:14px">
+   <div class="c5" style="--c:#c4513e" data-s="4"><div class="tt">K • Na • Ca</div><div class="why">عنيف جدًا: نتجنّبه في المختبر</div></div>
+   <div class="c5" style="--c:#c98b12" data-s="5"><div class="tt">Mg • Al • Zn • Fe</div><div class="why">آمن، والشدة تقلّ نزولًا</div></div>
+   <div class="c5" style="--c:#5f6f7a" data-s="6"><div class="tt">تحت H: Cu • Ag</div><div class="why">لا تتفاعل: لا تستطيع إزاحة الهيدروجين</div></div></div>`});
+
+add(3,'تحقّقي: سؤال اختبار',el=>{el.innerHTML=`${H('من الاختبارات','٢٠٢٤/٢٠٢٥ • الدور الأول')}
+  <div class="line" style="margin-bottom:14px">تفاعل حمض الهيدروكلوريك المخفف مع <b>الألومنيوم</b> لمدة ١٠ ثوانٍ. ماذا يحدث لحجم الغاز إذا استُبدل بـ<b>الكالسيوم</b>؟</div>
+  ${chk({s:0,q:'اختاري:',o:['يقل','يزيد','لا يتغير'],a:1})}
+  <div class="fix" data-s="1" style="margin-top:16px">يزيد، لأن الكالسيوم أعلى من الألومنيوم في السلسلة فهو أنشط.</div>`;bindChoice($('.chk',el),{a:1,x:'الكالسيوم أنشط.'})});
+
+/* ---------- 4. الكربون والأكاسيد ---------- */
+add(4,'الاختزال بالكربون',el=>{el.innerHTML=`${H('الكربون','الكربون يأخذ الأكسجين… ممن تحته فقط')}
+  <div class="grid2" style="grid-template-columns:1fr 560px"><div class="col">
+   <div class="fix" data-s="1"><span class="lab">الاختزال:</span>تفاعل يتم فيه نزع الأكسجين من مركّب ما.</div>
+   <div class="line" data-s="2">الكربون يختزل أكاسيد الفلزات <span class="h">تحته</span> في السلسلة: Zn و Fe و Cu.</div>
+   ${EQ('2CuO(s) + C(s) → 2Cu(s) + CO₂(g)',3)}
+   <div class="line" data-s="4">كلما زاد الفرق في النشاط زادت الشدة: C مع أكسيد النحاس <b>أشد</b> من C مع أكسيد الحديد.</div>
+  </div><figure class="pic">${D.series({mh:560,band:{C:'#e3ad3c',Zn:'#d6f1f2',Fe:'#d6f1f2',Sn:'#d6f1f2',Pb:'#d6f1f2',Cu:'#d6f1f2',K:'#fbe3dc',Na:'#fbe3dc',Ca:'#fbe3dc',Mg:'#fbe3dc',Al:'#fbe3dc'}})}<figcaption>الأحمر: لا يختزلها الكربون • الفيروزي: يختزلها</figcaption></figure></div>`});
+
+add(4,'الإزاحة مع الأكاسيد',el=>{el.innerHTML=`${H('الإزاحة','الأنشط يأخذ الأكسجين')}
+  <div class="fix" data-s="1"><span class="lab">الإزاحة (الإحلال):</span>تفاعل تتم فيه إزاحة فلز من مركّبه ليحل محله فلز آخر أكثر نشاطًا.</div>
+  ${EQ('Fe(s) + CuO(s) → FeO(s) + Cu(s)',2)}${EQ('Fe(s) + (Cu²⁺,O²⁻)(s) → (Fe²⁺,O²⁻)(s) + Cu(s)',3)}
+  <div class="line" data-s="4">الحديد: ذرة ← <span class="h">أيون موجب</span>. النحاس: أيون موجب ← ذرة.</div>
+  <div class="fix" data-s="5" style="text-align:center">النشاط الكيميائي = سهولة وسرعة تكوين الفلز لأيون موجب</div>
+  <div class="line" data-s="6">والعكس؟ النحاس + أكسيد الحديد (II): <b>لا يحدث تفاعل</b>.</div>`});
+
+add(4,'الجدول ٥-١',el=>{const R=[['النحاس','✗','✗','✗',0],['الحديد','✓','✗','✗',1],['الألومنيوم','✓','✓','✗',2],['الماغنيسيوم','✓','✓','✓',3]];
+  el.innerHTML=`${H('الجدول ٥-١','عدّي علامات ✓')}<div class="grid2" style="grid-template-columns:1fr 600px"><div class="col"><table style="width:100%;border-collapse:separate;border-spacing:6px;font-size:calc(34px*var(--fs));text-align:center"><tr style="color:var(--sea)"><th></th><th>CuO</th><th>FeO</th><th>Al₂O₃</th></tr>${R.map((r,i)=>`<tr data-s="${i+1}"><th style="text-align:right">${r[0]}</th>${r.slice(1,4).map(x=>`<td style="background:${x==='✓'?'var(--ok-soft)':'var(--no-soft)'};border-radius:12px;font-weight:700">${x}</td>`).join('')}</tr>`).join('')}</table></div>
+  <div class="col"><div class="fix" data-s="5" style="font-size:calc(40px*var(--fs));text-align:center">Mg &gt; Al &gt; Fe &gt; Cu</div>
+  ${chk({s:6,q:'أيّ الأربعة أكبر قابلية لتكوين أيون موجب؟',o:['النحاس','الحديد','الماغنيسيوم'],a:2})}</div></div>`;bindChoice($('.chk',el),{a:2,x:'الأنشط = الأسهل في تكوين أيون موجب.'})});
+
+/* ---------- 5. محاليل الأملاح ---------- */
+add(5,'الخارصين في كبريتات النحاس',el=>{el.innerHTML=`${H('الإزاحة في المحاليل','الخارصين + كبريتات النحاس (II)')}
+  <div class="grid2" style="grid-template-columns:1fr 640px"><div class="col">
+   <div class="line" data-s="1">يتلاشى <span class="h">اللون الأزرق</span> حتى يصبح المحلول عديم اللون.</div>
+   <div class="line" data-s="2">يُغطّى الخارصين بطبقة <span class="h">بُنّية محمرة</span> من النحاس.</div>
+   ${EQ('Zn(s) + CuSO₄(aq) → ZnSO₄(aq) + Cu(s)',3)}${EQ('Zn(s) + Cu²⁺(aq) → Zn²⁺(aq) + Cu(s)',4)}
+   <div class="fix" data-s="5">Zn يفقد إلكترونين ← Zn²⁺ ، و Cu²⁺ يكسبهما ← Cu</div>
+  </div><figure class="pic" style="flex-direction:row;justify-content:center">${D.beaker('#5B9BE0','#AEB6BD',null,240)}<span style="font-size:70px;color:var(--sand);align-self:center">←</span>${D.beaker('#EEF5F8','#AEB6BD','#B5633A',240)}</figure></div>`});
+
+add(5,'الجدول ٦-١',el=>{const M=['الخارصين','الحديد','النحاس','الفضة'],S2=['ZnSO₄','FeSO₄','CuSO₄','AgNO₃'];const R=[[0,1,1,1],[0,0,1,1],[0,0,0,1],[0,0,0,0]];
+  el.innerHTML=`${H('الجدول ٦-١','من يتفاعل مع من؟')}<div class="grid2" style="grid-template-columns:1fr 560px"><div class="col"><table style="width:100%;border-collapse:separate;border-spacing:6px;font-size:calc(32px*var(--fs));text-align:center"><tr style="color:var(--sea)"><th></th>${S2.map(x=>`<th style="direction:ltr">${x}</th>`).join('')}</tr>${R.map((r,i)=>`<tr data-s="${i+1}"><th style="text-align:right">${M[i]}</th>${r.map((x,j)=>`<td style="background:${i===j?'#eee':x?'var(--ok-soft)':'var(--no-soft)'};border-radius:12px;font-weight:700">${i===j?'—':x?'✓':'✗'}</td>`).join('')}</tr>`).join('')}</table></div>
+  <div class="col"><div class="fix" data-s="5" style="font-size:calc(38px*var(--fs));text-align:center">Zn &gt; Fe &gt; Cu &gt; Ag</div>
+  <div class="line" data-s="6">النحاس في نترات الفضة: يصبح المحلول <b>أزرق</b> ويتكوّن راسب فضي.</div>${EQ('Cu(s) + 2Ag⁺(aq) → Cu²⁺(aq) + 2Ag(s)',7)}</div></div>`});
+
+add(5,'نشاط: يحدث أم لا يحدث؟',el=>{const P=[['Mg + CuSO₄','يحدث'],['Cu + ZnSO₄','لا يحدث'],['Fe + CuSO₄','يحدث'],['Ag + CuSO₄','لا يحدث'],['Zn + FeSO₄','يحدث'],['Cu + FeSO₄','لا يحدث']];
+  el.innerHTML=`${H('نشاط','توقّعي: هل يحدث تفاعل إزاحة؟')}<div class="qa" style="grid-template-columns:repeat(3,1fr);gap:16px">${P.map((p,i)=>`<div class="card" tabindex="0" style="text-align:center"><div class="q" style="direction:ltr;font-size:calc(40px*var(--fs))">${p[0]}</div><div class="a" style="font-size:calc(36px*var(--fs));color:${p[1]==='يحدث'?'var(--ok)':'var(--no)'}">${p[1]==='يحدث'?'✓ يحدث تفاعل':'✗ لا يحدث'}</div><div class="tapme">اضغطي للتحقق</div></div>`).join('')}</div>
+  <div class="note" style="margin-top:14px">القاعدة: الفلز يزيح من هو <b>تحته</b> في السلسلة فقط</div>`;reveal(el)});
+
+/* ---------- اربطي واحفظي (ضمن المحاليل) ---------- */
+add(5,'اربطي واحفظي',el=>{const M=[['#c4513e','⬆','الأنشط يزيح','يأخذ الأكسجين أو يخرج الفلز من محلوله'],['#1d8a5a','C','الكربون','يختزل أكاسيد من تحته فقط'],['#1b5c86','H','الهيدروجين','من فوقه يتفاعل مع الحمض'],['#7B3FA0','+','أيون موجب','الأنشط يكوّنه أسهل وأسرع']];
+  el.innerHTML=`${H('اربطي واحفظي','أربع قواعد تحلّ أي سؤال')}<div class="mem">${M.map(m=>`<div class="mc" style="--c:${m[0]}" tabindex="0"><div class="k" style="font-size:calc(90px*var(--fs))">${m[1]}</div><div class="ar">⬇</div><div class="v">${m[2]}</div><div class="x">${m[3]}</div></div>`).join('')}</div>
+  <div class="memo" data-s="1">في أسئلة الفلزات الافتراضية: <span class="h">عدّي التفاعلات</span>… الأكثر تفاعلًا هو الأنشط</div>`;reveal(el)});
+
+/* ---------- 6. تمرين تكويني ---------- */
+add(6,'تمرين تكويني',el=>{el.innerHTML=`<div class="exh"><div class="k">تمرين تكويني</div><div class="p"><span>عمل جماعي</span><span>كتاب النشاط</span></div><div class="s"><b>التمرين ١-٢</b> • سلسلة النشاط الكيميائي للفلزات • صـ ١٦–١٧</div><div class="s">الأجزاء أ – هـ</div></div>`});
+add(6,'التمرين ١-٢ (أ – ج)',el=>{const Q=[['أ. اكتبي المعادلة الرمزية الموزونة لتفاعل الماغنيسيوم مع بخار الماء.','<span class="n" dir="ltr">Mg(s) + H₂O(g) → MgO(s) + H₂(g)</span>'],['ب. اختاري فلزًا من السلسلة لا يتفاعل مع بخار الماء.','النحاس (أو الفضة أو الذهب)'],['ج. اختاري فلزًا يتفاعل بأمان مع حمض مخفف.','الماغنيسيوم (أو الخارصين أو الحديد)']];
+  el.innerHTML=`${H('كتاب النشاط صـ ١٦','التمرين ١-٢ • أ، ب، ج')}<div class="qa" style="gap:14px">${Q.map(q=>`<div class="card" style="padding:8px 20px" tabindex="0"><div class="q" style="font-size:calc(32px*var(--fs))">${q[0]}</div><div class="a" style="font-size:calc(32px*var(--fs))">${q[1]}</div></div>`).join('')}</div>`;reveal(el)});
+add(6,'التمرين ١-٢ (د – هـ)',el=>{const R=[['Cu في AgNO₃','رمادي ← مغطّى ببلّورات فلزية','عديم اللون ← أزرق'],['Ag في CuSO₄','فضي ← لا يتغير','أزرق ← أزرق'],['Fe في CuSO₄','رمادي ← مغطّى ببُنّي محمر','أزرق ← أخضر باهت'],['Zn في CuSO₄','رمادي ← مغطّى ببُنّي محمر','أزرق ← عديم اللون'],['Zn في FeSO₄','رمادي ← مغطّى برمادي داكن','أخضر باهت ← عديم اللون']];
+  el.innerHTML=`${H('كتاب النشاط صـ ١٧','التمرين ١-٢ • د، هـ')}<div class="qa" style="grid-template-columns:1fr 1fr;gap:10px">${R.map(r=>`<div class="card" style="padding:6px 18px" tabindex="0"><div class="q" style="font-size:calc(30px*var(--fs))">${r[0]}</div><div class="a" style="font-size:calc(26px*var(--fs))">الفلز: ${r[1]}<br>المحلول: ${r[2]}</div></div>`).join('')}<div class="card" style="padding:6px 18px" tabindex="0"><div class="q" style="font-size:calc(30px*var(--fs))">هـ. رتّبي تنازليًا</div><div class="a" style="font-size:calc(34px*var(--fs))">Zn &gt; Fe &gt; Cu &gt; Ag</div></div></div>`;reveal(el)});
+
+/* ---------- 7. تمرين ختامي ---------- */
+add(7,'تمرين ختامي',el=>{el.innerHTML=`<div class="exh"><div class="k">تمرين ختامي</div><div class="p"><span>عمل فردي</span><span>تقويم أقران</span></div><div class="s"><b>كتاب الطالب صـ ٣١</b> • النشاط ١-٤: السؤالان ١ و ٣</div><div class="s">أجيبي وحدكِ في الكتاب</div></div>`});
+add(7,'النشاط ١-٤: السؤال ١',el=>{el.innerHTML=`${H('كتاب الطالب صـ ٣١','الكروم أنشط من النحاس وأقل نشاطًا من الماغنيسيوم')}
+  <div class="bq">أ. نحاس + كبريتات الكروم (III) ← ......</div><div class="ans" data-s="1"><b>الإجابة:</b> لا يحدث تفاعل.</div>
+  <div class="bq" style="margin-top:12px">ب. ماغنيسيوم + كبريتات الكروم (III) ← ......</div><div class="ans" data-s="2"><b>الإجابة:</b> كبريتات الماغنيسيوم + كروم</div>
+  <div class="bq" style="margin-top:12px">ج. كروم + كبريتات النحاس (II) ← ......</div><div class="ans" data-s="3"><b>الإجابة:</b> كبريتات الكروم (III) + نحاس</div>`});
+add(7,'النشاط ١-٤: السؤال ٣',el=>{el.innerHTML=`${H('كتاب الطالب صـ ٣١','اكتبي المعادلات الأيونية لأربعة تفاعلات')}
+  <div class="ans" data-s="1" style="direction:ltr;text-align:center"><span class="n">Mg(s) + Cu²⁺(aq) → Mg²⁺(aq) + Cu(s)</span></div>
+  <div class="ans" data-s="2" style="direction:ltr;text-align:center;margin-top:10px"><span class="n">Zn(s) + Cu²⁺(aq) → Zn²⁺(aq) + Cu(s)</span></div>
+  <div class="ans" data-s="3" style="direction:ltr;text-align:center;margin-top:10px"><span class="n">Fe(s) + Cu²⁺(aq) → Fe²⁺(aq) + Cu(s)</span></div>
+  <div class="ans" data-s="4" style="direction:ltr;text-align:center;margin-top:10px"><span class="n">Mg(s) + Zn²⁺(aq) → Mg²⁺(aq) + Zn(s)</span></div>`});
+
+/* ---------- الخريطة الذهنية ---------- */
+add(7,'الخريطة الذهنية',el=>{const B=[{t:'سلسلة النشاط',c:'#b8652f',x:24,y:16,i:['قائمة ترتيب الفلزات','K أعلاها و Au أسفلها','C و H للمقارنة']},{t:'الماء',c:'#1b5c86',x:76,y:16,i:['K Na Ca Mg: بارد','Al Zn Fe: بخار','Cu Ag: لا تتفاعل']},{t:'الحمض المخفف',c:'#7B3FA0',x:21,y:72,i:['كلوريد + هيدروجين','تحت H لا يتفاعل']},{t:'الكربون',c:'#1d8a5a',x:79,y:72,i:['يختزل من تحته','الاختزال = نزع O']},{t:'الإزاحة',c:'#c98b12',x:50,y:93,i:['الأنشط يزيح','أيون موجب أسهل','معادلة أيونية']}];
+  const full=!!S.full;S.o=S.o||{};
+  el.innerHTML=`<div class="head" style="justify-content:space-between"><div style="display:flex;gap:16px;align-items:center"><span class="chip">تصحيح الخريطة</span><h1 class="t">الخريطة الذهنية للدرس</h1></div><div class="tabs"><button data-f="0" aria-pressed="${!full}">الخريطة فارغة</button><button data-f="1" aria-pressed="${full}">إظهار الحلول</button></div></div>
+  <div class="mm"><svg class="ln" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${B.map(b=>`<path d="M50 50 C${(50+b.x)/2} 50 ${(50+b.x)/2} ${b.y} ${b.x} ${b.y}" stroke="${b.c}" fill="none" vector-effect="non-scaling-stroke" style="stroke-width:7px"/>`).join('')}</svg>
+  <div class="core">نشاط<br>الفلزات</div>
+  ${B.map((b,k)=>`<div class="br" style="--c:${b.c};left:${b.x}%;top:${b.y}%"><div class="bt" data-b="${k}">${b.t}</div><div class="its">${b.i.map((t,j)=>{const on=full||S.o[k+'-'+j];return `<button class="bi ${on?'shown':'blank'}" data-o="${k}-${j}">${on?t:'؟'}</button>`}).join('')}</div></div>`).join('')}</div>`;
+  el.onclick=e=>{const f=e.target.closest('[data-f]');if(f){S.full=f.dataset.f==='1';if(!S.full)S.o={};render(true);return}const o=e.target.closest('[data-o]');if(o){S.o[o.dataset.o]=1;render(true);return}const t=e.target.closest('[data-b]');if(t){B[+t.dataset.b].i.forEach((_,j)=>S.o[t.dataset.b+'-'+j]=1);render(true)}}});
+
+/* ============ حركة الإلكترونات ============ */
+function animate(svg){if(!svg||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const vb=svg.viewBox.baseVal,W=vb.width,Hh=vb.height;const dots=$$('.e',svg);const ions=$$('.ion circle',svg).map(c=>[+c.getAttribute('cx'),+c.getAttribute('cy'),+c.getAttribute('r')]);
+  const P=dots.map(d=>({x:+d.getAttribute('cx'),y:+d.getAttribute('cy'),vx:(Math.random()-.5)*2,vy:(Math.random()-.5)*2}));cur.flow=false;
+  const step=()=>{if(!svg.isConnected)return;P.forEach((p,i)=>{p.vx+=(Math.random()-.5)*.5;p.vy+=(Math.random()-.5)*.5;p.vx*=.94;p.vy*=.94;p.x+=p.vx+(cur.flow?-2.4:0);p.y+=p.vy;
+    if(p.y<16||p.y>Hh-16){p.vy*=-1;p.y=Math.min(Hh-16,Math.max(16,p.y))}
+    if(cur.flow){if(p.x<12)p.x=W-12}else if(p.x<16||p.x>W-16){p.vx*=-1;p.x=Math.min(W-16,Math.max(16,p.x))}
+    for(const[cx,cy,r]of ions){const dx=p.x-cx,dy=p.y-cy,d=Math.hypot(dx,dy)||1,m=r+13;if(d<m){p.x=cx+dx/d*m;p.y=cy+dy/d*m;p.vx+=dx/d*.8;p.vy+=dy/d*.8}}
+    dots[i].setAttribute('cx',p.x.toFixed(1));dots[i].setAttribute('cy',p.y.toFixed(1))});requestAnimationFrame(step)};requestAnimationFrame(step)}
+
+/* ============ المحرّك ============ */
+const screenEl=$('#screen');
+function render(keep){const s=SL[idx];if(!keep)S={};screenEl.innerHTML='';screenEl.onclick=null;const el=document.createElement('div');el.style.height='100%';screenEl.appendChild(el);el.onclick=null;s.render(el);
+  fixFormulas(el);cur.steps=$$('[data-s]',el).map(x=>+x.dataset.s);cur.max=cur.steps.length?Math.max(...cur.steps):0;if(!keep||S.step==null)S.step=0;applySteps();updateBar();try{localStorage.setItem('rt-14-idx',idx)}catch(e){}}
+function fixFormulas(root){const re=/([A-Za-z()₀-₉]+[⁰-⁹]*[⁺⁻])/g;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>/[⁺⁻]/.test(n.nodeValue)&&!n.parentElement.closest("svg,bdi,[dir=ltr],.n,option")?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT});const L=[];while(w.nextNode())L.push(w.currentNode);L.forEach(t=>{const f=document.createDocumentFragment();let last=0;t.nodeValue.replace(re,(m,_,i)=>{f.append(t.nodeValue.slice(last,i));const b=document.createElement("bdi");b.dir="ltr";b.textContent=m;f.append(b);last=i+m.length});f.append(t.nodeValue.slice(last));t.replaceWith(f)})}
+function applySteps(){$$('[data-s]',screenEl).forEach(x=>x.classList.toggle('hid',+x.dataset.s>S.step))}
+function updateBar(){const s=SL[idx];$('#count').textContent=`${ar(idx+1)} / ${ar(SL.length)} • ${s.title}`;$('#bPrev').disabled=idx===0;$('#bNext').disabled=idx===SL.length-1;$('#bRev').disabled=S.step>=cur.max;$('#bAll').disabled=S.step>=cur.max;
+  $('#prog>div').style.width=((idx+1)/SL.length*100)+'%';
+  $('#secs').innerHTML=SECS.map(([n,m],i)=>`<button class="sec ${i===s.sec?'on':i<s.sec?'done':''}" data-sec="${i}">${n}<small>${ar(m)} د</small></button>`).join('')}
+function go(i){idx=Math.max(0,Math.min(SL.length-1,i));render()}
+$('#bNext').onclick=()=>go(idx+1);$('#bPrev').onclick=()=>go(idx-1);
+$('#bRev').onclick=()=>{if(S.step<cur.max){S.step=cur.steps.filter(v=>v>S.step).sort((a,b)=>a-b)[0];applySteps();updateBar()}};
+$('#bAll').onclick=()=>{S.step=cur.max;applySteps();updateBar()};
+$('#bReset').onclick=()=>render();
+$('#secs').onclick=e=>{const b=e.target.closest('[data-sec]');if(b)go(SL.findIndex(s=>s.sec===+b.dataset.sec))};
+let FS=1;const setFs=()=>document.documentElement.style.setProperty('--fs',FS);
+$('#bUp').onclick=()=>{FS=Math.min(1.25,FS+.05);setFs()};$('#bDn').onclick=()=>{FS=Math.max(.8,FS-.05);setFs()};
+$('#bFull').onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}};
+$('#bMenu').onclick=()=>{$('#mgrid').innerHTML=SL.map((s,i)=>`<button class="${i===idx?'cur':''}" data-i="${i}"><span class="n">${ar(i+1)}</span> ${s.title}</button>`).join('');$('#ov').hidden=false};
+$('#mgrid').onclick=e=>{const b=e.target.closest('[data-i]');if(b){$('#ov').hidden=true;go(+b.dataset.i)}};$('#bClose').onclick=()=>$('#ov').hidden=true;
+let tOn=false,t0=0,tAcc=0;setInterval(()=>{if(!tOn)return;const s=Math.floor((tAcc+Date.now()-t0)/1000);$('#timer').textContent=ar(String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'))},500);
+$('#bTimer').onclick=()=>{if(tOn){tAcc+=Date.now()-t0;tOn=false;$('#bTimer').textContent='تشغيل المؤقت'}else{t0=Date.now();tOn=true;$('#bTimer').textContent='إيقاف المؤقت'}};
+document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea'))return;if(e.key==='ArrowLeft'||e.key==='PageDown')go(idx+1);else if(e.key==='ArrowRight'||e.key==='PageUp')go(idx-1);else if(e.key===' '){e.preventDefault();$('#bRev').click()}});
+function fit(){const st=$('#stage'),k=Math.min(innerWidth/1920,innerHeight/1080);st.style.transform=`scale(${k})`}
+addEventListener('resize',fit);fit();
+try{const v=+localStorage.getItem('rt-14-idx');if(v>0&&v<SL.length)idx=v}catch(e){}
+render();
+</script>
+</body>
+</html>

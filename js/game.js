@@ -7,6 +7,7 @@ const LV_META={
   colors:{name:"مختبر الألوان",tag:"خمّني اللون",ic:"M9 3h6M10 3v10a4 4 0 1 0 4 0V3M9 13h6"},
   react:{name:"مختبر الماء",tag:"راقبي واستنتجي",ic:"M4 14c2-2 4-2 6 0s4 2 6 0 4-2 4-2M4 18c2-2 4-2 6 0s4 2 6 0 4-2 4-2M12 3v6M9 6l3 3 3-3"},
   order:{name:"سباق الترتيب",tag:"رتّبي بالتسلسل",ic:"M5 18h3v-5H5zM10.5 18h3V9h-3zM16 18h3V5h-3z"},
+  duel:{name:"مبارزة الفلزات",tag:"من يزيح من؟",ic:"M6 20V8l3-4 3 4v12M12 20V12l3-4 3 4v8M4 20h16"},
   check:{name:"ارسمي وتحقّقي",tag:"المستوى الأخير",ic:"M4 20l4-1 11-11-3-3L5 16zM14 6l3 3"}
 };
 const G=()=>{S.game=S.game||{};return S.game};
@@ -39,6 +40,7 @@ function startLevel(id,i){const a=L(id).activities[i];PLAY={id,i,a,pts:0,miss:0,
   if(a.type==="colors"){PLAY.items=shuffleA(a.items)}
   if(a.type==="react"){PLAY.qi=0;PLAY.ok=0}
   if(a.type==="order"){PLAY.r=0;PLAY.got=[];PLAY.pool=shuffleA(a.rounds[0].items)}
+  if(a.type==="duel"){PLAY.items=shuffleA(a.items)}
   if(a.type==="check")PLAY.ticks=a.items.map(()=>false);
   render();setTimeout(()=>{const g=$("#game");if(g)g.scrollIntoView({behavior:"smooth",block:"start"})},40)}
 const shuffleA=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
@@ -104,6 +106,16 @@ function drawLevel(){
           setTimeout(()=>{PLAY.lock=false;PLAY.r++;if(PLAY.r>=a.rounds.length)endLevel(PLAY.miss===0?3:PLAY.miss<=2?2:1);else{PLAY.got=[];PLAY.pool=shuffleA(a.rounds[PLAY.r].items);drawLevel()}},2200)}
         else drawLevel()}
       else{PLAY.miss++;bump(false,b);$("#fbk").textContent="ليس هذا دوره في الترتيب. فكّري في الاتجاه نزولًا في المجموعة.";$("#fbk").className="fbk no"}});
+  }
+  if(a.type==="duel"){
+    const it=PLAY.items[PLAY.k],D=window.DISP,M=D.MET[it[0]],T=D.SALT[it[1]];
+    el.innerHTML=`${playHead()}<div class="rush"><div class="rq"><small>مبارزة ${PLAY.k+1} من ${PLAY.items.length}</small><b>${M.n} <bdi dir="ltr">${it[0]}</bdi> في محلول ${T[0]} <bdi dir="ltr">${T[1]}</bdi></b></div><div id="sim" style="max-width:260px;margin:auto"></div><div class="ropts"><button class="opt" data-v="1">يحدث تفاعل إزاحة</button><button class="opt" data-v="0">لا يحدث تفاعل</button></div><div class="fbk" id="fbk"></div></div>`;
+    dispSim($("#sim"),it[0],it[1],"before");
+    el.querySelectorAll(".ropts .opt").forEach(b=>b.onclick=()=>{if(PLAY.lock)return;PLAY.lock=true;const R=dispResult(it[0],it[1]);const ok=(b.dataset.v==="1")===R.ok;
+      el.querySelectorAll(".ropts .opt").forEach(x=>{x.disabled=true;if((x.dataset.v==="1")===R.ok)x.classList.add("right")});if(!ok)b.classList.add("wrong");
+      dispSim($("#sim"),it[0],it[1]);if(ok)PLAY.pts+=10;else PLAY.miss++;bump(ok);
+      $("#fbk").innerHTML=(ok?"صحيح! +10 ":"")+R.obs;$("#fbk").className="fbk "+(ok?"ok":"no");
+      setTimeout(()=>{PLAY.lock=false;PLAY.k++;if(PLAY.k>=PLAY.items.length)endLevel(PLAY.miss<=1?3:PLAY.miss<=3?2:1);else drawLevel()},ok?2600:3800)});
   }
   if(a.type==="check"){
     el.innerHTML=`${playHead()}<div class="two"><div data-widget="lattice-static"></div><ul class="criteria big">${a.items.map((x,k)=>`<li><label><input type="checkbox" data-k="${k}" ${PLAY.ticks[k]?'checked':''}>${x}</label></li>`).join("")}</ul></div><div style="text-align:center;margin-top:14px"><button class="btn date" id="fin" ${PLAY.ticks.every(Boolean)?'':'disabled'}>أنهيت رسمي</button></div>`;

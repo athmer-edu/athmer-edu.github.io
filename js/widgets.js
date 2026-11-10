@@ -118,3 +118,80 @@ window.__widgets = () => document.querySelectorAll("[data-widget]").forEach(el =
     el.querySelectorAll(".mb").forEach(b=>b.onclick=()=>{k=b.dataset.k;el.querySelectorAll(".mb").forEach(x=>x.setAttribute("aria-pressed",x===b));draw()});draw();
   };
 })();
+
+/* ===== الدرس 1-4: سلسلة النشاط الكيميائي ومختبر الإزاحة ===== */
+(function(){
+  const st=document.createElement("style");
+  st.textContent=`.ser{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:16px;align-items:start}
+  @media (max-width:700px){.ser{grid-template-columns:1fr}}
+  .ser-l{list-style:none;margin:0;padding:0;display:grid;gap:5px;position:relative}
+  .ser-l li button{width:100%;display:flex;align-items:center;gap:10px;border:0;border-radius:10px;padding:6px 12px;font:600 15px var(--body);cursor:pointer;color:var(--ink);background:var(--paper);box-shadow:inset 0 0 0 1px var(--rule);text-align:start}
+  .ser-l li button b{font:700 17px var(--display);min-width:34px;direction:ltr;text-align:center}
+  .ser-l li.nm button{background:var(--date-tint);font-style:normal}
+  .ser-l li button[aria-pressed="true"]{background:var(--palm);color:#fff;box-shadow:none}
+  .ser-card{border-radius:14px;background:var(--paper);box-shadow:inset 0 0 0 1px var(--rule);padding:14px 16px;position:sticky;top:80px}
+  .ser-card h4{margin:0 0 8px;font:700 19px var(--display);color:var(--palm)}
+  .ser-card dl{margin:0;display:grid;gap:8px}.ser-card dt{font-weight:700;font-size:14px;color:var(--soft)}.ser-card dd{margin:0;line-height:1.7}
+  .ser-card .eq{direction:ltr;text-align:start;font:600 15px var(--body);background:var(--sheet);border-radius:8px;padding:4px 8px;margin-top:4px;overflow-x:auto;white-space:nowrap}
+  .dlab-ctl{display:grid;gap:10px;margin-bottom:10px}
+  .dlab-ctl .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .dlab-ctl .row>span{font-weight:700;color:var(--soft);min-width:70px}
+  .dlab-ctl button{border:0;border-radius:10px;padding:7px 12px;font:600 14px var(--body);background:var(--palm-tint);color:var(--palm);cursor:pointer}
+  .dlab-ctl button[aria-pressed="true"]{background:var(--palm);color:#fff}
+  .dsim{display:block;width:100%;max-width:340px;margin:0 auto}
+  .dlab-out{border-radius:14px;background:var(--paper);box-shadow:inset 0 0 0 1px var(--rule);padding:12px 16px;margin-top:8px;line-height:1.8}
+  .dlab-out .eq{direction:ltr;text-align:center;font:600 15px var(--body);background:var(--sheet);border-radius:8px;padding:6px;margin-top:6px;overflow-x:auto;white-space:nowrap}`;
+  document.head.appendChild(st);
+
+  /* بيانات الفلزات (من الجدول 4-1 والشكل 4-1 في كتاب الطالب) */
+  const SER=[
+    ["K","البوتاسيوم","يتفاعل بشدة مع الماء البارد منتجًا الهيدروجين.","تفاعل قوي جدًا (خطير، يُتجنّب في المختبر).","لا يُختزل أكسيده بالكربون (أنشط من الكربون).","2K(s) + 2H₂O(l) → 2KOH(aq) + H₂(g)"],
+    ["Na","الصوديوم","يتفاعل بشدة مع الماء البارد منتجًا الهيدروجين.","تفاعل قوي جدًا (خطير، يُتجنّب في المختبر).","لا يُختزل أكسيده بالكربون.","2Na(s) + 2H₂O(l) → 2NaOH(aq) + H₂(g)"],
+    ["Ca","الكالسيوم","يتفاعل بشدة مع الماء البارد، وينتج الهيدروجين بسرعة ومحلولًا قلويًا (ماء الجير).","تفاعل عنيف جدًا، غير آمن في المختبر.","لا يُختزل أكسيده بالكربون.","Ca(s) + 2H₂O(l) → Ca(OH)₂(aq) + H₂(g)"],
+    ["Mg","الماغنيسيوم","بطيء جدًا مع الماء البارد، ويتوهّج مع بخار الماء فيكوّن أكسيد الماغنيسيوم والهيدروجين.","يتفاعل بأمان منتجًا كلوريد الماغنيسيوم والهيدروجين.","لا يُختزل أكسيده بالكربون.","Mg(s) + 2H₂O(g) → MgO(s) + H₂(g)"],
+    ["Al","الألومنيوم","يتفاعل مع بخار الماء عند التسخين (بعد إزالة طبقة أكسيد الألومنيوم الواقية).","يتفاعل بقوة أقل منتجًا الهيدروجين.","لا يُختزل أكسيده بالكربون.","2Al(s) + 6HCl(aq) → 2AlCl₃(aq) + 3H₂(g)"],
+    ["C","الكربون","لافلز يُدرج في السلسلة للمقارنة.","—","يختزل أكاسيد الفلزات التي تقع تحته فقط.","2CuO(s) + C(s) → 2Cu(s) + CO₂(g)",1],
+    ["Zn","الخارصين","لا يتفاعل بشكل ملحوظ مع الماء البارد، ويتفاعل مع بخار الماء عند التسخين.","يتفاعل بقوة أقل منتجًا الهيدروجين.","يُختزل أكسيده بالكربون.","Zn(s) + H₂O(g) → ZnO(s) + H₂(g)"],
+    ["Fe","الحديد","يتفاعل مع بخار الماء عند التسخين (النشاط 1-2: الصوف الحديدي الساخن).","يتفاعل بقوة أقل منتجًا الهيدروجين.","يُختزل أكسيده بالكربون.","Fe(s) + H₂O(g) → FeO(s) + H₂(g)"],
+    ["Sn","القصدير","—","—","يُختزل أكسيده بالكربون.",""],
+    ["Pb","الرصاص","لا يتفاعل.","لا يتفاعل (حسب الجدول 4-1).","يُختزل أكسيده بالكربون.",""],
+    ["H","الهيدروجين","لافلز يُدرج في السلسلة للمقارنة.","الفلزات فوقه تزيحه من الماء والأحماض، والفلزات تحته لا تستطيع.","—","",1],
+    ["Cu","النحاس","لا يتفاعل مع الماء ولا بخار الماء حتى عند التسخين.","لا يتفاعل مع الأحماض المخففة.","يُختزل أكسيده بالكربون بسهولة.","2CuO(s) + C(s) → 2Cu(s) + CO₂(g)"],
+    ["Ag","الفضة","لا تتفاعل.","لا تتفاعل.","—",""],
+    ["Au","الذهب","لا يتفاعل.","لا يتفاعل، ويوجد في الطبيعة بهيئته النقية.","—",""]
+  ];
+  WIDGETS.series=el=>{
+    el.className="widget";let k=0;
+    el.innerHTML=`<div class="ser"><div><p class="soft" style="margin:0 0 8px;text-align:center">⬆ زيادة النشاط الكيميائي</p><ol class="ser-l">${SER.map((s,i)=>`<li class="${s[6]?'nm':''}"><button data-i="${i}" aria-pressed="${i===k}"><b>${s[0]}</b>${s[1]}${s[6]?' <small style="color:var(--soft)">(لافلز)</small>':''}</button></li>`).join("")}</ol></div><div class="ser-card" aria-live="polite"></div></div><div class="w-bar"><span class="w-cap">الشكل 4-1: سلسلة النشاط الكيميائي. اضغطي على أي عنصر لتعرفي كيف يتفاعل.</span></div>`;
+    const show=()=>{const s=SER[k];el.querySelector(".ser-card").innerHTML=`<h4><bdi dir="ltr">${s[0]}</bdi> ${s[1]}</h4><dl><dt>مع الماء أو بخار الماء</dt><dd>${s[2]}</dd><dt>مع حمض الهيدروكلوريك المخفف</dt><dd>${s[3]}</dd><dt>اختزال أكسيده بالكربون</dt><dd>${s[4]}</dd></dl>${s[5]?`<div class="eq">${s[5]}</div>`:""}`;
+      el.querySelectorAll(".ser-l button").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.i===k))};
+    el.querySelectorAll(".ser-l button").forEach(b=>b.onclick=()=>{k=+b.dataset.i;show()});show();
+  };
+
+  /* مختبر الإزاحة: فلز في محلول ملح فلز آخر */
+  const MET={Mg:{n:"الماغنيسيوم",r:5,c:"#C9CED3",ion:"Mg²⁺",sol:null},Zn:{n:"الخارصين",r:4,c:"#AEB6BD",ion:"Zn²⁺",sol:null},Fe:{n:"الحديد",r:3,c:"#6B7177",ion:"Fe²⁺",sol:"#BFDDB0"},Cu:{n:"النحاس",r:2,c:"#B5633A",ion:"Cu²⁺",sol:"#5B9BE0"},Ag:{n:"الفضة",r:1,c:"#DADDE0",ion:"Ag⁺",sol:null}};
+  const SALT={Mg:["كبريتات الماغنيسيوم","MgSO₄"],Zn:["كبريتات الخارصين","ZnSO₄"],Fe:["كبريتات الحديد (II)","FeSO₄"],Cu:["كبريتات النحاس (II)","CuSO₄"],Ag:["نترات الفضة","AgNO₃"]};
+  const COAT={Cu:"بُنّي محمر",Fe:"رمادي داكن",Ag:"رمادي-فضي (بلّورات فلزية)",Zn:"رمادي-فضي",Mg:"رمادي"};
+  const colName=c=>c==="#5B9BE0"?"أزرق":c==="#BFDDB0"?"أخضر فاتح":"عديم اللون";
+  window.DISP={MET,SALT,COAT};
+  window.dispResult=(m,s)=>{const M=MET[m],T=MET[s];const ok=M.r>T.r;const before=T.sol||"#EEF5F8",after=ok?(M.sol||"#EEF5F8"):before;
+    const eqs={"Zn-Cu":"Zn(s) + CuSO₄(aq) → ZnSO₄(aq) + Cu(s)","Fe-Cu":"Fe(s) + CuSO₄(aq) → FeSO₄(aq) + Cu(s)","Mg-Cu":"Mg(s) + CuSO₄(aq) → MgSO₄(aq) + Cu(s)","Zn-Fe":"Zn(s) + FeSO₄(aq) → ZnSO₄(aq) + Fe(s)","Mg-Fe":"Mg(s) + FeSO₄(aq) → MgSO₄(aq) + Fe(s)","Mg-Zn":"Mg(s) + ZnSO₄(aq) → MgSO₄(aq) + Zn(s)","Cu-Ag":"Cu(s) + 2AgNO₃(aq) → Cu(NO₃)₂(aq) + 2Ag(s)","Zn-Ag":"Zn(s) + 2AgNO₃(aq) → Zn(NO₃)₂(aq) + 2Ag(s)","Fe-Ag":"Fe(s) + 2AgNO₃(aq) → Fe(NO₃)₂(aq) + 2Ag(s)","Mg-Ag":"Mg(s) + 2AgNO₃(aq) → Mg(NO₃)₂(aq) + 2Ag(s)"};
+    const ion={"Zn-Cu":"Zn(s) + Cu²⁺(aq) → Zn²⁺(aq) + Cu(s)","Fe-Cu":"Fe(s) + Cu²⁺(aq) → Fe²⁺(aq) + Cu(s)","Mg-Cu":"Mg(s) + Cu²⁺(aq) → Mg²⁺(aq) + Cu(s)","Zn-Fe":"Zn(s) + Fe²⁺(aq) → Zn²⁺(aq) + Fe(s)","Mg-Fe":"Mg(s) + Fe²⁺(aq) → Mg²⁺(aq) + Fe(s)","Mg-Zn":"Mg(s) + Zn²⁺(aq) → Mg²⁺(aq) + Zn(s)","Cu-Ag":"Cu(s) + 2Ag⁺(aq) → Cu²⁺(aq) + 2Ag(s)","Zn-Ag":"Zn(s) + 2Ag⁺(aq) → Zn²⁺(aq) + 2Ag(s)","Fe-Ag":"Fe(s) + 2Ag⁺(aq) → Fe²⁺(aq) + 2Ag(s)","Mg-Ag":"Mg(s) + 2Ag⁺(aq) → Mg²⁺(aq) + 2Ag(s)"};
+    const key=m+"-"+s;
+    return {ok,before,after,coat:ok?MET[s].c:null,
+      obs:m===s?"الفلز في محلول ملحه نفسه: لا يحدث تفاعل.":ok?`يحدث تفاعل: ${T.sol?`يتلاشى اللون ${colName(before)} للمحلول${after!=="#EEF5F8"?` ويصبح ${colName(after)}`:" ويصبح عديم اللون"}`:after!=="#EEF5F8"?`يصبح لون المحلول ${colName(after)}`:"يبقى المحلول عديم اللون"}، ويتكوّن على الفلز راسب ${COAT[s]} من ${T.n}.`:`لا يحدث تفاعل، لأن ${M.n} أقل نشاطًا من ${T.n}.`,
+      why:ok?`${M.n} أنشط من ${T.n}، فيزيحه من محلول ملحه ويحلّ محلّه.`:"",eq:ok?eqs[key]:"",ion:ok?ion[key]:""}};
+  window.dispSim=(host,m,s,play)=>{const R=dispResult(m,s);
+    host.innerHTML=`<svg class="dsim" viewBox="0 0 220 230" role="img" aria-label="كأس فيها محلول وشريط فلز"><path d="M40 30v160a20 20 0 0 0 20 20h100a20 20 0 0 0 20-20V30" fill="none" stroke="#6e7f88" stroke-width="5" stroke-linecap="round"/><path class="sl" d="M43 80h134v110a17 17 0 0 1-17 17H60a17 17 0 0 1-17-17z" fill="${R.before}"/><rect x="98" y="14" width="24" height="170" rx="4" fill="${MET[m].c}" stroke="#555" stroke-width="2"/><g class="ct" opacity="0">${[...Array(14)].map((_,i)=>`<circle cx="${100+(i*7)%22}" cy="${92+i*6.5}" r="${3+(i%3)}" fill="${R.coat||'none'}"/>`).join("")}</g></svg>`;
+    if(!R.ok||play==="before")return R;const sl=host.querySelector(".sl"),ct=host.querySelector(".ct");
+    const go=()=>{sl.style.transition="fill 2.2s ease";ct.style.transition="opacity 2.2s ease";requestAnimationFrame(()=>{sl.setAttribute("fill",R.after);sl.style.fill=R.after;ct.setAttribute("opacity","1");ct.style.opacity=1})};
+    if(play!==false)setTimeout(go,300);else{sl.setAttribute("fill",R.after);ct.setAttribute("opacity","1")}
+    return R};
+  WIDGETS.displab=el=>{
+    el.className="widget";let m="Zn",s="Cu";
+    el.innerHTML=`<div class="dlab-ctl"><div class="row"><span>الفلز:</span>${Object.keys(MET).map(k=>`<button data-m="${k}"><bdi dir="ltr">${k}</bdi> ${MET[k].n}</button>`).join("")}</div><div class="row"><span>المحلول:</span>${Object.keys(SALT).map(k=>`<button data-s="${k}">${SALT[k][0]}</button>`).join("")}</div></div><div class="dlab-h"></div><div class="dlab-out" aria-live="polite"></div><div class="w-bar"><span class="w-cap">مختبر الإزاحة (الجدول 6-1): اختاري فلزًا ومحلولًا، وراقبي ما يحدث.</span></div>`;
+    const run=()=>{el.querySelectorAll("[data-m]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.m===m));el.querySelectorAll("[data-s]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.s===s));
+      const R=dispSim(el.querySelector(".dlab-h"),m,s);el.querySelector(".dlab-out").innerHTML=`<b>${MET[m].n} + ${SALT[s][0]}</b><br>${R.obs}${R.why?`<br>${R.why}`:""}${R.eq?`<div class="eq">${R.eq}</div><div class="eq">${R.ion}</div>`:""}`};
+    el.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{m=b.dataset.m;run()});el.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{s=b.dataset.s;run()});run();
+  };
+})();
