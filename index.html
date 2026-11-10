@@ -413,6 +413,16 @@ select.no{border-color:var(--chem);box-shadow:0 0 0 1px var(--chem)}
 .tbar{height:10px;border-radius:10px;background:var(--rule);overflow:hidden}
 .tbar span{display:block;height:100%;width:100%;background:var(--palm);transition:width .1s linear}
 .tbar span.low{background:var(--chem)}
+.ordg{display:grid;gap:16px;margin-top:10px}
+.ladder{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ladder .end{font-size:13px;color:var(--soft);font-weight:600;background:var(--paper);padding:4px 10px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--rule)}
+.ladder ol{list-style:none;margin:0;padding:0;display:flex;gap:8px;flex:1;min-width:0;flex-wrap:wrap}
+.ladder li{flex:1;min-width:86px;text-align:center;padding:12px 6px;border-radius:12px;border:2px dashed var(--rule);color:var(--soft);font-weight:600;transition:background .3s}
+.ladder li.now{border-color:var(--date);background:var(--date-tint);color:var(--date)}
+.ladder li.in{border:2px solid var(--palm);background:var(--palm-tint);color:var(--palm)}
+.q-fig{margin:0 0 12px;max-width:min(100%,560px);background:#fff;border-radius:12px;box-shadow:inset 0 0 0 1px var(--rule);padding:10px;color:#1A2622}
+.q-fig svg{display:block;width:100%;height:auto}
+.q-fig table{width:100%;border-collapse:collapse;font-size:15px}.q-fig td,.q-fig th{border:1px solid #CBD3CF;padding:7px 9px;text-align:start;vertical-align:top}.q-fig th{background:#EEF3F0}
 .ropts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .criteria.big{font-size:17px;gap:14px}
 .result{text-align:center;padding:30px 10px;display:grid;gap:10px;justify-items:center}
@@ -554,6 +564,7 @@ select.no{border-color:var(--chem);box-shadow:0 0 0 1px var(--chem)}
 
 <script src="content/chem10-1-1.js"></script>
 <script src="content/chem10-1-2.js"></script>
+<script src="content/chem10-1-3.js"></script>
 <script src="js/widgets.js"></script>
 <script src="js/game.js"></script>
 <script>
@@ -784,7 +795,7 @@ function stage(id,t){
   }
   if(t==="activities")return gameView(id);
   const best=(S.scores||{})[id];
-  return `<section class="sec"><h2>أسئلة الاختبارات السابقة</h2>${C.exams?`<p class="soft">أسئلة من اختبارات نهاية الفصل للأعوام السابقة على هذا الدرس، كما وردت.</p><div class="mcs">${C.exams.map((e,i)=>{const head=`<div class="src">${e.src}${e.max?` • <b>[${e.max}]</b>`:""}</div>${e.ctx?`<p class="ctx">${e.ctx}</p>`:""}${e.img?`<img class="q-img" src="${e.img}" alt="شكل السؤال">`:""}`;if(e.type==="fill")return `<div class="xq fq" data-i="${i}">${head}<div class="stem"><span class="qn">${i+1}</span>${e.q}</div><div class="fill-rows">${e.rows.map((r,k)=>`<label class="m-row" data-a="${r[1]}"><span class="t">${r[0]}</span><select aria-label="الإجابة ${k+1}"><option value="">اختاري</option>${e.options.map(o=>`<option>${o}</option>`).join("")}</select><span class="mark"></span></label>`).join("")}</div><button class="btn sm fchk">تحقّقي</button></div>`;
+  return `<section class="sec"><h2>أسئلة الاختبارات السابقة</h2>${C.exams?`<p class="soft">أسئلة من اختبارات نهاية الفصل للأعوام السابقة على هذا الدرس، كما وردت.</p><div class="mcs">${C.exams.map((e,i)=>{const head=`<div class="src">${e.src}${e.max?` • <b>[${e.max}]</b>`:""}</div>${e.ctx?`<p class="ctx">${e.ctx}</p>`:""}${e.img?`<img class="q-img" src="${e.img}" alt="شكل السؤال">`:""}${e.fig?`<div class="q-fig">${e.fig}</div>`:""}`;if(e.type==="fill")return `<div class="xq fq" data-i="${i}">${head}<div class="stem"><span class="qn">${i+1}</span>${e.q}</div><div class="fill-rows">${e.rows.map((r,k)=>`<label class="m-row" data-a="${r[1]}"><span class="t">${r[0]}</span><select aria-label="الإجابة ${k+1}"><option value="">اختاري</option>${e.options.map(o=>`<option>${o}</option>`).join("")}</select><span class="mark"></span></label>`).join("")}</div><button class="btn sm fchk">تحقّقي</button></div>`;
       if(e.type==="multi")return `<div class="xq mq" data-i="${i}">${head}<div class="stem"><span class="qn">${i+1}</span>${e.q}</div><div class="multi">${e.o.map((o,k)=>`<label class="mopt"><input type="checkbox" value="${k}">${o}</label>`).join("")}</div><button class="btn sm mchk">تحقّقي</button><div class="explain"></div></div>`;
       return e.type==="mcq"?`<div class="xq">${head}${opts([e.q,e.o,e.a,e.x],i,"x",true)}</div>`:`<div class="wq xq">${head}<div class="stem"><span class="qn">${i+1}</span>${e.q}</div><textarea rows="${e.draw?4:2}" aria-label="إجابتك" placeholder="${e.draw?"اكتبي إجابتك هنا، وارسمي المخطط في دفترك":"اكتبي إجابتك هنا"}"></textarea><button class="btn ghost sm reveal">عرض الإجابة النموذجية</button><div class="model" hidden><b>نقاط الإجابة المتوقعة (${e.marks.length})</b><ul class="criteria">${e.marks.map(m=>`<li><label><input type="checkbox">${m}</label></li>`).join("")}</ul>${e.draw?`<div data-widget="lattice-static"></div>`:""}</div></div>`}).join("")}</div>`:empty("تُضاف قريبًا","ستضاف هنا أسئلة الاختبارات السابقة لهذا الدرس عند تجهيزها.")}</section>
     <div class="extra-h"><h2>تدريب إضافي</h2><p class="soft">أسئلة للتدرّب من الكتاب، وأسئلة اختيار من متعدد إضافية.</p></div>
