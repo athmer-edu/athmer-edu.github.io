@@ -340,7 +340,118 @@ select.no{border-color:var(--chem);box-shadow:0 0 0 1px var(--chem)}
 .opt-img{height:110px;width:auto;max-width:100%;background:#fff;border-radius:8px;padding:4px}
 .mcs .xq .opts{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
 
+/* ===== لعبة الأنشطة ===== */
+.game{scroll-margin-top:96px}
+.hud{display:flex;align-items:center;gap:18px;padding:14px 18px;border-radius:18px;background:var(--palm);color:var(--paper);flex-wrap:wrap}
+.hud-k{display:flex;flex-direction:column;align-items:center;line-height:1.1;min-width:70px}
+.hud-n{font-family:var(--display);font-weight:800;font-size:30px}
+.hud-n em{font-style:normal;font-size:18px;opacity:.7}
+.hud-k small{font-size:13px;opacity:.85}
+.hud-bar{flex:1;min-width:120px;height:10px;border-radius:10px;background:color-mix(in srgb,var(--paper) 25%,transparent);overflow:hidden}
+.hud-bar span{display:block;height:100%;background:var(--date);border-radius:10px;transition:width .6s}
+.game-lede{margin:14px 0 18px}
+.trail{list-style:none;margin:0;padding:0;display:grid;gap:14px;position:relative}
+.trail::before{content:"";position:absolute;inset-inline-start:33px;top:30px;bottom:30px;border-inline-start:3px dashed var(--rule)}
+.lv button{width:100%;display:flex;align-items:center;gap:16px;text-align:start;padding:12px 16px;border-radius:18px;background:var(--sheet);box-shadow:inset 0 0 0 1px var(--rule);transition:transform .15s,box-shadow .15s;position:relative}
+.lv.open button{box-shadow:inset 0 0 0 2px var(--c)}
+.lv.open button:hover,.lv.done button:hover{transform:translateX(-4px)}
+.lv.locked button{opacity:.55;cursor:not-allowed}
+.node{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--ct);color:var(--c);box-shadow:0 0 0 5px var(--paper);z-index:1}
+.lv.done .node{background:var(--date);color:#241603}
+.node svg{width:22px;height:22px}
+.lv-t{flex:1;display:flex;flex-direction:column;line-height:1.4}
+.lv-t small{color:var(--soft);font-size:13px}
+.lv-t b{font-family:var(--display);font-size:20px}
+.lv-t span{font-size:14.5px;color:var(--soft)}
+.lv-s{display:flex;flex-direction:column;align-items:center;gap:2px}
+.lv-s small{font-size:12.5px;color:var(--soft)}
+.go-pill{background:var(--c);color:var(--paper);border-radius:999px;padding:4px 16px;font-weight:600;font-size:14px}
+.lock{font-size:13px;color:var(--soft)}
+.stars-r{display:inline-flex;gap:2px}
+.stars-r svg{width:20px;height:20px;fill:var(--rule)}
+.stars-r svg.on{fill:var(--date)}
+.ph{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.ph-t{flex:1;display:flex;flex-direction:column;line-height:1.3}
+.ph-t small{color:var(--soft);font-size:13px}.ph-t b{font-family:var(--display);font-size:24px;color:var(--c)}
+.ph-s{display:flex;gap:10px}
+.ph-s span{background:var(--palm-tint);border-radius:999px;padding:4px 12px;font-size:14px}
+.ph-s .miss{background:var(--chem-tint)}
+.pop{animation:pop .45s}.shake{animation:shk .4s}
+@keyframes pop{40%{transform:scale(1.06)}}
+@keyframes shk{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.sortg{display:grid;gap:18px;justify-items:center;margin-top:12px}
+.deck-c{position:relative;width:min(100%,460px)}
+.deck-c .count{text-align:center;color:var(--soft);font-size:14px;margin-bottom:6px;font-variant-numeric:tabular-nums}
+.card-g{min-height:130px;display:grid;place-items:center;text-align:center;font-family:var(--display);font-weight:600;font-size:26px;padding:18px;border-radius:22px;background:var(--sheet);box-shadow:inset 0 0 0 2px var(--c),0 10px 0 -4px var(--ct),0 20px 0 -8px var(--rule)}
+.bins-g{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:min(100%,560px)}
+.bin-g{min-height:96px;border-radius:20px;background:var(--ct);box-shadow:inset 0 0 0 2px var(--c);font-family:var(--display);font-size:24px;color:var(--c);transition:transform .12s}
+.bin-g:hover{transform:translateY(-3px)}
+.bin-g.good{background:var(--palm);color:var(--paper)}.bin-g.bad{background:var(--chem);color:var(--paper)}
+.fbk{min-height:28px;text-align:center;font-weight:500}
+.fbk.ok{color:var(--palm)}.fbk.no{color:var(--chem)}
+.mem-g{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:12px 0}
+.mcard{aspect-ratio:4/3;perspective:900px;padding:0}
+.mcard .in{position:relative;display:block;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d}
+.mcard.up .in,.mcard.got .in{transform:rotateY(180deg)}
+.mcard .back,.mcard .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;display:grid;place-items:center;padding:10px;text-align:center}
+.mcard .back{background:var(--palm);color:var(--date)}
+.mcard .back svg{width:40%;height:40%}
+.mcard .face{transform:rotateY(180deg);background:var(--sheet);box-shadow:inset 0 0 0 2px var(--c);font-size:14.5px;line-height:1.45;align-content:center}
+.mcard .face small{display:block;font-size:11.5px;color:var(--soft)}
+.mcard.why .face{background:var(--date-tint)}
+.mcard.got .face{box-shadow:inset 0 0 0 3px var(--palm);opacity:.8}
+.sent{font-size:20px;line-height:2.4;max-width:70ch;margin:14px 0}
+.slot-g{display:inline-block;min-width:110px;text-align:center;border-bottom:3px dashed var(--soft);padding:0 8px;color:var(--soft);margin:0 2px}
+.slot-g.now{border-bottom-color:var(--date);background:var(--date-tint);border-radius:8px 8px 0 0;color:var(--date)}
+.slot-g.filled{border-bottom:3px solid var(--palm);color:var(--palm);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip-g{padding:8px 18px;border-radius:999px;background:var(--sheet);box-shadow:inset 0 0 0 2px var(--c);font-size:16px}
+.chip-g:disabled{opacity:.3}
+.dtab summary{cursor:pointer;color:var(--soft);margin:8px 0}
+.rush{margin-top:10px;display:grid;gap:12px}
+.rq small{color:var(--soft);display:block}.rq b{font-family:var(--display);font-size:21px}
+.tbar{height:10px;border-radius:10px;background:var(--rule);overflow:hidden}
+.tbar span{display:block;height:100%;width:100%;background:var(--palm);transition:width .1s linear}
+.tbar span.low{background:var(--chem)}
+.ropts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.criteria.big{font-size:17px;gap:14px}
+.result{text-align:center;padding:30px 10px;display:grid;gap:10px;justify-items:center}
+.result .stars-r svg{width:58px;height:58px}
+.result .stars-r svg.on{animation:pop .6s backwards}
+.result .stars-r svg:nth-child(2){animation-delay:.15s}.result .stars-r svg:nth-child(3){animation-delay:.3s}
+.result h2{font-size:30px}
+.r-pts{color:var(--soft)}.r-pts b{color:var(--ink);font-family:var(--display)}
+.r-act{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:200}
+/* ===== طريق الإثمار ===== */
+.path{margin-top:36px;padding:20px;border-radius:22px;background:var(--sheet);box-shadow:inset 0 0 0 1px var(--rule)}
+.path-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.path-h b{font-family:var(--display);font-size:22px}
+.path-s{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.path-s li>button,.path-s li.cert-step{width:100%;height:100%;display:flex;gap:10px;align-items:flex-start;text-align:start;padding:12px;border-radius:14px;background:var(--paper);box-shadow:inset 0 0 0 1px var(--rule)}
+.path-s li.ok>button,.path-s li.ok.cert-step{background:var(--palm-tint);box-shadow:inset 0 0 0 1px var(--palm)}
+.path-s .dot{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--rule);font-weight:700;font-size:14px}
+.path-s li.ok .dot{background:var(--palm);color:var(--paper)}
+.path-s .cert-step .dot{background:var(--date-tint);color:var(--date)}
+.path-s li span:last-child{display:flex;flex-direction:column;line-height:1.35}
+.path-s small{color:var(--soft);font-size:13px}
+.path-a{margin-top:16px;display:flex;justify-content:center}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.extra-h{margin:10px 0 6px;padding-top:16px;border-top:2px solid var(--ink)}
+.extra-h h2{font-size:26px}
+/* ===== الشهادة ===== */
+.cert-ov{position:fixed;inset:0;background:rgba(10,20,17,.72);z-index:150;display:grid;place-items:center;padding:16px}
+.cert-box{background:var(--sheet);border-radius:20px;padding:16px;width:min(100%,980px);max-height:100%;overflow:auto;display:grid;gap:12px}
+.cert-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.cert-top label{font-weight:600}
+.cert-top input{flex:1;min-width:160px;font:inherit;padding:8px 12px;border-radius:10px;border:1px solid var(--rule);background:var(--paper);color:var(--ink)}
+.cert-box canvas{width:100%;height:auto;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.18)}
+.cert-act{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
 @media (max-width:880px){
+  .path-s{grid-template-columns:1fr 1fr}
+  .mem-g{grid-template-columns:repeat(2,1fr)}
+  .ropts{grid-template-columns:1fr}
   .two,.uses{grid-template-columns:1fr}
   .m-row{grid-template-columns:minmax(0,1fr) 24px}
   .m-row .t{grid-column:1/-1}
@@ -399,6 +510,7 @@ select.no{border-color:var(--chem);box-shadow:0 0 0 1px var(--chem)}
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="content/chem10-1-1.js"></script>
+<script src="js/game.js"></script>
 <script>
 /* ===== المنهج (من فهرس كتاب الطالب) ===== */
 const TEACHER = "أ. رتاج";
@@ -614,6 +726,7 @@ function stage(id,t){
     return empty("الأسئلة قيد التحضير","ستظهر هنا أسئلة الدرس مع التصحيح والشرح.");
   }
   if(t==="explain"){
+    S.seen=S.seen||{};S.seen[id]=S.seen[id]||{};if(!S.seen[id].explain){S.seen[id].explain=true;save()}
     const secs=[...C.explain.matchAll(/<section class="sec" id="([^"]+)">\s*<h2>([^<]+)<\/h2>/g)];
     return `<nav class="toc-mini" aria-label="أقسام الشرح">${secs.map(m=>`<button data-go="${m[1]}">${m[2]}</button>`).join("")}</nav><div class="prose">${C.explain}</div>`;
   }
@@ -624,25 +737,16 @@ function stage(id,t){
       <div class="cards">${S2.cards.map(x=>`<button class="flip"><div class="in"><div class="f"><div>${x[0]}<small>اضغطي لرؤية الإجابة</small></div></div><div class="b"><div>${x[1]}</div></div></div></button>`).join("")}</div></section>
       <section class="sec"><h2>مصطلحات الدرس</h2><div class="tbl"><table><thead><tr><th>المصطلح</th><th>بالإنجليزية</th></tr></thead><tbody>${S2.terms.map(x=>`<tr><td>${x[0]}</td><td dir="ltr" style="text-align:end">${x[1]}</td></tr>`).join("")}</tbody></table></div></section>`;
   }
-  if(t==="activities"){
-    return C.activities.map((a,ai)=>{
-      let body="";
-      if(a.type==="sort")body=`<div class="sort">${a.items.map(x=>`<div class="sort-row" data-a="${x[1]}"><span class="t">${x[0]}</span>${a.options.map(o=>`<button data-v="${o}">${o}</button>`).join("")}</div>`).join("")}</div>`;
-      if(a.type==="match")body=`<div class="match">${a.items.map((x,i)=>`<label class="m-row" data-a="${x[1]}"><span class="t">${x[0]}</span><select><option value="">اختر السبب</option>${a.reasons.map((r,ri)=>`<option value="${ri}">${r}</option>`).join("")}</select><span class="mark"></span></label>`).join("")}</div><button class="btn sm chk">تحقّق من إجاباتي</button>`;
-      if(a.type==="blanks"){let k=0;body=`<div class="bank">${a.bank.map(w=>`<span>${w}</span>`).join("")}</div><p class="blanks">${a.text.replace(/\{([^}]+)\}/g,(m,w)=>`<select data-a="${w}" aria-label="فراغ ${++k}"><option value="">……</option>${a.bank.map(b=>`<option>${b}</option>`).join("")}</select>`)}</p><button class="btn sm chk">تحقّق من إجاباتي</button>`}
-      if(a.type==="data")body=`<div class="tbl"><table><thead><tr>${a.cols.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>${a.rows.map(r=>`<tr>${r.map((c,i)=>`<td${i?' class="num"':""}>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div><div class="mcs">${a.qs.map((q,qi)=>opts(q,qi,"d"+ai)).join("")}</div>`;
-      if(a.type==="check")body=`<ul class="criteria">${a.items.map((x,i)=>`<li><label><input type="checkbox">${x}</label></li>`).join("")}</ul>`;
-      return `<section class="sec act" data-type="${a.type}"><h2><span class="qn">${ai+1}</span>${a.title}</h2><p class="soft">${a.intro}</p>${body}</section>`;
-    }).join("");
-  }
+  if(t==="activities")return gameView(id);
   const best=(S.scores||{})[id];
-  return `<section class="sec"><h2>اختيار من متعدد</h2>
+  return `<section class="sec"><h2>أسئلة الاختبارات السابقة</h2>${C.exams?`<p class="soft">أسئلة من اختبارات نهاية الفصل للأعوام السابقة على هذا الدرس، كما وردت.</p><div class="mcs">${C.exams.map((e,i)=>{const head=`<div class="src">${e.src}${e.max?` • <b>[${e.max}]</b>`:""}</div>${e.ctx?`<p class="ctx">${e.ctx}</p>`:""}${e.img?`<img class="q-img" src="${e.img}" alt="شكل السؤال">`:""}`;return e.type==="mcq"?`<div class="xq">${head}${opts([e.q,e.o,e.a,e.x],i,"x",true)}</div>`:`<div class="wq xq">${head}<div class="stem"><span class="qn">${i+1}</span>${e.q}</div><textarea rows="${e.draw?4:2}" aria-label="إجابتك" placeholder="${e.draw?"اكتبي إجابتك هنا، وارسمي المخطط في دفترك":"اكتبي إجابتك هنا"}"></textarea><button class="btn ghost sm reveal">عرض الإجابة النموذجية</button><div class="model" hidden><b>نقاط الإجابة المتوقعة (${e.marks.length})</b><ul class="criteria">${e.marks.map(m=>`<li><label><input type="checkbox">${m}</label></li>`).join("")}</ul>${e.draw?`<div data-widget="lattice-static"></div>`:""}</div></div>`}).join("")}</div>`:empty("تُضاف قريبًا","ستضاف هنا أسئلة الاختبارات السابقة لهذا الدرس عند تجهيزها.")}</section>
+    <div class="extra-h"><h2>تدريب إضافي</h2><p class="soft">أسئلة للتدرّب من الكتاب، وأسئلة اختيار من متعدد إضافية.</p></div>
+    <section class="sec"><h2>اختيار من متعدد للتدرّب</h2>
       <div class="scorebar"><span id="score">أجبت عن 0 من ${C.mcq.length}</span>${best!=null?`<span class="soft">أفضل نتيجة سابقة: ${best} من ${C.mcq.length}</span>`:""}<button class="btn ghost sm" id="retry">إعادة الأسئلة</button></div>
       <div class="mcs">${C.mcq.map((q,i)=>opts(q,i,"m")).join("")}</div></section>
     <section class="sec"><h2>أسئلة مقالية من الكتاب</h2><p class="soft">اكتبي إجابتكِ أولًا، ثم اعرضي نقاط الإجابة النموذجية وضعي علامة على كل نقطة ذكرتِها.</p>
       ${C.written.map((w,i)=>`<div class="wq"><div class="src">${w.src}</div><div class="stem"><span class="qn">${i+1}</span>${w.q}</div><textarea rows="3" aria-label="إجابتك" placeholder="اكتبي إجابتك هنا"></textarea><button class="btn ghost sm reveal">عرض الإجابة النموذجية</button><div class="model" hidden><b>نقاط الإجابة (${w.marks.length})</b><ul class="criteria">${w.marks.map(m=>`<li><label><input type="checkbox">${m}</label></li>`).join("")}</ul></div></div>`).join("")}
-    </section>
-    <section class="sec"><h2>أسئلة الاختبارات السابقة</h2>${C.exams?`<p class="soft">أسئلة من اختبارات نهاية الفصل للأعوام السابقة على هذا الدرس، كما وردت.</p><div class="mcs">${C.exams.map((e,i)=>{const head=`<div class="src">${e.src}${e.max?` • <b>[${e.max}]</b>`:""}</div>${e.ctx?`<p class="ctx">${e.ctx}</p>`:""}${e.img?`<img class="q-img" src="${e.img}" alt="شكل السؤال">`:""}`;return e.type==="mcq"?`<div class="xq">${head}${opts([e.q,e.o,e.a,e.x],i,"x",true)}</div>`:`<div class="wq xq">${head}<div class="stem"><span class="qn">${i+1}</span>${e.q}</div><textarea rows="${e.draw?4:2}" aria-label="إجابتك" placeholder="${e.draw?"اكتبي إجابتك هنا، وارسمي المخطط في دفترك":"اكتبي إجابتك هنا"}"></textarea><button class="btn ghost sm reveal">عرض الإجابة النموذجية</button><div class="model" hidden><b>نقاط الإجابة المتوقعة (${e.marks.length})</b><ul class="criteria">${e.marks.map(m=>`<li><label><input type="checkbox">${m}</label></li>`).join("")}</ul>${e.draw?`<div data-widget="lattice-static"></div>`:""}</div></div>`}).join("")}</div>`:empty("تُضاف قريبًا","ستضاف هنا أسئلة الاختبارات السابقة لهذا الدرس عند تجهيزها.")}</section>`;
+    </section>`;
 }
 function vLesson(id){
   const f=find(id);if(!f)return vHome();
@@ -662,7 +766,7 @@ function vLesson(id){
     <div class="wrap lesson-main">
       <div>
         <div class="stage">${stage(id,tab)}</div>
-        <div class="finish">${done?`<p>أثمر هذا الدرس في شجرتك.</p><a class="btn ghost sm" href="#${sk}">العودة إلى الوحدات</a>`:`<p>أنهيتِ الدرس وفهمتِه؟</p><button class="btn date" id="done">${IC.fruit}إنهاء الدرس وإضافة ثمرته</button>`}</div>
+        ${finishBox(id,sk)}
         <nav class="pager" aria-label="التنقل بين الدروس">${pv?`<a href="#${pv.id}"><small>الدرس السابق</small><span>${pv.l[0]}  ${pv.l[1]}</span></a>`:""}${nx?`<a class="nx" href="#${nx.id}"><small>الدرس التالي</small><span>${nx.l[0]}  ${nx.l[1]}</span></a>`:""}</nav>
       </div>
       <aside class="aside">
@@ -683,6 +787,14 @@ function latticeSVG(o){
   if(o.labels){const lx=10+gap/2,ly=10+gap/2;s+=`<g class="lbl"><line x1="${lx+r}" y1="${ly-r+4}" x2="${lx+gap*1.6}" y2="${ly-r-2}"/><text x="${lx+gap*1.7}" y="${ly-r+2}">أيون فلز موجب</text><circle cx="${lx+gap/2}" cy="${ly+gap/2}" r="6" class="e"/><line x1="${lx+gap/2+7}" y1="${ly+gap/2}" x2="${lx+gap*1.6}" y2="${ly+gap/2+18}"/><text x="${lx+gap*1.7}" y="${ly+gap/2+24}">إلكترون غير متمركز</text></g>`}
   return {svg:s+`</svg>`,W,H,gap,cols,rows};
 }
+window.__staticLattice=()=>{
+  document.querySelectorAll('[data-widget="lattice-static"]:not(.static)').forEach(el=>{
+    el.className="widget static";
+    const ions=[];for(const y of [50,120,190])for(const x of [50,120,190])ions.push(`<g class="ion"><circle cx="${x}" cy="${y}" r="24"/><text x="${x}" y="${y+7}">+</text></g>`);
+    const es=[[85,85],[155,85],[85,155],[155,155],[85,20],[155,214],[20,120],[220,120],[120,85],[50,155]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="6" class="e"/>`);
+    el.innerHTML=`<svg viewBox="0 0 470 236" class="lat" role="img" aria-label="رسم تخطيطي للبنية الشبكية للفلز مع البيانات"><rect x="2" y="2" width="236" height="232" rx="16" class="sea"/>${ions.join("")}${es.join("")}<g class="lbl"><line x1="212" y1="44" x2="262" y2="44"/><text x="270" y="51">أيون فلز موجب</text><line x1="161" y1="158" x2="262" y2="182"/><text x="270" y="189">إلكترون غير متمركز</text></g></svg>`;
+  });
+};
 function hydrate(id){
   const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.querySelectorAll('[data-widget="lattice"]').forEach(el=>{
@@ -698,12 +810,7 @@ function hydrate(id){
     draw();if(!reduce)requestAnimationFrame(step);
     el.querySelector('[data-a="cur"]').onclick=e=>{cur=!cur;e.target.textContent=cur?"فصل البطارية":"توصيل بطارية";el.querySelector(".w-cap").textContent=cur?"البطارية موصولة: الإلكترونات غير المتمركزة تنساب في اتجاه واحد وتنقل التيار، والأيونات ثابتة في مواقعها.":"الإلكترونات تتحرك عشوائيًا بين الأيونات.";svg.classList.toggle("on",cur)};
   });
-  document.querySelectorAll('[data-widget="lattice-static"]').forEach(el=>{
-    el.className="widget static";
-    const ions=[];for(const y of [50,120,190])for(const x of [50,120,190])ions.push(`<g class="ion"><circle cx="${x}" cy="${y}" r="24"/><text x="${x}" y="${y+7}">+</text></g>`);
-    const es=[[85,85],[155,85],[85,155],[155,155],[85,20],[155,214],[20,120],[220,120],[120,85],[50,155]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="6" class="e"/>`);
-    el.innerHTML=`<svg viewBox="0 0 470 236" class="lat" role="img" aria-label="رسم تخطيطي للبنية الشبكية للفلز مع البيانات"><rect x="2" y="2" width="236" height="232" rx="16" class="sea"/>${ions.join("")}${es.join("")}<g class="lbl"><line x1="212" y1="44" x2="262" y2="44"/><text x="270" y="51">أيون فلز موجب</text><line x1="161" y1="158" x2="262" y2="182"/><text x="270" y="189">إلكترون غير متمركز</text></g></svg>`;
-  });
+  window.__staticLattice();
   document.querySelectorAll('[data-widget="slide-demo"]').forEach(el=>{
     const g=latticeSVG({cols:6,rows:3,gap:62,label:"طبقات أيونات فلز تنزلق فوق بعضها عند الطرق"});
     el.className="widget";
@@ -739,9 +846,11 @@ function hydrate(id){
     const C=L(id);const g=q.dataset.g,ii=+q.dataset.i;const src=g==="m"?C.mcq[ii]:g==="x"?[0,0,0,C.exams[ii].x]:C.activities[+g.slice(1)].qs[ii];
     all[R].classList.add("right");if(i!==R)o.classList.add("wrong");
     ex.innerHTML=`<b>${i===R?"إجابة صحيحة.":"الإجابة الصحيحة ("+AB[R]+")."}</b> ${src[3]}`;ex.classList.add("show");
-    q.dataset.done=i===R?"1":"0";if(q.dataset.g==="m")upd();
+    q.dataset.done=i===R?"1":"0";if(q.dataset.g==="m")upd();if(g==="x"){S.exam=S.exam||{};const E=S.exam[id]=S.exam[id]||{a:{}};E.a=E.a||{};if(!(ii in E.a)){E.a[ii]=i===R;E.n=Object.keys(E.a).length;E.best=Object.values(E.a).filter(Boolean).length;save();refreshPath(id)}}
   }));
   const rt=$("#retry");if(rt)rt.onclick=()=>{render();};
+  gameBind(id);
+  bindPath(id);
   document.querySelectorAll(".reveal").forEach(b=>b.onclick=()=>{const m=b.nextElementSibling;m.hidden=!m.hidden;b.textContent=m.hidden?"عرض الإجابة النموذجية":"إخفاء الإجابة النموذجية"});
 }
 function vReview(sk,title){
@@ -774,9 +883,9 @@ function bind(r){
   document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{tab=t.dataset.t;render()});
   if(document.querySelector(".lesson-main"))hydrate(r);
   const bm=$("#bm");if(bm)bm.onclick=()=>{if(needLogin())return;S.saved[r]=!S.saved[r];save();toast(S.saved[r]?"حُفظ الدرس في محفوظاتي":"أُزيل الدرس من محفوظاتي");render()};
-  const d=$("#done");if(d)d.onclick=()=>{if(needLogin())return;S.status[r]="fruit";save();toast("أثمر تعبك! ثمرة جديدة في شجرتك");render()};
+  const d=$("#done");if(d)d.onclick=()=>{if(needLogin())return;S.status[r]="fruit";save();toast("أثمر تعبك! ثمرة جديدة في شجرتك");render();if(L(r)){confetti();setTimeout(()=>showCert(r),700)}};
 }
-window.addEventListener("hashchange",()=>{tab="explain";render();window.scrollTo(0,0)});
+window.addEventListener("hashchange",()=>{tab="explain";PLAY=null;render();window.scrollTo(0,0)});
 render();
 </script>
 </body>
