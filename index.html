@@ -185,6 +185,7 @@ h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.3;text-wrap:ba
 .tab.on svg{color:var(--c)}
 .lesson-main{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:40px;padding:36px 0 80px;align-items:start}
 .stage{min-height:340px}
+.lesson-main>div,.stage{min-width:0}
 .aside{display:grid;gap:28px;position:sticky;top:96px}
 .aside h3{font-size:17px;margin-bottom:12px}
 .criteria{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-size:15.5px}
@@ -245,13 +246,102 @@ footer{border-top:1px solid var(--rule);padding:28px 0 36px;color:var(--soft);fo
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 footer .hand{font-size:20px;color:var(--palm)}
 
+
+/* ===== محتوى الدروس ===== */
+.soft{color:var(--soft)}
+.toc-mini{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.toc-mini button{font-size:14px;padding:6px 14px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--rule);color:var(--soft)}
+.toc-mini button:hover{color:var(--ink);box-shadow:inset 0 0 0 1px var(--c)}
+.sec{padding:6px 0 30px;margin-bottom:26px;border-bottom:1px solid var(--rule);scroll-margin-top:96px}
+.sec:last-child{border-bottom:0}
+.sec h2{font-size:24px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.sec p{margin:0 0 12px;max-width:68ch}
+.qn{flex:none;display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--ct);color:var(--c);font-family:var(--display);font-weight:700;font-size:14px}
+.ticks{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:8px;max-width:70ch}
+.ticks li{position:relative;padding-inline-start:22px}
+.ticks li::before{content:"";position:absolute;inset-inline-start:2px;top:12px;width:8px;height:8px;border-radius:50%;background:var(--c)}
+.steps{counter-reset:st;list-style:none;margin:0 0 20px;padding:0;display:grid;gap:12px;max-width:70ch}
+.steps li{counter-increment:st;position:relative;padding-inline-start:44px;min-height:30px}
+.steps li::before{content:counter(st);position:absolute;inset-inline-start:0;top:0;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--c);color:var(--paper);font-family:var(--display);font-weight:700;font-size:14px}
+.callout{background:var(--sheet);box-shadow:inset 0 0 0 1px var(--rule);border-inline-start:4px solid var(--palm);border-radius:6px 14px 14px 6px;padding:14px 18px;margin:16px 0;max-width:72ch}
+.callout > b:first-child{display:block;font-family:var(--display);font-weight:600;margin-bottom:4px}
+.callout ul{margin:6px 0 0;padding-inline-start:20px}
+.callout.warn{border-inline-start-color:var(--chem)}
+.term{margin:12px 0;padding:12px 16px;border-radius:12px;background:var(--ct);max-width:72ch}
+.term dt{font-family:var(--display);font-weight:700;color:var(--c)}
+.term dt span{font-family:var(--body);font-weight:500;font-size:14px;color:var(--soft);margin-inline-start:8px}
+.term dd{margin:2px 0 0}
+.props{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin:6px 0 18px}
+.props article{padding:16px 18px;border-radius:14px;background:var(--sheet);box-shadow:inset 0 0 0 1px var(--rule)}
+.props h3{font-size:18px;margin-bottom:6px;color:var(--c)}
+.props p{margin:0 0 6px;font-size:16px}
+.props .ex{color:var(--soft);font-size:15px}
+.uses{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.uses article{padding:16px 18px;border-radius:14px;box-shadow:inset 0 0 0 1px var(--rule)}
+.uses h3{font-size:20px}
+.uses .use{color:var(--date);font-weight:600;margin:2px 0 6px}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:center}
+.tbl{overflow-x:auto;margin:6px 0 14px}
+.tbl table{border-collapse:collapse;width:100%;font-size:15.5px;min-width:440px}
+.tbl th{font-family:var(--display);font-weight:600;text-align:start;padding:10px 12px;border-bottom:2px solid var(--ink);white-space:nowrap}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--rule)}
+.tbl td.num{font-variant-numeric:tabular-nums;direction:ltr;text-align:end}
+.widget{margin:18px 0;border-radius:18px;background:var(--sheet);box-shadow:inset 0 0 0 1px var(--rule);padding:14px}
+.widget.static{background:transparent;box-shadow:none;padding:0;margin:0}
+.w-stage svg,.widget.static svg{width:100%;height:auto;display:block}
+.w-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
+.w-cap{flex:1;min-width:200px;color:var(--soft);font-size:15px}
+.legend{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--soft)}
+.legend i{font-style:normal;display:inline-grid;place-items:center;border-radius:50%}
+.k-ion{width:20px;height:20px;background:var(--ct);box-shadow:inset 0 0 0 1.5px var(--c);color:var(--c);font-weight:700;font-size:13px}
+.k-e{width:10px;height:10px;background:var(--date);margin-inline-start:8px}
+.lat .sea{fill:var(--date-tint)}
+.lat .ion circle{fill:var(--ct);stroke:var(--c);stroke-width:2}
+.lat .ion text{fill:var(--c);font-family:var(--display);font-weight:700;font-size:22px;text-anchor:middle}
+.lat .e{fill:var(--date)}
+.lat .row{transition:transform .9s cubic-bezier(.5,0,.2,1)}
+.lat .lbl line{stroke:var(--ink);stroke-width:1.3}
+.lat .lbl text{fill:var(--ink);font-family:var(--body);font-size:16px;direction:ltr;text-anchor:start}
+.match{display:grid;gap:10px;margin-bottom:14px}
+.m-row{display:grid;grid-template-columns:minmax(150px,.7fr) minmax(0,1.3fr) 24px;gap:12px;align-items:center;padding:10px 12px;border-radius:12px;box-shadow:inset 0 0 0 1px var(--rule)}
+.m-row .t{font-weight:500}
+select{font:inherit;font-size:15px;color:var(--ink);background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:7px 10px;max-width:100%}
+.m-row.ok,.sort-row.ok{box-shadow:inset 0 0 0 2px var(--palm)}
+.m-row.no{box-shadow:inset 0 0 0 2px var(--chem)}
+.m-row.ok .mark::after{content:"✓";color:var(--palm);font-weight:700}
+.m-row.no .mark::after{content:"✗";color:var(--chem);font-weight:700}
+select.ok{border-color:var(--palm);box-shadow:0 0 0 1px var(--palm)}
+select.no{border-color:var(--chem);box-shadow:0 0 0 1px var(--chem)}
+.bank{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.bank span{padding:4px 12px;border-radius:999px;background:var(--date-tint);font-size:14.5px}
+.blanks{line-height:2.6;max-width:72ch}
+.mcs{display:grid;gap:26px;margin-top:14px}
+.mc .stem,.wq .stem{font-family:var(--display);font-weight:600;font-size:18px;margin-bottom:12px;display:flex;gap:10px;align-items:flex-start}
+.mc.done-1{}
+.scorebar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:12px 16px;border-radius:12px;background:var(--palm-tint);font-weight:500}
+.scorebar .btn{margin-inline-start:auto}
+.wq{padding:18px 0;border-bottom:1px dashed var(--rule)}
+.wq:last-child{border-bottom:0}
+.wq .src{font-size:13px;color:var(--soft);margin-bottom:4px}
+.wq textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--sheet);border:1px solid var(--rule);border-radius:12px;padding:10px 14px;margin-bottom:10px;resize:vertical}
+.model{margin-top:12px;padding:14px 16px;border-radius:12px;background:var(--date-tint)}
+.model b{font-family:var(--display);display:block;margin-bottom:8px}
+#crit li{display:flex;gap:4px;align-items:flex-start}
+.crit-go{text-align:start;font-size:15.5px;line-height:1.7;padding:2px 0}
+.crit-go:hover{color:var(--c);text-decoration:underline;text-underline-offset:4px}
+.slot .slide{min-height:200px}
+
 @media (max-width:880px){
+  .two,.uses{grid-template-columns:1fr}
+  .m-row{grid-template-columns:minmax(0,1fr) 24px}
+  .m-row .t{grid-column:1/-1}
+  .m-row select{grid-column:1;width:100%}
   .hero{grid-template-columns:1fr;padding-top:36px;gap:8px}
   .branch{max-width:260px;order:-1;justify-self:start}
   .subject{grid-template-columns:1fr;gap:20px}
   .page-head .wrap{grid-template-columns:1fr}
   .tree-card{justify-self:start}
-  .lesson-main{grid-template-columns:1fr}
+  .lesson-main{grid-template-columns:minmax(0,1fr)}
   .aside{position:static}
   .unit-body{padding-inline-start:0}
   .stops{grid-template-columns:1fr;gap:24px}
@@ -299,6 +389,7 @@ footer .hand{font-size:20px;color:var(--palm)}
 <footer><div class="wrap"><span><span class="hand">أثمِر</span>  كلُّ درسٍ بذرة، وكلُّ نجاحٍ ثمرة</span><span>منهج سلطنة عُمان، الفصل الدراسي الأول</span></div></footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="content/chem10-1-1.js"></script>
 <script>
 /* ===== المنهج (من فهرس كتاب الطالب) ===== */
 const TEACHER = "أ. رتاج";
@@ -499,30 +590,58 @@ function vSubject(sk){
 /* ===== صفحة الدرس ===== */
 const TABS=[["explain","الشرح",IC.book],["summary","الملخص",IC.cards],["activities","الأنشطة",IC.act],["exams","أسئلة الاختبارات",IC.quiz]];
 let tab="explain";
-const DEMO="chem10-1-1";
+const L=id=>(window.LESSONS||{})[id];
 function find(id){for(const sk in SUBJECTS)for(const u of SUBJECTS[sk].units)for(const l of u.lessons)if(lid(sk,l[0])===id)return{sk,u,l};return null}
 function empty(h,p){return `<div class="empty"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="var(--palm)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 48c9-3 19-3 28 0"/><path d="M28 47V30"/><path d="M28 32c-9 .5-13.6-4-14.4-12 8.4-.3 13.6 3.9 14.4 12zM28 28.5c.3-7.5 5-12.3 13.4-12.6.2 7.6-4.6 12.3-13.4 12.6z"/></svg><h3>${h}</h3><p>${p}</p></div>`}
+const AB="أبجدهوزح";
+function opts(q,qi,grp){const ord=q[1].map((_,i)=>i);for(let i=ord.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ord[i],ord[j]]=[ord[j],ord[i]]}return `<div class="mc" data-r="${ord.indexOf(q[2])}" data-g="${grp}" data-i="${qi}"><div class="stem"><span class="qn">${qi+1}</span>${q[0]}</div><div class="opts">${ord.map((o,i)=>`<button class="opt" data-i="${i}"><span class="l">${AB[i]}</span>${q[1][o]}</button>`).join("")}</div><div class="explain"></div></div>`}
 function stage(id,t){
-  const d=id===DEMO;
-  if(t==="explain"){if(!d)return empty("الشرح قيد التحضير","سيظهر هنا عرض الدرس وشرح المعلمة.");
-    return `<span class="example">مثال لشكل هذا التبويب</span><div class="slide"><div><h3>الترابط الفلزي</h3><p>هنا يظهر عرض الدرس من Google Drive، شريحة بعد شريحة.</p></div></div><div class="slide-bar"><button class="btn ghost sm">السابقة</button><span>شريحة 1 من 12</span><button class="btn ghost sm">التالية</button></div>`}
-  if(t==="summary"){if(!d)return empty("الملخص قيد التحضير","ستظهر هنا بطاقات الملخص التفاعلي.");
-    const c=[["الترابط الفلزي","قوة تجاذب بين <mark>أيونات الفلز الموجبة</mark> وبحر من <mark>الإلكترونات غير المتمركزة</mark>."],["لماذا توصل الفلزات الكهرباء؟","لأن إلكتروناتها غير المتمركزة <mark>حرّة الحركة</mark>، فتنقل الشحنة عبر الفلز."],["لماذا تُطرق الفلزات وتُسحب؟","لأن طبقات الأيونات الموجبة <mark>تنزلق</mark> فوق بعضها دون أن ينكسر الترابط الفلزي."]];
-    return `<span class="example">مثال: اضغط البطاقة لتقلبها</span><div class="cards">${c.map(x=>`<button class="flip"><div class="in"><div class="f"><div>${x[0]}<small>اضغط لرؤية الإجابة</small></div></div><div class="b"><div>${x[1]}</div></div></div></button>`).join("")}</div>`}
-  if(t==="activities"){if(!d)return empty("الأنشطة قيد التحضير","ستظهر هنا أنشطة الدرس من كتاب النشاط بشكل تفاعلي.");
-    const it=[["موصل جيد للكهرباء","فلز"],["هش في الحالة الصلبة","لافلز"],["لامع عند قطعه حديثًا","فلز"],["رديء التوصيل للحرارة","لافلز"]];
-    return `<span class="example">مثال: صنّف كل خاصية</span><div class="sort">${it.map(x=>`<div class="sort-row" data-a="${x[1]}"><span class="t">${x[0]}</span><button data-v="فلز">فلز</button><button data-v="لافلز">لافلز</button></div>`).join("")}</div>`}
-  if(t==="exams"){if(!d)return empty("الأسئلة قيد التحضير","ستظهر هنا أسئلة الاختبارات السابقة لهذا الدرس، مع التصحيح والشرح.");
-    const o=["وجود أيونات سالبة حرّة الحركة","وجود إلكترونات غير متمركزة حرّة الحركة","وجود جزيئات متعادلة بين الأيونات","قوة الروابط التساهمية بين الذرات"];
-    return `<span class="example">سؤال توضيحي بنفس أسلوب الاختبارات</span><div class="q" data-r="1"><div class="stem">أيٌّ مما يأتي يفسّر قدرة الفلزات على توصيل التيار الكهربائي؟</div><div class="opts">${o.map((x,i)=>`<button class="opt" data-i="${i}"><span class="l">${"أبجد"[i]}</span>${x}</button>`).join("")}</div><div class="explain" id="ex"></div></div>`}
+  const C=L(id);
+  if(!C){
+    if(t==="explain")return empty("الشرح قيد التحضير","سيظهر هنا شرح الدرس وعرض المعلمة.");
+    if(t==="summary")return empty("الملخص قيد التحضير","ستظهر هنا خلاصة الدرس وبطاقات المراجعة.");
+    if(t==="activities")return empty("الأنشطة قيد التحضير","ستظهر هنا أنشطة الدرس بشكل تفاعلي.");
+    return empty("الأسئلة قيد التحضير","ستظهر هنا أسئلة الدرس مع التصحيح والشرح.");
+  }
+  if(t==="explain"){
+    const secs=[...C.explain.matchAll(/<section class="sec" id="([^"]+)">\s*<h2>([^<]+)<\/h2>/g)];
+    return `<nav class="toc-mini" aria-label="أقسام الشرح">${secs.map(m=>`<button data-go="${m[1]}">${m[2]}</button>`).join("")}</nav><div class="prose">${C.explain}</div>`;
+  }
+  if(t==="summary"){
+    const S2=C.summary;
+    return `<section class="sec"><h2>الخلاصة في دقيقة</h2><ul class="ticks">${S2.points.map(p=>`<li>${p}</li>`).join("")}</ul></section>
+      <section class="sec"><h2>بطاقات المراجعة</h2><p class="soft">اقرأ السؤال، وجاوب في ذهنك، ثم اضغط البطاقة لتتأكد.</p>
+      <div class="cards">${S2.cards.map(x=>`<button class="flip"><div class="in"><div class="f"><div>${x[0]}<small>اضغط لرؤية الإجابة</small></div></div><div class="b"><div>${x[1]}</div></div></div></button>`).join("")}</div></section>
+      <section class="sec"><h2>مصطلحات الدرس</h2><div class="tbl"><table><thead><tr><th>المصطلح</th><th>بالإنجليزية</th></tr></thead><tbody>${S2.terms.map(x=>`<tr><td>${x[0]}</td><td dir="ltr" style="text-align:end">${x[1]}</td></tr>`).join("")}</tbody></table></div></section>`;
+  }
+  if(t==="activities"){
+    return C.activities.map((a,ai)=>{
+      let body="";
+      if(a.type==="sort")body=`<div class="sort">${a.items.map(x=>`<div class="sort-row" data-a="${x[1]}"><span class="t">${x[0]}</span>${a.options.map(o=>`<button data-v="${o}">${o}</button>`).join("")}</div>`).join("")}</div>`;
+      if(a.type==="match")body=`<div class="match">${a.items.map((x,i)=>`<label class="m-row" data-a="${x[1]}"><span class="t">${x[0]}</span><select><option value="">اختر السبب</option>${a.reasons.map((r,ri)=>`<option value="${ri}">${r}</option>`).join("")}</select><span class="mark"></span></label>`).join("")}</div><button class="btn sm chk">تحقّق من إجاباتي</button>`;
+      if(a.type==="blanks"){let k=0;body=`<div class="bank">${a.bank.map(w=>`<span>${w}</span>`).join("")}</div><p class="blanks">${a.text.replace(/\{([^}]+)\}/g,(m,w)=>`<select data-a="${w}" aria-label="فراغ ${++k}"><option value="">……</option>${a.bank.map(b=>`<option>${b}</option>`).join("")}</select>`)}</p><button class="btn sm chk">تحقّق من إجاباتي</button>`}
+      if(a.type==="data")body=`<div class="tbl"><table><thead><tr>${a.cols.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>${a.rows.map(r=>`<tr>${r.map((c,i)=>`<td${i?' class="num"':""}>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div><div class="mcs">${a.qs.map((q,qi)=>opts(q,qi,"d"+ai)).join("")}</div>`;
+      if(a.type==="check")body=`<ul class="criteria">${a.items.map((x,i)=>`<li><label><input type="checkbox">${x}</label></li>`).join("")}</ul>`;
+      return `<section class="sec act" data-type="${a.type}"><h2><span class="qn">${ai+1}</span>${a.title}</h2><p class="soft">${a.intro}</p>${body}</section>`;
+    }).join("");
+  }
+  const best=(S.scores||{})[id];
+  return `<section class="sec"><h2>اختيار من متعدد</h2>
+      <div class="scorebar"><span id="score">أجبت عن 0 من ${C.mcq.length}</span>${best!=null?`<span class="soft">أفضل نتيجة سابقة: ${best} من ${C.mcq.length}</span>`:""}<button class="btn ghost sm" id="retry">إعادة الأسئلة</button></div>
+      <div class="mcs">${C.mcq.map((q,i)=>opts(q,i,"m")).join("")}</div></section>
+    <section class="sec"><h2>أسئلة مقالية من الكتاب</h2><p class="soft">اكتب إجابتك أولًا، ثم اعرض نقاط الإجابة النموذجية وضع علامة على كل نقطة ذكرتها.</p>
+      ${C.written.map((w,i)=>`<div class="wq"><div class="src">${w.src}</div><div class="stem"><span class="qn">${i+1}</span>${w.q}</div><textarea rows="3" aria-label="إجابتك" placeholder="اكتب إجابتك هنا"></textarea><button class="btn ghost sm reveal">عرض الإجابة النموذجية</button><div class="model" hidden><b>نقاط الإجابة (${w.marks.length})</b><ul class="criteria">${w.marks.map(m=>`<li><label><input type="checkbox">${m}</label></li>`).join("")}</ul></div></div>`).join("")}
+    </section>
+    <section class="sec"><h2>أسئلة الاختبارات السابقة</h2>${empty("تُضاف قريبًا","ستضاف هنا أسئلة الاختبارات السابقة لهذا الدرس عند تجهيزها.")}</section>`;
 }
 function vLesson(id){
   const f=find(id);if(!f)return vHome();
-  const {sk,u,l}=f,s=SUBJECTS[sk];
+  const {sk,u,l}=f,s=SUBJECTS[sk],C=L(id);
   if(S.user&&st(id)==="seed"){S.status[id]="grow"}
   if(S.user){S.last=id;save()}
   const all=lessonsOf(sk),ix=all.findIndex(x=>x.id===id),pv=all[ix-1],nx=all[ix+1];
   const done=st(id)==="fruit";
+  const crit=(S.crit||{})[id]||{};
   return `<div class="${s.kind}">
     <header class="lesson-top"><div class="wrap">
       <nav class="crumbs"><a href="#home">الرئيسية</a><span>/</span><a href="#${sk}">${s.name}</a><span>/</span><span>الوحدة ${ORD[u.n]}: ${u.title}</span></nav>
@@ -537,13 +656,83 @@ function vLesson(id){
         <nav class="pager" aria-label="التنقل بين الدروس">${pv?`<a href="#${pv.id}"><small>الدرس السابق</small><span>${pv.l[0]}  ${pv.l[1]}</span></a>`:""}${nx?`<a class="nx" href="#${nx.id}"><small>الدرس التالي</small><span>${nx.l[0]}  ${nx.l[1]}</span></a>`:""}</nav>
       </div>
       <aside class="aside">
-        <div><h3>معايير النجاح</h3><ul class="criteria">
-          ${id===DEMO?["أصف الترابط الفلزي.","أفسّر توصيل الفلزات للكهرباء والحرارة.","أفسّر قابلية الفلزات للطرق والسحب."].map((c,i)=>`<li><label><input type="checkbox" id="c${i}">${c}</label></li>`).join(""):`<li style="color:var(--soft)">تُضاف معايير هذا الدرس من ملف معايير النجاح.</li>`}
+        <div><h3>معايير النجاح</h3>${C?`<p class="soft" style="font-size:13.5px;margin:-6px 0 10px">ضع علامة عند كل معيار حققته. اضغط النص لتنتقل إلى شرحه.</p>`:""}<ul class="criteria" id="crit">
+          ${C?C.criteria.map((c,i)=>`<li><label><input type="checkbox" data-c="${i}" ${crit[i]?"checked":""}></label><button class="crit-go" data-go="${c.go}">${c.t}</button></li>`).join(""):`<li style="color:var(--soft)">تُضاف معايير هذا الدرس من ملف معايير النجاح.</li>`}
         </ul></div>
-        ${id===DEMO?`<div class="teacher-note">ركّزوا على كلمة «غير متمركزة»، فهي مفتاح الدرس كله<small>ملاحظة ${TEACHER}</small></div>`:""}
+        ${C&&C.note?`<div class="teacher-note">${C.note}<small>ملاحظة ${TEACHER}</small></div>`:""}
         <figure style="margin:0;text-align:center;color:var(--soft);font-size:14px">${tree(sk,170)}<figcaption>شجرتك في ${s.name}</figcaption></figure>
       </aside>
     </div></div>`;
+}
+/* ===== الرسومات التفاعلية ===== */
+function latticeSVG(o){
+  const cols=o.cols||7,rows=o.rows||4,gap=o.gap||64,r=o.r||21,W=cols*gap+20,H=rows*gap+20;
+  let s=`<svg viewBox="0 0 ${W} ${H}" class="lat" role="img" aria-label="${o.label||"شبكة أيونات فلز موجبة يحيط بها بحر من الإلكترونات"}"><rect x="2" y="2" width="${W-4}" height="${H-4}" rx="18" class="sea"/>`;
+  for(let y=0;y<rows;y++){s+=`<g class="row" data-row="${y}">`;for(let x=0;x<cols;x++){const cx=10+gap/2+x*gap,cy=10+gap/2+y*gap;s+=`<g class="ion"><circle cx="${cx}" cy="${cy}" r="${r}"/><text x="${cx}" y="${cy+7}">+</text></g>`}s+=`</g>`}
+  s+=`<g class="els"></g>`;
+  if(o.labels){const lx=10+gap/2,ly=10+gap/2;s+=`<g class="lbl"><line x1="${lx+r}" y1="${ly-r+4}" x2="${lx+gap*1.6}" y2="${ly-r-2}"/><text x="${lx+gap*1.7}" y="${ly-r+2}">أيون فلز موجب</text><circle cx="${lx+gap/2}" cy="${ly+gap/2}" r="6" class="e"/><line x1="${lx+gap/2+7}" y1="${ly+gap/2}" x2="${lx+gap*1.6}" y2="${ly+gap/2+18}"/><text x="${lx+gap*1.7}" y="${ly+gap/2+24}">إلكترون غير متمركز</text></g>`}
+  return {svg:s+`</svg>`,W,H,gap,cols,rows};
+}
+function hydrate(id){
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelectorAll('[data-widget="lattice"]').forEach(el=>{
+    const g=latticeSVG({});
+    el.className="widget";
+    el.innerHTML=`<div class="w-stage">${g.svg}</div><div class="w-bar"><button class="btn sm" data-a="cur">${"توصيل بطارية"}</button><span class="legend"><i class="k-ion">+</i>أيون فلز موجب<i class="k-e"></i>إلكترون غير متمركز</span><span class="w-cap">الإلكترونات تتحرك عشوائيًا بين الأيونات.</span></div>`;
+    const svg=el.querySelector("svg"),eg=svg.querySelector(".els"),N=26;
+    const E=[...Array(N)].map((_,k)=>({x:10+g.gap*(1+k%(g.cols-1))+(Math.random()-.5)*20,y:10+g.gap*(1+Math.floor(k/(g.cols-1))%(g.rows-1))+(Math.random()-.5)*20,vx:(Math.random()-.5)*1.4,vy:(Math.random()-.5)*1.4}));
+    eg.innerHTML=E.map(()=>`<circle r="6" class="e"/>`).join("");const dots=[...eg.children];
+    let cur=false,lbl=false;
+    const draw=()=>E.forEach((p,i)=>{dots[i].setAttribute("cx",p.x.toFixed(1));dots[i].setAttribute("cy",p.y.toFixed(1))});
+    const step=()=>{if(!el.isConnected)return;E.forEach(p=>{p.vx+=(Math.random()-.5)*.35;p.vy+=(Math.random()-.5)*.35;p.vx*=.95;p.vy*=.95;let dx=p.vx+(cur?-1.6:0);p.x+=dx;p.y+=p.vy;{const gx=10+g.gap/2+Math.round((p.x-10-g.gap/2)/g.gap)*g.gap,gy=10+g.gap/2+Math.round((p.y-10-g.gap/2)/g.gap)*g.gap,dx2=p.x-gx,dy2=p.y-gy,d=Math.hypot(dx2,dy2)||1,m=28;if(d<m){p.x=gx+dx2/d*m;p.y=gy+dy2/d*m;p.vx+=dx2/d*.6;p.vy+=dy2/d*.6}}if(p.y<14||p.y>g.H-14)p.vy*=-1,p.y=Math.min(g.H-14,Math.max(14,p.y));if(cur){if(p.x<10)p.x=g.W-10}else if(p.x<14||p.x>g.W-14)p.vx*=-1,p.x=Math.min(g.W-14,Math.max(14,p.x))});draw();requestAnimationFrame(step)};
+    draw();if(!reduce)requestAnimationFrame(step);
+    el.querySelector('[data-a="cur"]').onclick=e=>{cur=!cur;e.target.textContent=cur?"فصل البطارية":"توصيل بطارية";el.querySelector(".w-cap").textContent=cur?"البطارية موصولة: الإلكترونات غير المتمركزة تنساب في اتجاه واحد وتنقل التيار، والأيونات ثابتة في مواقعها.":"الإلكترونات تتحرك عشوائيًا بين الأيونات.";svg.classList.toggle("on",cur)};
+  });
+  document.querySelectorAll('[data-widget="lattice-static"]').forEach(el=>{
+    el.className="widget static";
+    const ions=[];for(const y of [50,120,190])for(const x of [50,120,190])ions.push(`<g class="ion"><circle cx="${x}" cy="${y}" r="24"/><text x="${x}" y="${y+7}">+</text></g>`);
+    const es=[[85,85],[155,85],[85,155],[155,155],[85,20],[155,214],[20,120],[220,120],[120,85],[50,155]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="6" class="e"/>`);
+    el.innerHTML=`<svg viewBox="0 0 470 236" class="lat" role="img" aria-label="رسم تخطيطي للبنية الشبكية للفلز مع البيانات"><rect x="2" y="2" width="236" height="232" rx="16" class="sea"/>${ions.join("")}${es.join("")}<g class="lbl"><line x1="212" y1="44" x2="262" y2="44"/><text x="270" y="51">أيون فلز موجب</text><line x1="161" y1="158" x2="262" y2="182"/><text x="270" y="189">إلكترون غير متمركز</text></g></svg>`;
+  });
+  document.querySelectorAll('[data-widget="slide-demo"]').forEach(el=>{
+    const g=latticeSVG({cols:6,rows:3,gap:62,label:"طبقات أيونات فلز تنزلق فوق بعضها عند الطرق"});
+    el.className="widget";
+    el.innerHTML=`<div class="w-stage hammer">${g.svg}</div><div class="w-bar"><button class="btn sm" data-a="hit">اطرق الفلز</button><span class="w-cap">جرّب: اضغط «اطرق الفلز» وراقب الطبقات.</span></div>`;
+    const svg=el.querySelector("svg");const eg=svg.querySelector(".els");let pts="";for(let y=0;y<g.rows;y++)for(let x=0;x<g.cols;x++){pts+=`<circle cx="${10+g.gap*(x+1)}" cy="${10+g.gap*(y+1)}" r="5" class="e"/>`}eg.innerHTML=pts;
+    let n=0;el.querySelector('[data-a="hit"]').onclick=e=>{n++;svg.querySelectorAll(".row").forEach((r,i)=>{r.style.transform=`translateX(${-(g.rows-1-i)*(n%2?g.gap/2:0)}px)`});e.target.textContent=n%2?"أعد الطبقات":"اطرق الفلز";el.querySelector(".w-cap").textContent=n%2?"انزلقت الطبقات فوق بعضها، وبقي بحر الإلكترونات يمسكها، فتغيّر الشكل ولم يتفكك الفلز.":"جرّب: اضغط «اطرق الفلز» وراقب الطبقات."};
+  });
+  document.querySelectorAll('[data-widget="slides"]').forEach(el=>{el.className="widget slot";el.innerHTML=`<div class="slide"><div><h3>عرض الدرس</h3><p>سيُضاف هنا عرض الباوربوينت الخاص بالمعلمة عند رفعه.</p></div></div>`});
+  /* التنقل داخل الشرح */
+  document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{const go=b.dataset.go;const jump=()=>{const t=document.getElementById(go);if(t)t.scrollIntoView({behavior:reduce?"auto":"smooth",block:"start"})};if(tab!=="explain"){tab="explain";render();setTimeout(jump,30)}else jump()});
+  /* معايير النجاح */
+  document.querySelectorAll("#crit input[data-c]").forEach(c=>c.onchange=()=>{S.crit=S.crit||{};S.crit[id]=S.crit[id]||{};S.crit[id][c.dataset.c]=c.checked;save()});
+  /* البطاقات */
+  document.querySelectorAll(".flip").forEach(c=>c.onclick=()=>c.classList.toggle("on"));
+  /* التصنيف */
+  document.querySelectorAll(".sort-row").forEach(row=>row.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    row.classList.remove("ok","no");row.classList.add(b.dataset.v===row.dataset.a?"ok":"no");
+    const box=row.closest(".sort");if(box.querySelectorAll(".sort-row.ok").length===box.querySelectorAll(".sort-row").length)toast("أحسنت، صنّفت الخصائص كلها بشكل صحيح");
+  }));
+  /* الربط والفراغات */
+  document.querySelectorAll(".act .chk").forEach(b=>b.onclick=()=>{
+    const sec=b.closest(".act");let ok=0,all=0;
+    sec.querySelectorAll(".m-row").forEach(r=>{all++;const v=r.querySelector("select").value,good=v!==""&&+v===+r.dataset.a;if(good)ok++;r.classList.toggle("ok",good);r.classList.toggle("no",!good)});
+    sec.querySelectorAll(".blanks select").forEach(s=>{all++;const good=s.value===s.dataset.a;if(good)ok++;s.classList.toggle("ok",good);s.classList.toggle("no",!good)});
+    toast(ok===all?"كل الإجابات صحيحة، أحسنت":`${ok} من ${all} صحيحة. راجع المظلّل بالأحمر`);
+  });
+  /* الاختيار من متعدد */
+  const mcs=[...document.querySelectorAll('.mc[data-g="m"]')];
+  const upd=()=>{const ans=mcs.filter(q=>q.dataset.done);const ok=ans.filter(q=>q.dataset.done==="1").length;const sc=$("#score");if(sc)sc.textContent=`أجبت عن ${ans.length} من ${mcs.length}، والصحيح ${ok}`;if(mcs.length&&ans.length===mcs.length){S.scores=S.scores||{};S.scores[id]=Math.max(S.scores[id]||0,ok);save();toast(ok===mcs.length?"علامة كاملة! أثمر تعبك":`نتيجتك ${ok} من ${mcs.length}`)}};
+  document.querySelectorAll(".mc").forEach(q=>q.querySelectorAll(".opt").forEach(o=>o.onclick=()=>{
+    if(q.dataset.done)return;
+    const R=+q.dataset.r,i=+o.dataset.i,all=q.querySelectorAll(".opt"),ex=q.querySelector(".explain");
+    const C=L(id);const src=q.dataset.g==="m"?C.mcq[+q.dataset.i]:C.activities[+q.dataset.g.slice(1)].qs[+q.dataset.i];
+    all[R].classList.add("right");if(i!==R)o.classList.add("wrong");
+    ex.innerHTML=`<b>${i===R?"إجابة صحيحة.":"الإجابة الصحيحة ("+AB[R]+")."}</b> ${src[3]}`;ex.classList.add("show");
+    q.dataset.done=i===R?"1":"0";if(q.dataset.g==="m")upd();
+  }));
+  const rt=$("#retry");if(rt)rt.onclick=()=>{render();};
+  document.querySelectorAll(".reveal").forEach(b=>b.onclick=()=>{const m=b.nextElementSibling;m.hidden=!m.hidden;b.textContent=m.hidden?"عرض الإجابة النموذجية":"إخفاء الإجابة النموذجية"});
 }
 function vReview(sk,title){
   const s=SUBJECTS[sk];
@@ -573,17 +762,7 @@ function render(){
 function bind(r){
   document.querySelectorAll(".unit-head").forEach(b=>b.onclick=()=>{const u=b.closest(".unit");u.classList.toggle("open");S.open[r][u.dataset.u]=u.classList.contains("open");b.setAttribute("aria-expanded",S.open[r][u.dataset.u]);save()});
   document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{tab=t.dataset.t;render()});
-  document.querySelectorAll(".flip").forEach(c=>c.onclick=()=>c.classList.toggle("on"));
-  document.querySelectorAll(".sort-row").forEach(row=>row.querySelectorAll("button").forEach(b=>b.onclick=()=>{
-    row.classList.remove("ok","no");row.classList.add(b.dataset.v===row.dataset.a?"ok":"no");
-    if(document.querySelectorAll(".sort-row.ok").length===document.querySelectorAll(".sort-row").length)toast("أحسنت، صنّفت الخصائص كلها بشكل صحيح");
-  }));
-  const q=$(".q");if(q)q.querySelectorAll(".opt").forEach(o=>o.onclick=()=>{
-    const R=+q.dataset.r,i=+o.dataset.i,all=q.querySelectorAll(".opt"),ex=$("#ex");
-    all.forEach(x=>x.classList.remove("right","wrong"));all[R].classList.add("right");if(i!==R)o.classList.add("wrong");
-    ex.innerHTML=i===R?"<b>إجابة صحيحة.</b> الإلكترونات غير المتمركزة تتحرك بحرية داخل الفلز فتنقل الشحنة الكهربائية.":"<b>الإجابة الصحيحة هي (ب).</b> لا توجد في الفلز أيونات سالبة حرة؛ الذي يتحرك هو الإلكترونات غير المتمركزة، ولهذا يوصل الفلز الكهرباء.";
-    ex.classList.add("show");
-  });
+  if(document.querySelector(".lesson-main"))hydrate(r);
   const bm=$("#bm");if(bm)bm.onclick=()=>{if(needLogin())return;S.saved[r]=!S.saved[r];save();toast(S.saved[r]?"حُفظ الدرس في محفوظاتي":"أُزيل الدرس من محفوظاتي");render()};
   const d=$("#done");if(d)d.onclick=()=>{if(needLogin())return;S.status[r]="fruit";save();toast("أثمر تعبك! ثمرة جديدة في شجرتك");render()};
 }
