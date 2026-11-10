@@ -330,6 +330,15 @@ select.no{border-color:var(--chem);box-shadow:0 0 0 1px var(--chem)}
 .crit-go{text-align:start;font-size:15.5px;line-height:1.7;padding:2px 0}
 .crit-go:hover{color:var(--c);text-decoration:underline;text-underline-offset:4px}
 .slot .slide{min-height:200px}
+.deck{aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#0b2a45}
+.deck iframe{width:100%;height:100%;border:0;display:block}
+.xq .src{font-size:13.5px;color:var(--soft);margin-bottom:6px}
+.xq .src b{color:var(--c)}
+.ctx{margin:0 0 10px;max-width:70ch}
+.q-img{display:block;max-width:min(100%,520px);border-radius:12px;margin:0 0 12px;background:#fff;box-shadow:inset 0 0 0 1px var(--rule)}
+.model .widget.static{max-width:440px;margin-top:10px}
+.opt-img{height:110px;width:auto;max-width:100%;background:#fff;border-radius:8px;padding:4px}
+.mcs .xq .opts{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
 
 @media (max-width:880px){
   .two,.uses{grid-template-columns:1fr}
@@ -479,8 +488,8 @@ function tree(sk,w=210){
 /* ===== أدوات ===== */
 const $=s=>document.querySelector(s);
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2600)}
-function login(){S.user={name:"طالب تجريبي"};save();toast("مرحبًا بك. شجرتك جاهزة لأول ثمرة");render()}
-function needLogin(){if(!S.user){toast("سجّل الدخول ليُحفظ تقدمك");return true}return false}
+function login(){S.user={name:"طالبة تجريبية"};save();toast("مرحبًا بكِ. شجرتكِ جاهزة لأول ثمرة");render()}
+function needLogin(){if(!S.user){toast("سجّلي الدخول ليُحفظ تقدّمك");return true}return false}
 function chrome(route){const r0=route;
   $("#nav").innerHTML=`
     <a class="hide ${route.startsWith("chem10")?"on":""}" href="#chem10">الكيمياء</a>
@@ -504,7 +513,7 @@ function vHome(){
         <span class="grade">${s.grade}</span>
         <h3>${s.name}</h3>
         <div class="progress"><span class="track"><i style="width:${p.p}%"></i></span><span>${p.d} من ${n} درسًا</span></div>
-        <a class="btn ghost enter" href="#${sk}">افتح مادة ${s.name}</a>
+        <a class="btn ghost enter" href="#${sk}">افتحي مادة ${s.name}</a>
       </div>
       <ol class="toc">${s.units.map(u=>`<li><span class="u">الوحدة ${ORD[u.n]}</span><span class="t">${u.title}</span><span class="lead"></span><span class="n">${COUNT_WORD(u.lessons.length)}</span></li>`).join("")}</ol>
     </article>`};
@@ -514,7 +523,7 @@ function vHome(){
         <div class="hello hand">أهلًا بكم في منصتنا</div>
         <h1>أثمِر</h1>
         <p class="motto">كلُّ درسٍ بذرة، وكلُّ نجاحٍ ثمرة</p>
-        <p>كل ما تحتاجه لمادتي الكيمياء والعلوم البيئية في هذا الفصل: شرح الدروس، وملخصات تقلّبها وتتدرّب عليها، وأنشطة، وأسئلة من اختبارات سابقة تصحَّح فورًا.</p>
+        <p>كل ما تحتاجينه لمادتي الكيمياء والعلوم البيئية في هذا الفصل: شرح الدروس، وملخصات تقلّبينها وتتدرّبين عليها، وأنشطة، وأسئلة من اختبارات سابقة تصحَّح فورًا.</p>
         <div class="hero-actions">
           ${S.user?`<a class="btn" href="#chem10">متابعة التعلّم</a>`:`<button class="btn" onclick="login()">${IC.g}تسجيل الدخول بحساب Google</button>`}
           <a class="link" href="#home" onclick="document.getElementById('shelf').scrollIntoView({behavior:'smooth'});return false;">تصفّح المواد</a>
@@ -570,9 +579,9 @@ function vSubject(sk){
       <div>
         <nav class="crumbs"><a href="#home">الرئيسية</a><span>/</span><span>${s.grade}</span></nav>
         <h1>${s.name}</h1>
-        <p class="lede">أربع وحدات و${p.t} درسًا. افتح أي درس لتجد شرحه وملخصه وأنشطته وأسئلته.</p>
+        <p class="lede">أربع وحدات و${p.t} درسًا. افتحي أي درس لتجدي شرحه وملخصه وأنشطته وأسئلته.</p>
         <div class="progress"><span class="track"><i style="width:${p.p}%"></i></span><span>أثمر ${p.d} من ${p.t}</span></div>
-        ${(()=>{const nx=lessonsOf(sk).find(x=>st(x.id)!=="fruit");return nx?`<a class="btn" style="margin-top:22px" href="#${nx.id}">${p.d?"الدرس التالي":"ابدأ من الدرس الأول"}: ${nx.l[1]}</a>`:`<p class="hand" style="font-size:22px;color:var(--date);margin:18px 0 0">أثمرت شجرتك كلها، أحسنت!</p>`})()}
+        ${(()=>{const nx=lessonsOf(sk).find(x=>st(x.id)!=="fruit");return nx?`<a class="btn" style="margin-top:22px" href="#${nx.id}">${p.d?"الدرس التالي":"ابدأ من الدرس الأول"}: ${nx.l[1]}</a>`:`<p class="hand" style="font-size:22px;color:var(--date);margin:18px 0 0">أثمرت شجرتك كلها، أحسنتِ!</p>`})()}
       </div>
       <figure class="tree-card" style="margin:0">${tree(sk)}<figcaption>شجرتك في ${s.name}</figcaption></figure>
     </div></header>
@@ -594,7 +603,8 @@ const L=id=>(window.LESSONS||{})[id];
 function find(id){for(const sk in SUBJECTS)for(const u of SUBJECTS[sk].units)for(const l of u.lessons)if(lid(sk,l[0])===id)return{sk,u,l};return null}
 function empty(h,p){return `<div class="empty"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="var(--palm)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 48c9-3 19-3 28 0"/><path d="M28 47V30"/><path d="M28 32c-9 .5-13.6-4-14.4-12 8.4-.3 13.6 3.9 14.4 12zM28 28.5c.3-7.5 5-12.3 13.4-12.6.2 7.6-4.6 12.3-13.4 12.6z"/></svg><h3>${h}</h3><p>${p}</p></div>`}
 const AB="أبجدهوزح";
-function opts(q,qi,grp){const ord=q[1].map((_,i)=>i);for(let i=ord.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ord[i],ord[j]]=[ord[j],ord[i]]}return `<div class="mc" data-r="${ord.indexOf(q[2])}" data-g="${grp}" data-i="${qi}"><div class="stem"><span class="qn">${qi+1}</span>${q[0]}</div><div class="opts">${ord.map((o,i)=>`<button class="opt" data-i="${i}"><span class="l">${AB[i]}</span>${q[1][o]}</button>`).join("")}</div><div class="explain"></div></div>`}
+const optHTML=x=>x.startsWith("img:")?`<img src="${x.slice(4)}" alt="شكل" class="opt-img">`:x;
+function opts(q,qi,grp,keep){const ord=q[1].map((_,i)=>i);if(!keep)for(let i=ord.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ord[i],ord[j]]=[ord[j],ord[i]]}return `<div class="mc" data-r="${ord.indexOf(q[2])}" data-g="${grp}" data-i="${qi}"><div class="stem"><span class="qn">${qi+1}</span>${q[0]}</div><div class="opts">${ord.map((o,i)=>`<button class="opt" data-i="${i}"><span class="l">${AB[i]}</span>${optHTML(q[1][o])}</button>`).join("")}</div><div class="explain"></div></div>`}
 function stage(id,t){
   const C=L(id);
   if(!C){
@@ -610,8 +620,8 @@ function stage(id,t){
   if(t==="summary"){
     const S2=C.summary;
     return `<section class="sec"><h2>الخلاصة في دقيقة</h2><ul class="ticks">${S2.points.map(p=>`<li>${p}</li>`).join("")}</ul></section>
-      <section class="sec"><h2>بطاقات المراجعة</h2><p class="soft">اقرأ السؤال، وجاوب في ذهنك، ثم اضغط البطاقة لتتأكد.</p>
-      <div class="cards">${S2.cards.map(x=>`<button class="flip"><div class="in"><div class="f"><div>${x[0]}<small>اضغط لرؤية الإجابة</small></div></div><div class="b"><div>${x[1]}</div></div></div></button>`).join("")}</div></section>
+      <section class="sec"><h2>بطاقات المراجعة</h2><p class="soft">اقرئي السؤال، وأجيبي في ذهنك، ثم اضغطي البطاقة لتتأكدي.</p>
+      <div class="cards">${S2.cards.map(x=>`<button class="flip"><div class="in"><div class="f"><div>${x[0]}<small>اضغطي لرؤية الإجابة</small></div></div><div class="b"><div>${x[1]}</div></div></div></button>`).join("")}</div></section>
       <section class="sec"><h2>مصطلحات الدرس</h2><div class="tbl"><table><thead><tr><th>المصطلح</th><th>بالإنجليزية</th></tr></thead><tbody>${S2.terms.map(x=>`<tr><td>${x[0]}</td><td dir="ltr" style="text-align:end">${x[1]}</td></tr>`).join("")}</tbody></table></div></section>`;
   }
   if(t==="activities"){
@@ -629,10 +639,10 @@ function stage(id,t){
   return `<section class="sec"><h2>اختيار من متعدد</h2>
       <div class="scorebar"><span id="score">أجبت عن 0 من ${C.mcq.length}</span>${best!=null?`<span class="soft">أفضل نتيجة سابقة: ${best} من ${C.mcq.length}</span>`:""}<button class="btn ghost sm" id="retry">إعادة الأسئلة</button></div>
       <div class="mcs">${C.mcq.map((q,i)=>opts(q,i,"m")).join("")}</div></section>
-    <section class="sec"><h2>أسئلة مقالية من الكتاب</h2><p class="soft">اكتب إجابتك أولًا، ثم اعرض نقاط الإجابة النموذجية وضع علامة على كل نقطة ذكرتها.</p>
-      ${C.written.map((w,i)=>`<div class="wq"><div class="src">${w.src}</div><div class="stem"><span class="qn">${i+1}</span>${w.q}</div><textarea rows="3" aria-label="إجابتك" placeholder="اكتب إجابتك هنا"></textarea><button class="btn ghost sm reveal">عرض الإجابة النموذجية</button><div class="model" hidden><b>نقاط الإجابة (${w.marks.length})</b><ul class="criteria">${w.marks.map(m=>`<li><label><input type="checkbox">${m}</label></li>`).join("")}</ul></div></div>`).join("")}
+    <section class="sec"><h2>أسئلة مقالية من الكتاب</h2><p class="soft">اكتبي إجابتكِ أولًا، ثم اعرضي نقاط الإجابة النموذجية وضعي علامة على كل نقطة ذكرتِها.</p>
+      ${C.written.map((w,i)=>`<div class="wq"><div class="src">${w.src}</div><div class="stem"><span class="qn">${i+1}</span>${w.q}</div><textarea rows="3" aria-label="إجابتك" placeholder="اكتبي إجابتك هنا"></textarea><button class="btn ghost sm reveal">عرض الإجابة النموذجية</button><div class="model" hidden><b>نقاط الإجابة (${w.marks.length})</b><ul class="criteria">${w.marks.map(m=>`<li><label><input type="checkbox">${m}</label></li>`).join("")}</ul></div></div>`).join("")}
     </section>
-    <section class="sec"><h2>أسئلة الاختبارات السابقة</h2>${empty("تُضاف قريبًا","ستضاف هنا أسئلة الاختبارات السابقة لهذا الدرس عند تجهيزها.")}</section>`;
+    <section class="sec"><h2>أسئلة الاختبارات السابقة</h2>${C.exams?`<p class="soft">أسئلة من اختبارات نهاية الفصل للأعوام السابقة على هذا الدرس، كما وردت.</p><div class="mcs">${C.exams.map((e,i)=>{const head=`<div class="src">${e.src}${e.max?` • <b>[${e.max}]</b>`:""}</div>${e.ctx?`<p class="ctx">${e.ctx}</p>`:""}${e.img?`<img class="q-img" src="${e.img}" alt="شكل السؤال">`:""}`;return e.type==="mcq"?`<div class="xq">${head}${opts([e.q,e.o,e.a,e.x],i,"x",true)}</div>`:`<div class="wq xq">${head}<div class="stem"><span class="qn">${i+1}</span>${e.q}</div><textarea rows="${e.draw?4:2}" aria-label="إجابتك" placeholder="${e.draw?"اكتبي إجابتك هنا، وارسمي المخطط في دفترك":"اكتبي إجابتك هنا"}"></textarea><button class="btn ghost sm reveal">عرض الإجابة النموذجية</button><div class="model" hidden><b>نقاط الإجابة المتوقعة (${e.marks.length})</b><ul class="criteria">${e.marks.map(m=>`<li><label><input type="checkbox">${m}</label></li>`).join("")}</ul>${e.draw?`<div data-widget="lattice-static"></div>`:""}</div></div>`}).join("")}</div>`:empty("تُضاف قريبًا","ستضاف هنا أسئلة الاختبارات السابقة لهذا الدرس عند تجهيزها.")}</section>`;
 }
 function vLesson(id){
   const f=find(id);if(!f)return vHome();
@@ -652,11 +662,11 @@ function vLesson(id){
     <div class="wrap lesson-main">
       <div>
         <div class="stage">${stage(id,tab)}</div>
-        <div class="finish">${done?`<p>أثمر هذا الدرس في شجرتك.</p><a class="btn ghost sm" href="#${sk}">العودة إلى الوحدات</a>`:`<p>أنهيت الدرس وفهمته؟</p><button class="btn date" id="done">${IC.fruit}إنهاء الدرس وإضافة ثمرته</button>`}</div>
+        <div class="finish">${done?`<p>أثمر هذا الدرس في شجرتك.</p><a class="btn ghost sm" href="#${sk}">العودة إلى الوحدات</a>`:`<p>أنهيتِ الدرس وفهمتِه؟</p><button class="btn date" id="done">${IC.fruit}إنهاء الدرس وإضافة ثمرته</button>`}</div>
         <nav class="pager" aria-label="التنقل بين الدروس">${pv?`<a href="#${pv.id}"><small>الدرس السابق</small><span>${pv.l[0]}  ${pv.l[1]}</span></a>`:""}${nx?`<a class="nx" href="#${nx.id}"><small>الدرس التالي</small><span>${nx.l[0]}  ${nx.l[1]}</span></a>`:""}</nav>
       </div>
       <aside class="aside">
-        <div><h3>معايير النجاح</h3>${C?`<p class="soft" style="font-size:13.5px;margin:-6px 0 10px">ضع علامة عند كل معيار حققته. اضغط النص لتنتقل إلى شرحه.</p>`:""}<ul class="criteria" id="crit">
+        <div><h3>معايير النجاح</h3>${C?`<p class="soft" style="font-size:13.5px;margin:-6px 0 10px">ضعي علامة عند كل معيار حققتِه. اضغطي النص لتنتقلي إلى شرحه.</p>`:""}<ul class="criteria" id="crit">
           ${C?C.criteria.map((c,i)=>`<li><label><input type="checkbox" data-c="${i}" ${crit[i]?"checked":""}></label><button class="crit-go" data-go="${c.go}">${c.t}</button></li>`).join(""):`<li style="color:var(--soft)">تُضاف معايير هذا الدرس من ملف معايير النجاح.</li>`}
         </ul></div>
         ${C&&C.note?`<div class="teacher-note">${C.note}<small>ملاحظة ${TEACHER}</small></div>`:""}
@@ -697,11 +707,11 @@ function hydrate(id){
   document.querySelectorAll('[data-widget="slide-demo"]').forEach(el=>{
     const g=latticeSVG({cols:6,rows:3,gap:62,label:"طبقات أيونات فلز تنزلق فوق بعضها عند الطرق"});
     el.className="widget";
-    el.innerHTML=`<div class="w-stage hammer">${g.svg}</div><div class="w-bar"><button class="btn sm" data-a="hit">اطرق الفلز</button><span class="w-cap">جرّب: اضغط «اطرق الفلز» وراقب الطبقات.</span></div>`;
+    el.innerHTML=`<div class="w-stage hammer">${g.svg}</div><div class="w-bar"><button class="btn sm" data-a="hit">اطرقي الفلز</button><span class="w-cap">جرّبي: اضغطي «اطرقي الفلز» وراقبي الطبقات.</span></div>`;
     const svg=el.querySelector("svg");const eg=svg.querySelector(".els");let pts="";for(let y=0;y<g.rows;y++)for(let x=0;x<g.cols;x++){pts+=`<circle cx="${10+g.gap*(x+1)}" cy="${10+g.gap*(y+1)}" r="5" class="e"/>`}eg.innerHTML=pts;
-    let n=0;el.querySelector('[data-a="hit"]').onclick=e=>{n++;svg.querySelectorAll(".row").forEach((r,i)=>{r.style.transform=`translateX(${-(g.rows-1-i)*(n%2?g.gap/2:0)}px)`});e.target.textContent=n%2?"أعد الطبقات":"اطرق الفلز";el.querySelector(".w-cap").textContent=n%2?"انزلقت الطبقات فوق بعضها، وبقي بحر الإلكترونات يمسكها، فتغيّر الشكل ولم يتفكك الفلز.":"جرّب: اضغط «اطرق الفلز» وراقب الطبقات."};
+    let n=0;el.querySelector('[data-a="hit"]').onclick=e=>{n++;svg.querySelectorAll(".row").forEach((r,i)=>{r.style.transform=`translateX(${-(g.rows-1-i)*(n%2?g.gap/2:0)}px)`});e.target.textContent=n%2?"أعد الطبقات":"اطرقي الفلز";el.querySelector(".w-cap").textContent=n%2?"انزلقت الطبقات فوق بعضها، وبقي بحر الإلكترونات يمسكها، فتغيّر الشكل ولم يتفكك الفلز.":"جرّبي: اضغطي «اطرقي الفلز» وراقبي الطبقات."};
   });
-  document.querySelectorAll('[data-widget="slides"]').forEach(el=>{el.className="widget slot";el.innerHTML=`<div class="slide"><div><h3>عرض الدرس</h3><p>سيُضاف هنا عرض الباوربوينت الخاص بالمعلمة عند رفعه.</p></div></div>`});
+  document.querySelectorAll('[data-widget="slides"]').forEach(el=>{const C=L(id);el.className="widget slot";el.innerHTML=C&&C.slides?`<div class="deck"><iframe src="${C.slides}" title="عرض الدرس" loading="lazy" allow="fullscreen"></iframe></div><div class="w-bar"><a class="btn sm" href="${C.slides}" target="_blank" rel="noopener">فتح العرض في صفحة كاملة</a><span class="w-cap">العرض نفسه الذي شُرح في الحصة. استخدمي الأسهم أو زر «التالي» للتنقل.</span></div>`:`<div class="slide"><div><h3>عرض الدرس</h3><p>سيُضاف هنا عرض الدرس.</p></div></div>`});
   /* التنقل داخل الشرح */
   document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{const go=b.dataset.go;const jump=()=>{const t=document.getElementById(go);if(t)t.scrollIntoView({behavior:reduce?"auto":"smooth",block:"start"})};if(tab!=="explain"){tab="explain";render();setTimeout(jump,30)}else jump()});
   /* معايير النجاح */
@@ -711,14 +721,14 @@ function hydrate(id){
   /* التصنيف */
   document.querySelectorAll(".sort-row").forEach(row=>row.querySelectorAll("button").forEach(b=>b.onclick=()=>{
     row.classList.remove("ok","no");row.classList.add(b.dataset.v===row.dataset.a?"ok":"no");
-    const box=row.closest(".sort");if(box.querySelectorAll(".sort-row.ok").length===box.querySelectorAll(".sort-row").length)toast("أحسنت، صنّفت الخصائص كلها بشكل صحيح");
+    const box=row.closest(".sort");if(box.querySelectorAll(".sort-row.ok").length===box.querySelectorAll(".sort-row").length)toast("أحسنتِ، صنّفتِ الخصائص كلها بشكل صحيح");
   }));
   /* الربط والفراغات */
   document.querySelectorAll(".act .chk").forEach(b=>b.onclick=()=>{
     const sec=b.closest(".act");let ok=0,all=0;
     sec.querySelectorAll(".m-row").forEach(r=>{all++;const v=r.querySelector("select").value,good=v!==""&&+v===+r.dataset.a;if(good)ok++;r.classList.toggle("ok",good);r.classList.toggle("no",!good)});
     sec.querySelectorAll(".blanks select").forEach(s=>{all++;const good=s.value===s.dataset.a;if(good)ok++;s.classList.toggle("ok",good);s.classList.toggle("no",!good)});
-    toast(ok===all?"كل الإجابات صحيحة، أحسنت":`${ok} من ${all} صحيحة. راجع المظلّل بالأحمر`);
+    toast(ok===all?"كل الإجابات صحيحة، أحسنتِ":`${ok} من ${all} صحيحة. راجعي المظلّل بالأحمر`);
   });
   /* الاختيار من متعدد */
   const mcs=[...document.querySelectorAll('.mc[data-g="m"]')];
@@ -726,7 +736,7 @@ function hydrate(id){
   document.querySelectorAll(".mc").forEach(q=>q.querySelectorAll(".opt").forEach(o=>o.onclick=()=>{
     if(q.dataset.done)return;
     const R=+q.dataset.r,i=+o.dataset.i,all=q.querySelectorAll(".opt"),ex=q.querySelector(".explain");
-    const C=L(id);const src=q.dataset.g==="m"?C.mcq[+q.dataset.i]:C.activities[+q.dataset.g.slice(1)].qs[+q.dataset.i];
+    const C=L(id);const g=q.dataset.g,ii=+q.dataset.i;const src=g==="m"?C.mcq[ii]:g==="x"?[0,0,0,C.exams[ii].x]:C.activities[+g.slice(1)].qs[ii];
     all[R].classList.add("right");if(i!==R)o.classList.add("wrong");
     ex.innerHTML=`<b>${i===R?"إجابة صحيحة.":"الإجابة الصحيحة ("+AB[R]+")."}</b> ${src[3]}`;ex.classList.add("show");
     q.dataset.done=i===R?"1":"0";if(q.dataset.g==="m")upd();
@@ -741,9 +751,9 @@ function vReview(sk,title){
 }
 function vSaved(){
   const ids=Object.keys(S.saved).filter(k=>S.saved[k]);
-  return `<div class="wrap saved"><h1>محفوظاتي</h1><p>الدروس التي حفظتها لترجع إليها.</p>
+  return `<div class="wrap saved"><h1>محفوظاتي</h1><p>الدروس التي حفظتِها لترجعي إليها.</p>
     ${ids.length?ids.map(id=>{const f=find(id);const s=SUBJECTS[f.sk];return `<a class="lesson ${s.kind}" href="#${id}"><span class="code">${f.l[0]}</span><span class="t">${f.l[1]}</span><span class="lead"></span><span class="state">${s.name}</span></a>`}).join("")
-      :empty("لا توجد دروس محفوظة بعد","اضغط «حفظ للرجوع إليه» داخل أي درس ليظهر هنا.")}</div>`;
+      :empty("لا توجد دروس محفوظة بعد","اضغطي «حفظ للرجوع إليه» داخل أي درس ليظهر هنا.")}</div>`;
 }
 
 /* ===== التنقل ===== */
