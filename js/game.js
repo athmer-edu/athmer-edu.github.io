@@ -4,6 +4,7 @@ const LV_META={
   match:{name:"ذاكرة الأزواج",tag:"اقلبي وطابقي",ic:"M4 5h7v14H4zM13 5h7v14h-7z"},
   blanks:{name:"أكملي الجملة",tag:"كلمات مفقودة",ic:"M4 8h16M4 12h7M15 12h5M4 16h16"},
   data:{name:"تحدّي الجدول",tag:"ضد الوقت",ic:"M12 7v5l3 2M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18"},
+  colors:{name:"مختبر الألوان",tag:"خمّني اللون",ic:"M9 3h6M10 3v10a4 4 0 1 0 4 0V3M9 13h6"},
   check:{name:"ارسمي وتحقّقي",tag:"المستوى الأخير",ic:"M4 20l4-1 11-11-3-3L5 16zM14 6l3 3"}
 };
 const G=()=>{S.game=S.game||{};return S.game};
@@ -33,6 +34,7 @@ function startLevel(id,i){const a=L(id).activities[i];PLAY={id,i,a,pts:0,miss:0,
   if(a.type==="match"){const cards=[];a.items.forEach((it,pi)=>{cards.push({p:pi,t:it[0],kind:"prop"});cards.push({p:pi,t:a.reasons[it[1]],kind:"why"})});PLAY.cards=shuffleA(cards);PLAY.open=[];PLAY.got=new Set();PLAY.moves=0}
   if(a.type==="blanks"){PLAY.parts=[];const re=/\{([^}]+)\}/g;let last=0,m;while((m=re.exec(a.text))){PLAY.parts.push({t:a.text.slice(last,m.index)});PLAY.parts.push({ans:m[1],fill:null});last=re.lastIndex}PLAY.parts.push({t:a.text.slice(last)});PLAY.bank=shuffleA(a.bank.map((w,k)=>({w,k,used:false})))}
   if(a.type==="data"){PLAY.qi=0;PLAY.ok=0}
+  if(a.type==="colors"){PLAY.items=shuffleA(a.items)}
   if(a.type==="check")PLAY.ticks=a.items.map(()=>false);
   render();setTimeout(()=>{const g=$("#game");if(g)g.scrollIntoView({behavior:"smooth",block:"start"})},40)}
 const shuffleA=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
@@ -52,7 +54,7 @@ function drawLevel(){
     el.innerHTML=`${playHead()}<div class="mem-g">${PLAY.cards.map((c,k)=>`<button class="mcard ${PLAY.got.has(c.p)?'got':''} ${PLAY.open.includes(k)?'up':''} ${c.kind}" data-k="${k}" aria-label="بطاقة ${k+1}"><span class="in"><span class="back"><svg viewBox="0 0 32 32"><path d="M16 28V15" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/><path d="M15.6 16c-5.5.3-9-2.6-9.6-8 5.6-.2 9 2.8 9.6 8zM15.4 12.5c.2-5 3.4-8.4 9-8.6.1 5-3.2 8.4-9 8.6z" fill="currentColor"/></svg></span><span class="face"><small>${c.kind==="prop"?"خاصية":"سبب"}</small>${c.t}</span></span></button>`).join("")}</div><p class="soft" style="text-align:center">المحاولات: <b id="mv">${PLAY.moves}</b></p>`;
     el.querySelectorAll(".mcard").forEach(b=>b.onclick=()=>{const k=+b.dataset.k,c=PLAY.cards[k];if(PLAY.lock||PLAY.got.has(c.p)||PLAY.open.includes(k))return;PLAY.open.push(k);b.classList.add("up");
       if(PLAY.open.length===2){PLAY.moves++;$("#mv").textContent=PLAY.moves;const[x,y]=PLAY.open.map(j=>PLAY.cards[j]);const ok=x.p===y.p&&x.kind!==y.kind;PLAY.lock=true;
-        if(ok){PLAY.pts+=15;PLAY.got.add(x.p);bump(true);setTimeout(()=>{PLAY.open=[];PLAY.lock=false;if(PLAY.got.size===a.items.length)endLevel(PLAY.moves<=6?3:PLAY.moves<=9?2:1);else drawLevel()},600)}
+        if(ok){PLAY.pts+=15;PLAY.got.add(x.p);bump(true);setTimeout(()=>{PLAY.open=[];PLAY.lock=false;if(PLAY.got.size===a.items.length){const n=a.items.length;endLevel(PLAY.moves<=n+2?3:PLAY.moves<=n+5?2:1)}else drawLevel()},600)}
         else{PLAY.miss++;bump(false);setTimeout(()=>{PLAY.open=[];PLAY.lock=false;drawLevel()},1000)}}});
   }
   if(a.type==="blanks"){
@@ -72,12 +74,20 @@ function drawLevel(){
       setTimeout(()=>{PLAY.qi++;if(PLAY.qi>=a.qs.length)endLevel(PLAY.ok===a.qs.length?3:PLAY.ok>=a.qs.length-2?2:1);else drawLevel()},ok?1100:2600)};
     el.querySelectorAll(".ropts .opt").forEach(b=>b.onclick=()=>answer(+b.dataset.j));
   }
+  if(a.type==="colors"){
+    const it=PLAY.items[PLAY.k],hex=n=>(a.palette.find(p=>p[0]===n)||[0,"#ccc"])[1];
+    el.innerHTML=`${playHead()}<div class="lab-g"><div class="tube-wrap"><div class="count">${PLAY.k+1} / ${PLAY.items.length}</div><svg viewBox="0 0 120 230" class="tube" role="img" aria-label="أنبوبة اختبار"><path d="M30 10h60M38 10v160a22 22 0 0 0 44 0V10" fill="#fff" stroke="currentColor" stroke-width="4"/><path id="liq" d="M41 80v90a19 19 0 0 0 38 0V80z" fill="var(--rule)"/><text x="60" y="140" text-anchor="middle" font-size="40" font-weight="700" fill="var(--soft)" id="qm">؟</text></svg><div class="ion-l"><b>${it[0]}</b><span dir="ltr">${it[1]}</span></div></div>
+     <div class="swatches">${a.palette.map(p=>`<button class="sw" data-c="${p[0]}"><i style="background:${p[1]}"></i>${p[0]}</button>`).join("")}</div><div class="fbk" id="fbk"></div></div>`;
+    el.querySelectorAll(".sw").forEach(b=>b.onclick=()=>{if(PLAY.lock)return;PLAY.lock=true;const ok=b.dataset.c===it[2];$("#liq").setAttribute("fill",hex(it[2]));$("#qm").textContent="";if(ok)PLAY.pts+=10;else PLAY.miss++;bump(ok,b);b.classList.add(ok?"good":"bad");$("#fbk").innerHTML=ok?"صحيح! +10":`اللون الصحيح: <b>${it[2]}</b>`;$("#fbk").className="fbk "+(ok?"ok":"no");
+      setTimeout(()=>{PLAY.lock=false;PLAY.k++;if(PLAY.k>=PLAY.items.length)endLevel(PLAY.miss<=1?3:PLAY.miss<=3?2:1);else drawLevel()},ok?900:1700)});
+  }
   if(a.type==="check"){
     el.innerHTML=`${playHead()}<div class="two"><div data-widget="lattice-static"></div><ul class="criteria big">${a.items.map((x,k)=>`<li><label><input type="checkbox" data-k="${k}" ${PLAY.ticks[k]?'checked':''}>${x}</label></li>`).join("")}</ul></div><div style="text-align:center;margin-top:14px"><button class="btn date" id="fin" ${PLAY.ticks.every(Boolean)?'':'disabled'}>أنهيت رسمي</button></div>`;
     hydrateStatic();
     el.querySelectorAll("input[data-k]").forEach(c=>c.onchange=()=>{PLAY.ticks[+c.dataset.k]=c.checked;$("#fin").disabled=!PLAY.ticks.every(Boolean)});
     $("#fin").onclick=()=>{PLAY.pts+=30;endLevel(3)};
   }
+  if(window.fixFormulas)fixFormulas(el);
   const tm=$("#toMap");if(tm)tm.onclick=()=>{clearInterval(PLAY&&PLAY.tm);PLAY=null;render()};
 }
 function endLevel(stars){
@@ -183,3 +193,8 @@ function drawCert(cv,o){
 }
 function bindPath(id){document.querySelectorAll("[data-gotab]").forEach(b=>b.onclick=()=>{tab=b.dataset.gotab;render();const tb=document.querySelector(".tabs");if(tb)window.scrollTo({top:tb.getBoundingClientRect().top+scrollY-90,behavior:"smooth"})});const ce=$("#cert");if(ce)ce.onclick=()=>showCert(id)}
 function refreshPath(id){const old=document.querySelector(".path");if(!old)return;const f=find(id);const tmp=document.createElement("div");tmp.innerHTML=finishBox(id,f.sk);old.replaceWith(tmp.firstElementChild);bindPath(id);const d=$("#done");if(d&&!d.disabled)d.onclick=()=>{if(needLogin())return;S.status[id]="fruit";save();toast("أثمر تعبك! ثمرة جديدة في شجرتك");render();confetti();setTimeout(()=>showCert(id),700)}}
+
+function bindExamExtra(id){const C=L(id);if(!C||!C.exams)return;
+  document.querySelectorAll(".fq .fchk").forEach(b=>b.onclick=()=>{const q=b.closest(".fq");let ok=0,n=0;q.querySelectorAll(".m-row").forEach(r=>{n++;const g=r.querySelector("select").value===r.dataset.a;if(g)ok++;r.classList.toggle("ok",g);r.classList.toggle("no",!g)});toast(ok===n?"إجابة كاملة، أحسنتِ":`${ok} من ${n} صحيحة`)});
+  document.querySelectorAll(".mq .mchk").forEach(b=>b.onclick=()=>{const q=b.closest(".mq"),e=C.exams[+q.dataset.i];const sel=[...q.querySelectorAll("input:checked")].map(x=>+x.value);q.querySelectorAll(".mopt").forEach((l,k)=>{const want=e.ok.includes(k);l.classList.toggle("ok",want);l.classList.toggle("no",!want&&sel.includes(k))});const right=sel.length===e.ok.length&&sel.every(v=>e.ok.includes(v));const ex=q.querySelector(".explain");ex.innerHTML=`<b>${right?"إجابة صحيحة.":"الإجابة الصحيحة مظلّلة بالأخضر."}</b> ${e.x||""}`;ex.classList.add("show")});
+}
