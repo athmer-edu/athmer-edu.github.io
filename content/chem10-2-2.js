@@ -79,6 +79,7 @@ window.LESSONS["chem10-2-2"] = {
       <li><b>المرحلة (ج):</b> السيليكون والفوسفور تحترق إلى أكاسيد <b>غير غازية وحمضية</b>، يعادلها <b>الجير</b> فتكوّن خبثًا يطفو فوق الفولاذ. يُمال الفرن لسكب الفولاذ، ثم في الاتجاه الآخر لسكب الخبث.</li>
     </ol>
     <div data-widget="bos"></div>
+    <div class="sim-box"><div class="sim-head"><b>محاكي فرن الأكسجين</b><a href="content/sim/oxygen-furnace.html" target="_blank" rel="noopener">فتح بملء الشاشة</a></div><iframe src="content/sim/oxygen-furnace.html" loading="lazy" title="محاكي فرن الأكسجين"></iframe></div>
     <div class="callout"><b>أنواع مختلفة من الفولاذ</b>بإضافة كميات محددة من عناصر انتقالية مثل <b>الكروم والنيكل والتنغستن</b> إلى الفولاذ وهو منصهر.</div>
     <div class="callout"><b>إعادة التدوير في الصناعة</b>الغازات الساخنة تسخّن الهواء الداخل (طاقة)، وخردة الفولاذ تُضاف إلى الفرن المائل (مواد).</div>
   </section>

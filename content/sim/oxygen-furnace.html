@@ -1,0 +1,576 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>محاكي فرن الأكسجين</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Readex+Pro:wght@500;700&display=swap">
+<style>
+/* Layout: control-room console — furnace scene on one side, operator panel (steps, gauges, reactions) on the other; stacks on phones. Deliberately single dark theme (steel-plant control room). */
+:root{
+  --bg:#13161b; --panel:#1c2129; --panel2:#232a34; --line:#323b47;
+  --fg:#ece6dc; --muted:#9aa3ad; --molten:#ff8a1f; --hot:#ffd166; --steel:#8fb3cf; --ok:#5cc28a; --warn:#ff6b5b; --o2:#5aa9ff; --slag:#9a7b57;
+  --f-display:"Readex Pro","IBM Plex Sans Arabic",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans Arabic","Segoe UI",Tahoma,system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.6;}
+.wrap{max-width:none;margin:0;padding-block:10px 12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));}
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 20px;margin-bottom:10px}
+h1{font-family:var(--f-display);font-size:clamp(22px,3.2vw,32px);margin:0;line-height:1.2;text-wrap:balance}
+h1 span{color:var(--molten)}
+.sub{color:var(--muted);margin:2px 0 0;font-size:13.5px;max-width:90ch}
+@media (min-width:901px){
+  html,body{height:100%}
+  .wrap{height:100%;display:flex;flex-direction:column}
+  .grid{flex:1;min-height:0;grid-template-columns:minmax(0,2.3fr) minmax(330px,1fr)}
+  .scene{display:flex;flex-direction:column;min-height:0}
+  .scene svg{flex:1;min-height:0;height:100%;width:100%}
+  .side{overflow-y:auto;min-height:0;padding-inline-end:2px}
+  ol.steps button{padding:5px 10px}
+  ol.steps{gap:5px}
+}
+:fullscreen .wrap{height:100vh}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+button{font-family:inherit;font-size:14px;color:var(--fg);background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:7px 12px;cursor:pointer;transition:background .15s,border-color .15s,transform .05s}
+button:hover{border-color:#4a5666;background:#2a323e}
+button:active{transform:translateY(1px)}
+button:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+button[disabled]{opacity:.45;cursor:not-allowed}
+.grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:14px}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+.scene{background:radial-gradient(120% 90% at 50% 70%,#1f2530 0%,#14181e 70%);border:1px solid var(--line);border-radius:14px;overflow:hidden;position:relative;min-width:0}
+.scene svg{display:block;width:100%;height:auto}
+.badge{position:absolute;top:10px;right:12px;font-size:12.5px;background:#0e1115cc;border:1px solid var(--line);padding:3px 10px;border-radius:20px;color:var(--muted)}
+.badge b{color:var(--hot);font-weight:700}
+.msg{margin:0;border-top:1px solid var(--line);padding:12px 16px;background:#171b21;min-height:86px}
+.msg h3{margin:0 0 2px;font-family:var(--f-display);font-size:16px;color:var(--hot)}
+.msg p{margin:0;color:var(--fg);max-width:70ch}
+.msg.warn h3{color:var(--warn)}
+.side{display:flex;flex-direction:column;gap:14px;min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.card h2{font-family:var(--f-display);font-size:15.5px;margin:0 0 8px;color:var(--fg);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card h2 small{font-family:var(--f-body);font-weight:400;color:var(--muted);font-size:12.5px}
+ol.steps{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+ol.steps button{width:100%;display:flex;align-items:center;gap:10px;text-align:right;padding:7px 10px}
+.num{flex:0 0 26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px;background:#2e3743;color:var(--muted);font-variant-numeric:tabular-nums;font-weight:700}
+.steps .done .num{background:var(--ok);color:#0f1a14}
+.steps .done{color:var(--muted)}
+.steps .current{border-color:var(--molten);background:#2d241b;box-shadow:0 0 0 1px #ff8a1f55 inset}
+.steps .current .num{background:var(--molten);color:#1b1206}
+.steps .opt{border-style:dashed}
+.alloys{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.alloys button{flex:1 1 140px;font-size:13px}
+.alloys .on{border-color:#b39ddb;background:#2a2536}
+.gauges{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.g{background:var(--panel2);border-radius:10px;padding:7px 10px;border:1px solid var(--line)}
+.g .k{font-size:12px;color:var(--muted)}
+.g .v{font-family:var(--f-display);font-size:20px;font-variant-numeric:tabular-nums;direction:ltr;text-align:right}
+.bars{display:grid;gap:6px;margin-top:8px}
+.bar{display:grid;grid-template-columns:110px minmax(0,1fr) 62px;align-items:center;gap:8px;font-size:13px}
+.bar .t{height:9px;border-radius:6px;background:#2b333e;overflow:hidden}
+.bar .t i{display:block;height:100%;width:100%;border-radius:6px;transition:width .2s linear}
+.bar .n{direction:ltr;text-align:left;font-variant-numeric:tabular-nums;color:var(--muted)}
+ul.eqs{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+ul.eqs li{direction:ltr;text-align:left;font-variant-numeric:tabular-nums;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:14px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;animation:pop .4s ease-out}
+ul.eqs li span{direction:rtl;color:var(--muted);font-size:12.5px}
+.empty{color:var(--muted);font-size:13.5px}
+@keyframes pop{from{transform:translateY(4px);opacity:.3}to{transform:none;opacity:1}}
+.final{border-color:var(--ok);background:linear-gradient(180deg,#1b2a22,#1c2129)}
+.final h2{color:var(--ok)}
+.final dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0;font-size:14px}
+.final dt{color:var(--muted)}
+.final dd{margin:0}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <div>
+    <h1>محاكي <span>عملية الأكسجين الأساسية</span></h1>
+    <p class="sub">نفّذي خطوات صناعة الفولاذ بالترتيب الصحيح: من تعبئة الفرن بالحديد الخام المنصهر حتى سكب الفولاذ والخبث. راقبي نسبة الكربون والشوائب ودرجة الحرارة أثناء نفخ الأكسجين.</p>
+  </div>
+  <div class="tools">
+    <button id="fsBtn" type="button">ملء الشاشة ⛶</button>
+    <button id="labelsBtn" type="button" aria-pressed="true">إخفاء التسميات</button>
+    <button id="resetBtn" type="button">إعادة التجربة</button>
+  </div>
+</header>
+
+<div class="grid">
+  <section class="scene" aria-label="مشهد فرن الأكسجين">
+    <div class="badge">الخطوة <b id="stepNo">١</b> من ١١</div>
+    <svg id="svg" viewBox="0 0 600 470" role="img" aria-label="رسم متحرك لفرن الأكسجين الأساسي">
+      <defs>
+        <linearGradient id="gIron" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb347"/><stop offset=".45" stop-color="#ff7b1c"/><stop offset="1" stop-color="#c2410c"/></linearGradient>
+        <linearGradient id="gSteel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6d6"/><stop offset=".5" stop-color="#ffd166"/><stop offset="1" stop-color="#ff9f1c"/></linearGradient>
+        <linearGradient id="gShell" x1="0" x2="1"><stop offset="0" stop-color="#2c3644"/><stop offset=".45" stop-color="#55657a"/><stop offset="1" stop-color="#26303c"/></linearGradient>
+        <radialGradient id="gFlame"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#fff3a3"/><stop offset=".7" stop-color="#ff9f1c" stop-opacity=".7"/><stop offset="1" stop-color="#ff5a1f" stop-opacity="0"/></radialGradient>
+        <radialGradient id="gGlow"><stop offset="0" stop-color="#ff8a1f" stop-opacity=".45"/><stop offset="1" stop-color="#ff8a1f" stop-opacity="0"/></radialGradient>
+        <clipPath id="inner"><path d="M-58,-71 L-27,-116 L27,-116 L58,-71 L68,75 Q68,116 31,119 L-31,119 Q-68,116 -68,75 Z"/></clipPath>
+      </defs>
+
+      <!-- floor & supports -->
+      <rect x="0" y="420" width="600" height="50" fill="#181c22"/>
+      <line x1="0" y1="420" x2="600" y2="420" stroke="#2f3843" stroke-width="2"/>
+      <path d="M190 420 L205 262 L222 262 L214 420 Z M410 420 L395 262 L378 262 L386 420 Z" fill="#2b333e" stroke="#3b4654"/>
+      <circle cx="300" cy="250" r="150" fill="url(#gGlow)" id="glow" opacity="0"/>
+
+      <!-- fume duct + hood -->
+      <path d="M282 0 V40 M318 0 V40" stroke="#3b4654" stroke-width="3"/>
+      <rect x="283" y="0" width="34" height="40" fill="#262e38"/>
+      <g id="hood">
+        <rect x="283" y="-60" width="34" height="62" fill="#262e38"/>
+        <path d="M244 0 L356 0 L344 32 L256 32 Z" fill="#3a4554" stroke="#56657a" stroke-width="1.5"/>
+      </g>
+      <g id="gas"></g>
+
+      <!-- oxygen lance -->
+      <g id="lance">
+        <rect x="294" y="-300" width="12" height="300" fill="#a9b6c4" stroke="#5f6d7c"/>
+        <rect x="292" y="-6" width="16" height="8" rx="2" fill="#7c8a99"/>
+        <ellipse id="flame" cx="300" cy="14" rx="0" ry="0" fill="url(#gFlame)"/>
+      </g>
+
+      <!-- converter (rotates about trunnion at 300,250) -->
+      <g id="vessel" transform="translate(300 250)">
+        <path d="M-78,-78 L-41,-133 L41,-133 L78,-78 L88,78 Q88,136 37,139 L-37,139 Q-88,136 -88,78 Z" fill="url(#gShell)" stroke="#17202b" stroke-width="2.5"/>
+        <path d="M-66,-74 L-33,-124 L33,-124 L66,-74 L76,76 Q76,126 34,129 L-34,129 Q-76,126 -76,76 Z" fill="#b8402f"/>
+        <g clip-path="url(#inner)">
+          <path d="M-58,-71 L-27,-116 L27,-116 L58,-71 L68,75 Q68,116 31,119 L-31,119 Q-68,116 -68,75 Z" fill="#0f1114"/>
+          <g id="world">
+            <rect id="slagRect" x="-300" y="0" width="600" height="0" fill="#8a6a46"/>
+            <rect id="liquid" x="-300" y="0" width="600" height="400" fill="url(#gIron)"/>
+            <rect id="liqShine" x="-300" y="0" width="600" height="3" fill="#fff3c4" opacity=".55"/>
+            <g id="bubbles"></g>
+            <g id="limeFloat"></g>
+          </g>
+          <g id="scrapIn"></g>
+        </g>
+        <path d="M-41,-133 L41,-133" stroke="#9aa9ba" stroke-width="3"/>
+        <circle cx="64" cy="-62" r="5" fill="#0f1114" stroke="#9aa9ba" stroke-width="1.5"/>
+        <circle cx="-92" cy="0" r="11" fill="#4a5666" stroke="#202833" stroke-width="2"/>
+        <circle cx="92" cy="0" r="11" fill="#4a5666" stroke="#202833" stroke-width="2"/>
+      </g>
+
+      <!-- iron ladle on crane -->
+      <g id="crane" opacity="0">
+        <line id="craneRope1" x1="0" y1="-200" x2="0" y2="-30" stroke="#6b7785" stroke-width="2"/>
+        <g id="ironLadle">
+          <path d="M-36,-26 L36,-26 L28,30 Q0,40 -28,30 Z" fill="#3a4554" stroke="#17202b" stroke-width="2"/>
+          <path d="M-36,-26 L36,-26" stroke="#9aa9ba" stroke-width="3"/>
+          <rect id="ladleMelt" x="-30" y="-22" width="60" height="12" fill="url(#gIron)"/>
+        </g>
+      </g>
+      <!-- scrap chute -->
+      <g id="chute" opacity="0">
+        <path d="M70 18 L180 70 L172 86 L62 34 Z" fill="#59677a" stroke="#2c3644" stroke-width="2"/>
+      </g>
+      <!-- lime hopper -->
+      <g id="hopper" opacity="0">
+        <path d="M400 20 L470 20 L452 58 L418 58 Z" fill="#59677a" stroke="#2c3644" stroke-width="2"/>
+        <path d="M430 58 L360 112" stroke="#59677a" stroke-width="12" stroke-linecap="round"/>
+      </g>
+      <g id="falling"></g>
+      <path id="stream" d="" fill="none" stroke="url(#gIron)" stroke-width="9" stroke-linecap="round" opacity="0"/>
+
+      <!-- steel ladle (right) & slag pot (left) -->
+      <g transform="translate(518 382)">
+        <path d="M-44,-38 L44,-38 L36,34 Q0,44 -36,34 Z" fill="#3a4554" stroke="#17202b" stroke-width="2"/>
+        <clipPath id="ladleClip"><path d="M-41,-35 L41,-35 L34,31 Q0,40 -34,31 Z"/></clipPath>
+        <g clip-path="url(#ladleClip)"><rect id="steelInLadle" x="-50" y="40" width="100" height="80" fill="url(#gSteel)"/></g>
+        <path d="M-44,-38 L44,-38" stroke="#9aa9ba" stroke-width="3"/>
+        <rect x="-50" y="36" width="100" height="8" rx="3" fill="#2b333e"/>
+        <circle cx="-30" cy="46" r="6" fill="#4a5666"/><circle cx="30" cy="46" r="6" fill="#4a5666"/>
+      </g>
+      <g transform="translate(82 386)">
+        <path d="M-40,-32 L40,-32 L32,30 Q0,40 -32,30 Z" fill="#4a3a2a" stroke="#1f1710" stroke-width="2"/>
+        <clipPath id="potClip"><path d="M-37,-29 L37,-29 L30,27 Q0,36 -30,27 Z"/></clipPath>
+        <g clip-path="url(#potClip)"><rect id="slagInPot" x="-50" y="40" width="100" height="80" fill="#8a6a46"/></g>
+        <circle cx="-26" cy="40" r="6" fill="#4a5666"/><circle cx="26" cy="40" r="6" fill="#4a5666"/>
+      </g>
+
+      <!-- labels -->
+      <g id="labels" direction="ltr" font-family="IBM Plex Sans Arabic, Tahoma, sans-serif" font-size="13" fill="#c9d2dc">
+        <text x="300" y="455" text-anchor="middle" font-weight="700" fill="#ece6dc">المحوّل (فرن الأكسجين)</text>
+        <text x="518" y="448" text-anchor="middle">مغرفة الفولاذ</text>
+        <text x="82" y="448" text-anchor="middle">وعاء الخبث</text>
+        <text id="lblHood" x="362" y="20" text-anchor="start">خزانة جمع الأبخرة</text>
+        <text id="lblLance" x="288" y="62" text-anchor="end">أنبوب الأكسجين</text>
+        <text id="lblIron" x="40" y="-10" opacity="0" text-anchor="start">حديد خام منصهر</text>
+        <text id="lblChute" x="62" y="16" opacity="0" text-anchor="start">خردة الفولاذ</text>
+        <text id="lblLime" x="474" y="40" opacity="0" text-anchor="start">الجير الحي CaO</text>
+      </g>
+    </svg>
+    <div class="msg" id="msg" aria-live="polite">
+      <h3 id="msgT">ابدئي التجربة</h3>
+      <p id="msgP">الحديد الخارج من الفرن العالي (الحديد الصُّب) يحتوي على نحو 4% كربون فيكون هشًّا. اضغطي الخطوة الأولى: إمالة الفرن للتعبئة.</p>
+    </div>
+  </section>
+
+  <aside class="side">
+    <div class="card">
+      <h2>خطوات التشغيل <small>اضغطيي الخطوة التالية</small></h2>
+      <ol class="steps" id="steps"></ol>
+      <div class="alloys" id="alloys" aria-label="إضافات اختيارية">
+        <button type="button" id="alloyCr" class="opt">إضافة الكروم والنيكل (اختياري)</button>
+        <button type="button" id="alloyW" class="opt">إضافة التنغستن (اختياري)</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>لوحة القياس <small id="phase">الفرن فارغ</small></h2>
+      <div class="gauges">
+        <div class="g"><div class="k">درجة الحرارة</div><div class="v" id="vT">— °C</div></div>
+        <div class="g"><div class="k">نسبة الكربون</div><div class="v" id="vC">—</div></div>
+      </div>
+      <div class="bars">
+        <div class="bar"><span>الكربون C</span><span class="t"><i id="bC" style="background:#9aa3ad;width:0"></i></span><span class="n" id="nC">0%</span></div>
+        <div class="bar"><span>السيليكون Si</span><span class="t"><i id="bSi" style="background:#c9b27a;width:0"></i></span><span class="n" id="nSi">0%</span></div>
+        <div class="bar"><span>الكبريت S</span><span class="t"><i id="bS" style="background:#e8d44d;width:0"></i></span><span class="n" id="nS">0%</span></div>
+        <div class="bar"><span>الفوسفور P</span><span class="t"><i id="bP" style="background:#e07a5f;width:0"></i></span><span class="n" id="nP">0%</span></div>
+        <div class="bar"><span>الخبث</span><span class="t"><i id="bSlag" style="background:var(--slag);width:0"></i></span><span class="n" id="nSlag">—</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>التفاعلات الحادثة</h2>
+      <ul class="eqs" id="eqs"><li class="empty" style="direction:rtl;text-align:right;display:block">ستظهر المعادلات هنا عند نفخ الأكسجين.</li></ul>
+    </div>
+
+    <div class="card final" id="final" hidden>
+      <h2>تم إنتاج الفولاذ ✔</h2>
+      <dl id="finalDl"></dl>
+    </div>
+  </aside>
+</div>
+</div>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const AR = n => String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const PIV = {x:300, y:250};
+// inner cavity outline (local coords) for level calculation
+const INNER = [[-58,-71],[-27,-116],[27,-116],[58,-71],[68,75],[60,104],[31,119],[-31,119],[-60,104],[-68,75]];
+
+const STEPS = [
+ {id:'tilt',   label:'إمالة الفرن للتعبئة'},
+ {id:'iron',   label:'صبّ الحديد الخام المنصهر'},
+ {id:'scrap',  label:'إضافة خردة الفولاذ'},
+ {id:'up',     label:'إعادة الفرن للوضع الرأسي'},
+ {id:'lime',   label:'إضافة الجير الحي CaO'},
+ {id:'hood',   label:'إنزال خزانة جمع الأبخرة'},
+ {id:'lance',  label:'إنزال أنبوب الأكسجين المبرّد بالماء'},
+ {id:'blow',   label:'نفخ الأكسجين بسرعة عالية'},
+ {id:'raise',  label:'رفع أنبوب الأكسجين والخزانة'},
+ {id:'tap',    label:'إمالة الفرن لسكب الفولاذ'},
+ {id:'slag',   label:'إمالة الفرن في الاتجاه الآخر لسكب الخبث'},
+];
+const INFO = {
+ tilt:['إمالة الفرن','يُمال المحوّل على محوره حتى تصبح فتحته مواجهة لمغرفة الحديد. الخطوة التالية: صبّ الحديد الخام المنصهر.'],
+ iron:['صبّ الحديد الخام المنصهر','يُصبّ الحديد الخام المنصهر القادم من الفرن العالي في المحوّل. يحتوي على نحو 4% كربون وشوائب (Si و S و P)، لذلك هو هشّ.'],
+ scrap:['إضافة الخردة','تُضاف مخلّفات الفولاذ (الخردة) لإعادة تدويرها، فتذوب في الحديد المنصهر وتمتزج به. كما أنها تساعد على ضبط درجة الحرارة.'],
+ up:['إعادة الفرن رأسيًّا','يعود المحوّل إلى الوضع الرأسي استعدادًا لإضافة الجير ونفخ الأكسجين.'],
+ lime:['إضافة الجير الحي','الجير الحي هو أكسيد الكالسيوم CaO، وهو أكسيد قاعدي. سيتفاعل لاحقًا مع الأكاسيد الحمضية (SiO₂ و P₄O₁₀) ليكوّن الخبث.'],
+ hood:['إنزال خزانة الأبخرة','توضعي خزانة جمع الأبخرة فوق فتحة الفرن لتجميع الغازات الناتجة (CO و CO₂ و SO₂) وإخراجها بأمان.'],
+ lance:['إنزال أنبوب الأكسجين','يُنزل أنبوب (خرطوم) الأكسجين المبرّد بالماء داخل الفرن فوق سطح الحديد المنصهر. التبريد بالماء يمنع انصهار الأنبوب.'],
+ blow:['نفخ الأكسجين','يُضخّ الأكسجين النقي بسرعة عالية فتتأكسد الشوائب: يحترق الكربون إلى CO و CO₂، والكبريت إلى SO₂، فتخرج غازاتٍ. أما SiO₂ و P₄O₁₀ فتتفاعل مع الجير وتكوّن الخبث الذي يطفو. ترتفع الحرارة لأن التفاعلات طاردة للحرارة.'],
+ raise:['رفع الأنبوب والخزانة','انخفضت نسبة الكربون إلى نحو 0.1%. يُرفع أنبوب الأكسجين والخزانة. يمكنكِ الآن (اختياريًّا) إضافة عناصر انتقالية لصنع فولاذ سبائكي، أو سكب الفولاذ مباشرة.'],
+ tap:['سكب الفولاذ','يُمال الفرن فيُسكب الفولاذ المنصهر من فتحة السكب إلى المغرفة، ويبقى الخبث الطافي داخل الفرن لأنه أقل كثافة.'],
+ slag:['سكب الخبث','يُمال الفرن في الاتجاه الآخر لسكب الخبث في وعاء الخبث. بعدها يصبح الفرن جاهزًا للشحنة التالية.'],
+};
+const WHY = {
+ tilt:'الفرن مائل بالفعل.',
+ iron:'يجب إمالة الفرن أولًا حتى تواجه فتحته مغرفة الحديد.',
+ scrap:'أضيفي الحديد الخام المنصهر أولًا؛ فالخردة تُضاف إلى الحديد المنصهر لتذوب فيه.',
+ up:'لم تكتمل التعبئة بعد (الحديد المنصهر ثم الخردة).',
+ lime:'يجب إعادة الفرن للوضع الرأسي قبل إضافة الجير.',
+ hood:'أضيفي الجير الحي أولًا، فهو ضروري لتكوين الخبث وإزالة الأكاسيد الحمضية.',
+ lance:'ضعي خزانة جمع الأبخرة أولًا لتجميع الغازات الناتجة عن الاحتراق.',
+ blow:'لا يمكن نفخ الأكسجين قبل إنزال الأنبوب داخل الفرن.',
+ raise:'لم يكتمل النفخ بعد؛ نسبة الكربون ما زالت مرتفعة.',
+ tap:'ارفعي أنبوب الأكسجين والخزانة قبل إمالة الفرن.',
+ slag:'اسكبي الفولاذ أولًا، ثم أمِل الفرن في الاتجاه الآخر لسكب الخبث.',
+};
+
+let S;
+function init(){
+  S = {step:0, busy:false, angle:0, fill:0, steel:0 /*0 iron → 1 steel color*/, slag:0, scrap:[], lime:false, limeFlecks:[],
+       lanceY:-10, hoodY:-40, flame:0, blowing:false, p:0, comp:null, gas:[], bubbles:[], falling:[],
+       crane:{x:-80,y:60,a:0,op:0,melt:1}, chuteOp:0, hopperOp:0, stream:null,
+       steelLadle:0, slagPot:0, alloy:new Set(), eqShown:new Set(), done:false};
+  $('eqs').innerHTML = '<li class="empty" style="direction:rtl;text-align:right;display:block">ستظهر المعادلات هنا عند نفخ الأكسجين.</li>';
+  $('final').hidden = true;
+  say(...['ابدئي التجربة','الحديد الخارج من الفرن العالي (الحديد الصُّب) يحتوي على نحو 4% كربون فيكون هشًّا. اضغطي الخطوة الأولى: إمالة الفرن للتعبئة.'], false);
+  buildSteps(); gauges();
+}
+function say(t, p, warn){ const m=$('msg'); m.classList.toggle('warn', !!warn); $('msgT').textContent=t; $('msgP').textContent=p; }
+
+function buildSteps(){
+  const ol = $('steps'); ol.innerHTML='';
+  STEPS.forEach((st,i)=>{
+    const li=document.createElement('li'); const b=document.createElement('button'); b.type='button'; b.id='st-'+st.id;
+    b.innerHTML=`<span class="num">${AR(i+1)}</span><span>${st.label}</span>`;
+    b.className = i<S.step?'done':(i===S.step?'current':'');
+    b.addEventListener('click',()=>doStep(i));
+    li.appendChild(b); ol.appendChild(li);
+  });
+  $('stepNo').textContent = AR(Math.min(S.step+1, STEPS.length));
+  const alloyOk = S.step===9 && !S.busy;
+  $('alloyCr').disabled = !alloyOk || S.alloy.has('cr'); $('alloyW').disabled = !alloyOk || S.alloy.has('w');
+  $('alloyCr').classList.toggle('on', S.alloy.has('cr')); $('alloyW').classList.toggle('on', S.alloy.has('w'));
+}
+
+// ---------- tween helpers ----------
+const ease = k => k<.5 ? 2*k*k : 1-Math.pow(-2*k+2,2)/2;
+function tween(ms, fn){ ms = RM ? ms*0.25 : ms; return new Promise(r=>{ const t0=performance.now(); const f=t=>{ const k=Math.min(1,(t-t0)/ms); fn(ease(k),k); k<1?requestAnimationFrame(f):r(); }; requestAnimationFrame(f); }); }
+const lerp=(a,b,k)=>a+(b-a)*k;
+const sleep=ms=>new Promise(r=>setTimeout(r, RM?ms*0.25:ms));
+function rot(lx,ly,a){ const r=a*Math.PI/180, c=Math.cos(r), s=Math.sin(r); return {x:PIV.x+lx*c-ly*s, y:PIV.y+lx*s+ly*c}; }
+function mouth(){ return rot(0,-130,S.angle); }
+function bottomY(){ let m=-1e9; for(const [x,y] of INNER){ const p=rot(x,y,S.angle); if(p.y>m) m=p.y; } return m; }
+function topY(){ let m=1e9; for(const [x,y] of INNER){ const p=rot(x,y,S.angle); if(p.y<m) m=p.y; } return m; }
+function levelY(){ return bottomY() - S.fill*235; }
+
+// ---------- actions ----------
+async function doStep(i){
+  if(S.busy) return;
+  if(S.done){ say('انتهت التجربة','اضغطي «إعادة التجربة» لتبدئي شحنة جديدة.'); return; }
+  if(i<S.step){ say('تمّت هذه الخطوة', `«${STEPS[i].label}» نُفّذت بالفعل. الخطوة التالية: «${STEPS[S.step].label}».`); return; }
+  if(i>S.step){ say('ليس بعد!', WHY[STEPS[i].id] + ` الخطوة التالية: «${STEPS[S.step].label}».`, true); return; }
+  S.busy=true; buildSteps();
+  const id=STEPS[i].id; say(...INFO[id]);
+  await ACT[id]();
+  S.step++; S.busy=false; buildSteps();
+  if(S.step<STEPS.length && id!=='blow' && id!=='raise') {/* keep message */}
+}
+
+const ACT = {
+  async tilt(){ await tween(1400,k=>{ S.angle=lerp(0,-42,k); }); },
+  async iron(){
+    S.crane={x:-80,y:62,a:0,op:1,melt:1};
+    await tween(1300,k=>{ S.crane.x=lerp(-80,140,k); });
+    await tween(700,k=>{ S.crane.a=lerp(0,62,k); });
+    S.stream={kind:'iron'};
+    await tween(2600,k=>{ S.fill=lerp(0,0.40,k); S.crane.melt=1-k; });
+    S.stream=null;
+    await tween(600,k=>{ S.crane.a=lerp(62,0,k); });
+    await tween(1000,k=>{ S.crane.x=lerp(140,-80,k); });
+    S.crane.op=0;
+  },
+  async scrap(){
+    S.chuteOp=1;
+    for(let n=0;n<9;n++){ dropFalling({x:170+Math.random()*8,y:78,tx:mouth().x+(Math.random()-.5)*14,ty:mouth().y+8,c:'#8d99a6',w:13,h:6,kind:'scrap'}); await sleep(170); }
+    await sleep(900);
+    for(let n=0;n<7;n++) S.scrap.push({x:-30+Math.random()*60,y:20+Math.random()*60,r:Math.random()*180,life:1});
+    await tween(1600,k=>{ S.fill=lerp(0.40,0.47,k); S.scrap.forEach(s=>s.life=1-k); });
+    S.scrap=[]; S.chuteOp=0;
+  },
+  async up(){ await tween(1300,k=>{ S.angle=lerp(-42,0,k); }); },
+  async lime(){
+    S.hopperOp=1;
+    for(let n=0;n<16;n++){ dropFalling({x:362+Math.random()*6,y:112,tx:300+(Math.random()-.5)*40,ty:levelY(),c:'#f1efe8',w:5,h:5,kind:'lime'}); await sleep(90); }
+    await sleep(1100);
+    S.lime=true; S.hopperOp=0;
+  },
+  async hood(){ await tween(1300,k=>{ S.hoodY=lerp(-40,84,k); }); },
+  async lance(){ await tween(1500,k=>{ S.lanceY=lerp(-10,198,k); }); },
+  async blow(){
+    S.blowing=true; S.p=0; $('phase').textContent='جارٍ النفخ…';
+    await tween(10000,(k,raw)=>{ S.p=raw; S.flame=1; });
+    S.blowing=false; S.flame=0; S.steel=1;
+    say('اكتمل النفخ','انخفضت نسبة الكربون إلى نحو 0.1%، وأُزيلت معظم الشوائب. اضغطي الخطوة التالية: رفع أنبوب الأكسجين والخزانة.');
+  },
+  async raise(){
+    await tween(1300,k=>{ S.lanceY=lerp(198,-10,k); });
+    await tween(1100,k=>{ S.hoodY=lerp(84,-40,k); });
+  },
+  async tap(){
+    await tween(1600,k=>{ S.angle=lerp(0,96,k); });
+    S.stream={kind:'steel'};
+    await tween(3200,k=>{ S.fill=lerp(0.47,0,k); S.steelLadle=k; });
+    S.stream=null;
+    await tween(1200,k=>{ S.angle=lerp(96,0,k); });
+  },
+  async slag(){
+    await tween(1600,k=>{ S.angle=lerp(0,-104,k); });
+    S.stream={kind:'slag'};
+    const s0=S.slag;
+    await tween(2200,k=>{ S.slag=lerp(s0,0,k); S.slagPot=k; });
+    S.stream=null;
+    await tween(1300,k=>{ S.angle=lerp(-104,0,k); });
+    finish();
+  },
+};
+
+async function addAlloy(kind){
+  if(S.busy || S.step!==9) return;
+  S.busy=true; buildSteps();
+  const col = kind==='cr' ? ['#b8c7b0','#d9dde2'] : ['#7d8796','#5e6876'];
+  say(kind==='cr'?'إضافة الكروم والنيكل':'إضافة التنغستن',
+      kind==='cr'?'تُضاف كميات محددة من الكروم Cr والنيكل Ni إلى الفولاذ وهو لا يزال منصهرًا، فينتج فولاذ مقاوم للصدأ.'
+                 :'يُضاف التنغستن W إلى الفولاذ المنصهر، فينتج فولاذ التنغستن الصلد المستخدم في أدوات القطع.');
+  for(let n=0;n<12;n++){ dropFalling({x:300+(Math.random()-.5)*30,y:-10,tx:300+(Math.random()-.5)*40,ty:levelY(),c:col[n%2],w:7,h:7,kind:'alloy'}); await sleep(80); }
+  await sleep(1200);
+  S.alloy.add(kind); S.busy=false; buildSteps();
+}
+
+function finish(){
+  S.done=true; S.step=STEPS.length; buildSteps();
+  const type = S.alloy.has('cr') && S.alloy.has('w') ? 'فولاذ سبائكي (كروم ونيكل وتنغستن)'
+             : S.alloy.has('cr') ? 'فولاذ مقاوم للصدأ (كروم + نيكل)'
+             : S.alloy.has('w') ? 'فولاذ التنغستن (لأدوات القطع)' : 'فولاذ منخفض الكربون';
+  $('finalDl').innerHTML = `
+    <dt>نوع الناتج</dt><dd>${type}</dd>
+    <dt>نسبة الكربون</dt><dd>من 4% إلى نحو 0.1%</dd>
+    <dt>درجة الحرارة</dt><dd>نحو 1650 °C</dd>
+    <dt>الغازات</dt><dd>CO و CO₂ و SO₂ خرجت عبر خزانة الأبخرة</dd>
+    <dt>الخبث</dt><dd>CaSiO₃ و Ca₃(PO₄)₂ سُكب في وعاء الخبث</dd>`;
+  $('final').hidden=false;
+  say('أحسنتِ! اكتملت العملية','أنتجتِ فولاذًا من الحديد الخام. لاحظي: الشوائب أُزيلت إمّا غازاتٍ (CO و CO₂ و SO₂) أو خبثًا مع الجير. اضغطي «إعادة التجربة» لتجربة إضافة عناصر السبائك.');
+}
+
+function dropFalling(o){ S.falling.push({...o,t:0}); }
+
+// ---------- composition during blow ----------
+const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
+function comp(){
+  if(S.fill<=0 && S.step<9) return null;
+  const p=S.p;
+  if(S.step<7) return {T:S.fill>0?1300:0,C:4.0,Si:0.8,S:0.05,P:0.10};
+  const cK = ease(clamp((p-0.08)/0.9));
+  return {T:1300+350*p, C:4.0-3.9*cK, Si:0.8*(1-clamp(p/0.25)), S:0.05*(1-0.6*clamp(p/0.7)), P:0.10*(1-0.9*clamp((p-0.2)/0.6))};
+}
+const EQS=[
+ [0.02,'Si + O₂ → SiO₂','أكسدة السيليكون'],
+ [0.10,'2C + O₂ → 2CO','احتراق الكربون'],
+ [0.22,'C + O₂ → CO₂','احتراق الكربون'],
+ [0.34,'S + O₂ → SO₂','أكسدة الكبريت'],
+ [0.42,'4P + 5O₂ → P₄O₁₀','أكسدة الفوسفور'],
+ [0.50,'CaO + SiO₂ → CaSiO₃','تكوين الخبث'],
+ [0.62,'6CaO + P₄O₁₀ → 2Ca₃(PO₄)₂','تكوين الخبث'],
+];
+let lastSlagW=-1;
+function gauges(){
+  const c=comp();
+  const pct=(v,max)=> (100*v/max).toFixed(0)+'%';
+  if(!c){ $('vT').textContent='— °C'; $('vC').textContent='—'; ['C','Si','S','P'].forEach(k=>{$('b'+k).style.width='0'; $('n'+k).textContent='—';}); }
+  else{
+    $('vT').textContent = Math.round(c.T)+' °C';
+    $('vC').textContent = c.C.toFixed(2)+'%';
+    $('bC').style.width=pct(c.C,4); $('nC').textContent=c.C.toFixed(2)+'%';
+    $('bSi').style.width=pct(c.Si,0.8); $('nSi').textContent=c.Si.toFixed(2)+'%';
+    $('bS').style.width=pct(c.S,0.05); $('nS').textContent=c.S.toFixed(3)+'%';
+    $('bP').style.width=pct(c.P,0.10); $('nP').textContent=c.P.toFixed(3)+'%';
+  }
+  const sw = Math.round(100*S.slag/22);
+  if(sw!==lastSlagW){ $('bSlag').style.width=sw+'%'; $('nSlag').textContent = S.slag>0.5?'يطفو':'—'; lastSlagW=sw; }
+  const ph = S.done?'اكتملت الشحنة': S.blowing?'جارٍ النفخ…': S.step>=8&&S.fill>0?'فولاذ منصهر': S.fill>0?'حديد خام منصهر':'الفرن فارغ';
+  if(!S.blowing) $('phase').textContent=ph;
+  if(S.blowing){
+    for(const [th,eq,name] of EQS){ if(S.p>=th && !S.eqShown.has(eq)){ S.eqShown.add(eq); addEq(eq,name);} }
+  }
+}
+function addEq(eq,name){ const ul=$('eqs'); const e=ul.querySelector('.empty'); if(e) e.remove(); const li=document.createElement('li'); li.innerHTML=`<b>${eq}</b><span>${name}</span>`; ul.appendChild(li); }
+
+// ---------- render loop ----------
+const NS='http://www.w3.org/2000/svg';
+function el(tag, attrs){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); return e; }
+let last=performance.now();
+function frame(t){
+  const dt=Math.min(50,t-last)/1000; last=t;
+  // vessel
+  $('vessel').setAttribute('transform',`translate(${PIV.x} ${PIV.y}) rotate(${S.angle})`);
+  const L=levelY();
+  const w=$('world'); w.setAttribute('transform',`rotate(${-S.angle}) translate(${-PIV.x} ${-PIV.y})`);
+  // world coords now; rects are in world space
+  const show=S.fill>0.001;
+  $('liquid').setAttribute('x',0); $('liquid').setAttribute('width',600);
+  $('liquid').setAttribute('y',L); $('liquid').setAttribute('height',show?400:0);
+  $('liquid').setAttribute('fill', S.steel>0.5?'url(#gSteel)':'url(#gIron)');
+  $('liqShine').setAttribute('x',0); $('liqShine').setAttribute('width',600); $('liqShine').setAttribute('y',L); $('liqShine').setAttribute('opacity',show?.55:0);
+  // slag grows during blow
+  if(S.blowing && S.lime) S.slag = 6+16*clamp(S.p/0.7);
+  else if(S.lime && S.step===5 && S.slag<3) S.slag=3;
+  $('slagRect').setAttribute('x',0); $('slagRect').setAttribute('width',600);
+  $('slagRect').setAttribute('y',L-S.slag); $('slagRect').setAttribute('height',Math.max(0,S.slag));
+  // lime flecks floating
+  const lf=$('limeFloat');
+  if(S.lime && S.step<=7 && !S.blowing || (S.blowing && S.p<0.45)){
+    if(lf.childElementCount===0){ for(let i=0;i<14;i++) lf.appendChild(el('rect',{width:5,height:4,fill:'#f1efe8',rx:1})); }
+    [...lf.children].forEach((r,i)=>{ r.setAttribute('x',250+i*7+Math.sin(t/600+i)*2); r.setAttribute('y',L-S.slag-3+Math.sin(t/400+i*1.7)); r.setAttribute('opacity', S.blowing?Math.max(0,1-S.p/0.45):1); });
+  } else lf.innerHTML='';
+  // scrap pieces inside (local)
+  const sc=$('scrapIn'); sc.innerHTML='';
+  S.scrap.forEach(s=>sc.appendChild(el('rect',{x:s.x,y:s.y,width:14,height:6,fill:'#8d99a6',opacity:s.life,transform:`rotate(${s.r} ${s.x} ${s.y})`})));
+  // bubbles while blowing
+  const bb=$('bubbles');
+  if(S.blowing && Math.random()<0.6) S.bubbles.push({x:300+(Math.random()-.5)*110,y:bottomY()-5,r:2+Math.random()*3});
+  S.bubbles.forEach(b=>b.y-=60*dt*(1+Math.random()));
+  S.bubbles=S.bubbles.filter(b=>b.y>L);
+  bb.innerHTML=''; S.bubbles.forEach(b=>bb.appendChild(el('circle',{cx:b.x,cy:b.y,r:b.r,fill:'#fff3c4',opacity:.75})));
+  // hood & lance
+  $('hood').setAttribute('transform',`translate(0 ${S.hoodY})`);
+  $('lance').setAttribute('transform',`translate(0 ${S.lanceY})`);
+  const fl=$('flame');
+  if(S.flame){ fl.setAttribute('rx',26+Math.random()*8); fl.setAttribute('ry',14+Math.random()*6); } else { fl.setAttribute('rx',0); fl.setAttribute('ry',0); }
+  $('glow').setAttribute('opacity', S.blowing?0.6+0.3*Math.sin(t/120):0);
+  // labels follow
+  $('lblHood').setAttribute('y', S.hoodY+22);
+  $('lblLance').setAttribute('opacity', S.lanceY>40?1:0);
+  // gas particles
+  if(S.blowing){
+    const rate = 30*(S.p<0.95?1:0.3);
+    for(let i=0;i<rate*dt;i++) S.gas.push({x:300+(Math.random()-.5)*50,y:mouth().y,vy:-(50+Math.random()*40),vx:(Math.random()-.5)*20,life:1,r:4+Math.random()*5,c:Math.random()<0.15?'#e8d44d':'#9aa3ad'});
+  }
+  S.gas.forEach(g=>{ g.y+=g.vy*dt; g.x+= (300-g.x)*dt*(g.y<S.hoodY+30?3:0.4) + g.vx*dt; g.life-=dt*0.45; g.r+=dt*3; });
+  S.gas=S.gas.filter(g=>g.life>0 && g.y>-20);
+  const gg=$('gas'); gg.innerHTML=''; S.gas.forEach(g=>gg.appendChild(el('circle',{cx:g.x,cy:g.y,r:g.r,fill:g.c,opacity:g.life*0.5})));
+  // crane & ladle
+  const cr=$('crane'); cr.setAttribute('opacity',S.crane.op);
+  cr.setAttribute('transform',`translate(${S.crane.x} ${S.crane.y})`);
+  $('ironLadle').setAttribute('transform',`rotate(${S.crane.a})`);
+  $('ladleMelt').setAttribute('height', 12*S.crane.melt+0.01);
+  $('lblIron').setAttribute('opacity', S.crane.op && S.crane.x>40 ? 1:0);
+  $('lblIron').setAttribute('x', S.crane.x-40); $('lblIron').setAttribute('y', S.crane.y-44);
+  $('chute').setAttribute('opacity',S.chuteOp); $('lblChute').setAttribute('opacity',S.chuteOp);
+  $('hopper').setAttribute('opacity',S.hopperOp); $('lblLime').setAttribute('opacity',S.hopperOp);
+  // falling particles
+  const fg=$('falling'); fg.innerHTML='';
+  S.falling.forEach(f=>{ f.t+=dt*1.3; const k=Math.min(1,f.t); const x=lerp(f.x,f.tx,k), y=lerp(f.y,f.ty,k*k);
+    fg.appendChild(el('rect',{x:x-f.w/2,y:y-f.h/2,width:f.w,height:f.h,fill:f.c,rx:f.kind==='scrap'?1:2,transform:`rotate(${f.t*200} ${x} ${y})`})); });
+  S.falling=S.falling.filter(f=>f.t<1);
+  // streams
+  const st=$('stream');
+  if(S.stream){
+    let a,b,col;
+    if(S.stream.kind==='iron'){ const r=S.crane.a*Math.PI/180; a={x:S.crane.x+36*Math.cos(r)+26*Math.sin(r), y:S.crane.y+36*Math.sin(r)-26*Math.cos(r)}; b=mouth(); col='url(#gIron)'; }
+    else if(S.stream.kind==='steel'){ a=rot(64,-62,S.angle); b={x:510,y:350}; col='url(#gSteel)'; }
+    else { a=mouth(); b={x:84,y:356}; col='#8a6a46'; }
+    const mx=(a.x+b.x)/2, my=Math.min(a.y,b.y)-10;
+    st.setAttribute('d',`M${a.x} ${a.y} Q${a.x+(b.x-a.x)*0.25} ${a.y+8} ${b.x} ${b.y}`);
+    st.setAttribute('stroke',col); st.setAttribute('opacity',1);
+    st.setAttribute('stroke-width', 7+Math.sin(t/60));
+  } else st.setAttribute('opacity',0);
+  $('steelInLadle').setAttribute('y', 40-68*S.steelLadle);
+  $('steelInLadle').setAttribute('fill', S.alloy.size? 'url(#gSteel)':'url(#gSteel)');
+  $('slagInPot').setAttribute('y', 40-48*S.slagPot);
+  gauges();
+  requestAnimationFrame(frame);
+}
+
+$('resetBtn').addEventListener('click',()=>{ if(S.busy) { say('انتظري قليلًا','يمكنكِ إعادة التجربة بعد انتهاء الحركة الحالية.', true); return; } init(); });
+$('fsBtn').addEventListener('click',()=>{ const d=document; if(d.fullscreenElement){ d.exitFullscreen&&d.exitFullscreen().catch(()=>{}); return; } const r=d.documentElement.requestFullscreen; if(!r){ say('ملء الشاشة غير متاح','هذا العارض لا يدعم ملء الشاشة. استخدمي وضع ملء الشاشة في المتصفح (F11).', true); return; } d.documentElement.requestFullscreen().catch(()=>say('ملء الشاشة غير متاح','هذا العارض لا يدعم ملء الشاشة. استخدمي وضع ملء الشاشة في المتصفح (F11).', true)); });
+document.addEventListener('fullscreenchange',()=>{ $('fsBtn').textContent = document.fullscreenElement ? 'خروج من ملء الشاشة' : 'ملء الشاشة ⛶'; });
+$('alloyCr').addEventListener('click',()=>addAlloy('cr'));
+$('alloyW').addEventListener('click',()=>addAlloy('w'));
+$('labelsBtn').addEventListener('click',e=>{ const g=$('labels'); const on=g.style.display!=='none'; g.style.display=on?'none':''; e.currentTarget.textContent=on?'إظهار التسميات':'إخفاء التسميات'; e.currentTarget.setAttribute('aria-pressed',String(!on)); });
+
+init();
+requestAnimationFrame(frame);
+})();
+</script>
+
+</body></html>

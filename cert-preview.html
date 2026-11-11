@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>معاينة شهادة إثمار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Playpen+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F7F8F6;--ink:#1A2622;--soft:#5E6B66;--rule:#E2E6E3;--palm:#1F4A3D;color-scheme:light}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans Arabic",Tahoma,sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:28px 20px 48px;display:grid;gap:16px}
+h1{font-family:Alexandria,sans-serif;font-size:30px;margin:0;color:var(--palm)}
+p{margin:0;color:var(--soft)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tabs button{font:inherit;padding:8px 18px;border-radius:999px;border:1px solid var(--rule);background:#fff;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--palm);color:#fff;border-color:var(--palm)}
+canvas{width:100%;height:auto;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.15)}
+</style></head><body><div class="wrap">
+<h1>معاينة شهادة إثمار</h1>
+<p>هكذا تظهر الشهادة للطالبة عند إنهاء الدرس، باسمها من حسابها. اختاري مستوى الوسام لترَي الأشكال الثلاثة.</p>
+<div class="tabs"><button data-m="0" aria-pressed="true">ذهبية</button><button data-m="1" aria-pressed="false">فضية</button><button data-m="2" aria-pressed="false">برونزية</button></div>
+<canvas id="cv" width="1600" height="1130" role="img" aria-label="شهادة إثمار لدرس الترابط وخصائص الفلزات"></canvas>
+</div>
+<script>
+const TEACHER="أ. رتاج الراسبي";
+const M=[{k:"ذهبية",c:"#C9962B",c2:"#F2D27A"},{k:"فضية",c:"#8A97A0",c2:"#D9E1E6"},{k:"برونزية",c:"#A3653A",c2:"#E3B08A"}];
+const T=[{stars:15,pts:340,best:7},{stars:11,pts:250,best:5},{stars:7,pts:160,best:3}];
+function drawCert(cv,o){
+  const x=cv.getContext("2d"),W=cv.width,H=cv.height,BW=330,BX=W-BW,CX=(BX)/2,GOLD="#C9962B",GOLD2="#F2D27A",INK="#1A2622",SOFT="#6B746F",PALM="#1F4A3D";
+  x.direction="rtl";x.textAlign="center";x.textBaseline="alphabetic";
+  const star8=(cx,cy,r,fill,alpha=1)=>{x.save();x.globalAlpha=alpha;x.fillStyle=fill;for(const a of [0,Math.PI/4]){x.save();x.translate(cx,cy);x.rotate(a);x.fillRect(-r*.7,-r*.7,r*1.4,r*1.4);x.restore()}x.restore()};
+  const txt=(t,X,Y,font,color,dir="rtl")=>{x.font=font;x.fillStyle=color;x.direction=dir;x.fillText(t,X,Y);x.direction="rtl"};
+  const goldGrad=(y0,y1)=>{const g=x.createLinearGradient(0,y0,0,y1);g.addColorStop(0,"#E9C46A");g.addColorStop(.5,"#B8862A");g.addColorStop(1,"#E2B85A");return g};
+  /* الورق */
+  const bg=x.createRadialGradient(CX,H*.4,100,CX,H*.5,1100);bg.addColorStop(0,"#FFFDF7");bg.addColorStop(1,"#F1E9D8");x.fillStyle=bg;x.fillRect(0,0,W,H);
+  /* علامة مائية: غصن */
+  x.save();x.globalAlpha=.07;x.strokeStyle=PALM;x.fillStyle=PALM;x.lineWidth=6;x.lineCap="round";x.beginPath();x.moveTo(60,H-40);x.bezierCurveTo(260,H-260,380,H-420,560,H-520);x.stroke();
+  for(let i=0;i<9;i++){const t=i/9,px=60+500*t,py=H-40-480*t+Math.sin(t*3)*20;x.save();x.translate(px,py);x.rotate(-.7+(i%2?1.2:-.2));x.beginPath();x.ellipse(i%2?28:-28,0,34,13,0,0,7);x.fill();x.restore()}x.restore();
+  /* الشريط الجانبي */
+  const bd=x.createLinearGradient(BX,0,W,H);bd.addColorStop(0,"#163A30");bd.addColorStop(1,"#21503F");x.fillStyle=bd;x.fillRect(BX,0,BW,H);
+  for(let yy=40;yy<H;yy+=74)for(let xx=BX+37+((yy/74)%2?37:0);xx<W;xx+=74)star8(xx,yy,13,GOLD,.13);
+  x.fillStyle=goldGrad(0,H);x.fillRect(BX-6,0,6,H);x.fillRect(BX+10,0,1.5,H);
+  /* إطار المساحة الرئيسية */
+  x.strokeStyle=GOLD;x.lineWidth=3;x.strokeRect(34,34,BX-74,H-68);x.lineWidth=1.2;x.strokeRect(48,48,BX-102,H-96);
+  [[34,34],[BX-40,34],[34,H-34],[BX-40,H-34]].forEach(([cx,cy])=>{star8(cx,cy,15,GOLD);star8(cx,cy,7,"#FFFDF7")});
+  /* محتوى الشريط */
+  x.save();x.translate(W-BW/2,150);x.strokeStyle=GOLD2;x.fillStyle=GOLD2;x.lineWidth=6;x.lineCap="round";x.beginPath();x.moveTo(0,46);x.quadraticCurveTo(2,10,-2,-20);x.stroke();
+  x.beginPath();x.ellipse(-26,-8,30,13,-.6,0,7);x.fill();x.globalAlpha=.8;x.beginPath();x.ellipse(24,-28,30,13,.6,0,7);x.fill();x.globalAlpha=1;x.fillStyle="#E9C46A";x.beginPath();x.arc(28,22,15,0,7);x.fill();x.restore();
+  txt("أثمِر",W-BW/2,268,'800 68px Alexandria',GOLD2);
+  txt("منصة الكيمياء والعلوم البيئية",W-BW/2,312,'500 21px "IBM Plex Sans Arabic"',"#CFE3D9");
+  /* الوسام */
+  const MX=W-BW/2,MY=600,R=118;
+  x.fillStyle=o.medal.c;[[-1],[1]].forEach(([s])=>{x.beginPath();x.moveTo(MX+s*30,MY+60);x.lineTo(MX+s*70,MY+250);x.lineTo(MX+s*42,MY+225);x.lineTo(MX+s*20,MY+258);x.lineTo(MX+s*2,MY+80);x.closePath();x.globalAlpha=s>0?1:.82;x.fill()});x.globalAlpha=1;
+  x.beginPath();for(let i=0;i<=48;i++){const a=i/48*Math.PI*2,rr=i%2?R:R-12;x.lineTo(MX+Math.cos(a)*rr,MY+Math.sin(a)*rr)}x.closePath();const mg=x.createRadialGradient(MX-40,MY-50,10,MX,MY,R);mg.addColorStop(0,o.medal.c2);mg.addColorStop(1,o.medal.c);x.fillStyle=mg;x.fill();
+  x.strokeStyle="rgba(255,255,255,.85)";x.lineWidth=3;x.beginPath();x.arc(MX,MY,R-26,0,7);x.stroke();x.lineWidth=1.2;x.beginPath();x.arc(MX,MY,R-34,0,7);x.stroke();
+  x.fillStyle="#fff";x.beginPath();x.arc(MX,MY+10,30,0,7);x.fill();x.strokeStyle="#fff";x.lineWidth=6;x.lineCap="round";x.beginPath();x.moveTo(MX,MY-18);x.quadraticCurveTo(MX+4,MY-38,MX+20,MY-44);x.stroke();
+  x.fillStyle="#fff";x.beginPath();x.ellipse(MX-16,MY-34,14,6,-.5,0,7);x.fill();
+  txt(`ثمرة ${o.medal.k}`,MX,MY+305,'700 38px Alexandria',GOLD2);
+  txt("كلُّ درسٍ بذرة،",MX,H-120,'500 27px "Playpen Sans Arabic"',"#E8F1EC");
+  txt("وكلُّ نجاحٍ ثمرة",MX,H-78,'500 27px "Playpen Sans Arabic"',"#E8F1EC");
+  /* العنوان */
+  txt("شهادة إثمار",CX,232,'800 112px Alexandria',goldGrad(140,240));
+  const div=(y,w)=>{x.strokeStyle=GOLD;x.lineWidth=2;x.beginPath();x.moveTo(CX-w,y);x.lineTo(CX-22,y);x.moveTo(CX+22,y);x.lineTo(CX+w,y);x.stroke();star8(CX,y,11,GOLD);[-w,w].forEach(d=>{x.fillStyle=GOLD;x.beginPath();x.arc(CX+d,y,4,0,7);x.fill()})};
+  div(282,250);
+  txt("تُمنح هذه الشهادة للطالبة المتميّزة",CX,360,'500 32px "IBM Plex Sans Arabic"',SOFT);
+  /* الاسم */
+  let fs=96;x.font=`600 ${fs}px "Playpen Sans Arabic"`;while(x.measureText(o.name).width>BX-260&&fs>50){fs-=4;x.font=`600 ${fs}px "Playpen Sans Arabic"`}
+  txt(o.name,CX,478,`600 ${fs}px "Playpen Sans Arabic"`,PALM);
+  const nw=Math.min(BX-260,x.measureText(o.name).width+120)/2;x.strokeStyle=GOLD;x.lineWidth=2.5;x.beginPath();x.moveTo(CX-nw,520);x.quadraticCurveTo(CX,505,CX+nw,520);x.stroke();
+  [[-nw,1],[nw,-1]].forEach(([d,s])=>{x.save();x.translate(CX+d,520);x.fillStyle=GOLD;x.rotate(s*.5);x.beginPath();x.ellipse(s*14,-4,14,5,0,0,7);x.fill();x.restore()});
+  txt("تقديرًا لإتمامها بنجاح درس",CX,592,'500 31px "IBM Plex Sans Arabic"',SOFT);
+  txt(o.lesson,CX,668,'700 60px Alexandria',"#9C4F2E");
+  txt(`${o.code}  •  ${o.subj}`,CX,722,'500 26px "IBM Plex Sans Arabic"',SOFT);
+  /* الإحصاءات */
+  const stats=[[`${o.T.T.stars}/${o.T.T.max}`,"نجوم الأنشطة"],[`${o.T.T.pts}`,"نقاط اللعبة"],[`${o.T.ex.best||0}/${o.T.nX}`,"أسئلة الاختبارات"]];
+  stats.forEach((sv,i)=>{const cx=CX+(1-i)*250,y=770,w=220,h=96;x.fillStyle="rgba(255,255,255,.75)";x.strokeStyle="rgba(201,150,43,.55)";x.lineWidth=1.5;x.beginPath();x.roundRect(cx-w/2,y,w,h,18);x.fill();x.stroke();txt(sv[0],cx,y+50,'800 40px Alexandria',INK,"ltr");txt(sv[1],cx,y+80,'500 20px "IBM Plex Sans Arabic"',SOFT)});
+  /* التوقيع والتاريخ */
+  const SX=CX+300,DX=CX-300,LY=1000;
+  let sf=56;x.font=`600 ${sf}px "Playpen Sans Arabic"`;while(x.measureText(TEACHER).width>330&&sf>34){sf-=2;x.font=`600 ${sf}px "Playpen Sans Arabic"`}txt(TEACHER,SX,LY-16,`600 ${sf}px "Playpen Sans Arabic"`,INK);
+  const d=new Date().toLocaleDateString("ar-OM",{year:"numeric",month:"long",day:"numeric"});txt(d,DX,LY-22,'500 30px "IBM Plex Sans Arabic"',INK);
+  x.strokeStyle=INK;x.lineWidth=1.5;[SX,DX].forEach(cx=>{x.beginPath();x.moveTo(cx-175,LY);x.lineTo(cx+175,LY);x.stroke()});
+  txt("معلمة المادة",SX,LY+36,'500 22px "IBM Plex Sans Arabic"',SOFT);txt("تاريخ الإتمام",DX,LY+36,'500 22px "IBM Plex Sans Arabic"',SOFT);
+  star8(CX,LY-10,16,GOLD,.9);star8(CX,LY-10,7,"#FFFDF7");
+}
+let m=0;
+function go(){const t=T[m];drawCert(document.getElementById("cv"),{name:"مريم بنت سالم الحارثية",lesson:"الترابط وخصائص الفلزات",code:"1-1",subj:"الكيمياء • الصف العاشر • الوحدة الأولى",medal:M[m],T:{T:{stars:t.stars,max:15,pts:t.pts},ex:{best:t.best},nX:7}})}
+document.querySelector(".tabs").onclick=e=>{const b=e.target.closest("[data-m]");if(!b)return;m=+b.dataset.m;document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x===b));go()};
+Promise.all(['800 60px Alexandria','700 60px Alexandria','500 30px "IBM Plex Sans Arabic"','600 80px "Playpen Sans Arabic"'].map(f=>document.fonts.load(f))).catch(()=>{}).then(go);go();
+</script></body></html>

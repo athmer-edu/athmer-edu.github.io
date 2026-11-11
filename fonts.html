@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>خطوط ملاحظات المعلمة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans+Arabic:wght@400;600&family=Marhey:wght@400;600&family=Katibeh&family=Lemonada:wght@400;600&family=Aref+Ruqaa&family=IBM+Plex+Sans+Arabic:wght@400;600&family=Alexandria:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F7F8F6;--ink:#1A2622;--soft:#5E6B66;--rule:#E2E6E3;--palm:#1F4A3D;--date:#C2852A;--tint:#F6EBD9;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#111816;--ink:#E7EDEA;--soft:#9AAAA4;--rule:#28342F;--palm:#7CC3A4;--date:#E3AE5C;--tint:#33291B;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#111816;--ink:#E7EDEA;--soft:#9AAAA4;--rule:#28342F;--palm:#7CC3A4;--date:#E3AE5C;--tint:#33291B;color-scheme:dark}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans Arabic",Tahoma,sans-serif;line-height:1.8}
+.wrap{max-width:980px;margin:0 auto;padding:40px 22px 64px}
+h1{font-family:Alexandria,sans-serif;font-size:34px;margin:0 0 6px;color:var(--palm)}
+.lede{color:var(--soft);margin:0 0 32px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px}
+.opt{border-top:2px solid var(--ink);padding-top:14px}
+.opt h2{font-family:Alexandria,sans-serif;font-size:19px;margin:0}
+.opt .d{color:var(--soft);font-size:14px;margin:2px 0 14px}
+.hello{font-size:30px;color:var(--date);line-height:1.5;margin-bottom:12px}
+.note{background:var(--tint);border-radius:4px 18px 18px 18px;padding:16px 18px;font-size:21px;line-height:1.75}
+.note small{display:block;font-family:"IBM Plex Sans Arabic",sans-serif;font-size:13px;color:var(--soft);margin-top:4px}
+.cur{display:inline-block;font-size:12.5px;color:var(--palm);font-weight:600;margin-inline-start:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>خط ملاحظات المعلمة</h1>
+  <p class="lede">نفس الجملتين بخمسة خطوط. اختاري الخط الذي يشبه خطك أكثر، وأخبريني باسمه.</p>
+  <div class="grid">
+    <section class="opt" style="--f:'Playpen Sans Arabic'">
+      <h2>١. بلاي بن<span class="cur">المستخدم الآن</span></h2><p class="d">خط يد حقيقي صُمم للتعليم، واضح وودود.</p>
+      <div class="hello" style="font-family:var(--f)">أهلًا بكم في منصتنا</div>
+      <div class="note" style="font-family:var(--f)">ركّزوا على كلمة «غير متمركزة»، فهي مفتاح الدرس كله<small>ملاحظة أ. رتاج</small></div>
+    </section>
+    <section class="opt" style="--f:'Marhey'">
+      <h2>٢. مرحي</h2><p class="d">مرح وحيوي، بروح شبابية.</p>
+      <div class="hello" style="font-family:var(--f)">أهلًا بكم في منصتنا</div>
+      <div class="note" style="font-family:var(--f)">ركّزوا على كلمة «غير متمركزة»، فهي مفتاح الدرس كله<small>ملاحظة أ. رتاج</small></div>
+    </section>
+    <section class="opt" style="--f:'Lemonada'">
+      <h2>٣. ليمونادة</h2><p class="d">ناعم ومستدير، قريب من الكتابة بالقلم العريض.</p>
+      <div class="hello" style="font-family:var(--f)">أهلًا بكم في منصتنا</div>
+      <div class="note" style="font-family:var(--f);font-size:18px">ركّزوا على كلمة «غير متمركزة»، فهي مفتاح الدرس كله<small>ملاحظة أ. رتاج</small></div>
+    </section>
+    <section class="opt" style="--f:'Katibeh'">
+      <h2>٤. كاتبة</h2><p class="d">خطّي أنيق مستوحى من النسخ والثلث.</p>
+      <div class="hello" style="font-family:var(--f);font-size:38px">أهلًا بكم في منصتنا</div>
+      <div class="note" style="font-family:var(--f);font-size:27px;line-height:1.5">ركّزوا على كلمة «غير متمركزة»، فهي مفتاح الدرس كله<small>ملاحظة أ. رتاج</small></div>
+    </section>
+    <section class="opt" style="--f:'Aref Ruqaa'">
+      <h2>٥. الرقعة (السابق)</h2><p class="d">للمقارنة فقط.</p>
+      <div class="hello" style="font-family:var(--f)">أهلًا بكم في منصتنا</div>
+      <div class="note" style="font-family:var(--f)">ركّزوا على كلمة «غير متمركزة»، فهي مفتاح الدرس كله<small>ملاحظة أ. رتاج</small></div>
+    </section>
+  </div>
+</div>
+</body>
+</html>
