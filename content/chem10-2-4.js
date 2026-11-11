@@ -21,7 +21,7 @@ window.LESSONS["chem10-2-4"] = {
 
   note: "الصدأ يحتاج الماء والأكسجين معًا. الحاجز العازل يمنع وصولهما، والتضحية تجعل فلزًا أنشط (Mg أو Zn) يفقد إلكتروناته بدل الحديد.",
 
-  slides: "slides/chem10-2-4.html",
+  slides: "slides/rust/index.html",
 
   explain: `
   <section class="sec" id="s-deck"><h2>عرض الدرس</h2><div data-widget="slides"></div></section>
