@@ -9,6 +9,8 @@ const LV_META={
   order:{name:"سباق الترتيب",tag:"رتّبي بالتسلسل",ic:"M5 18h3v-5H5zM10.5 18h3V9h-3zM16 18h3V5h-3z"},
   duel:{name:"مبارزة الفلزات",tag:"من يزيح من؟",ic:"M6 20V8l3-4 3 4v12M12 20V12l3-4 3 4v8M4 20h16"},
   runner:{name:"العدّاءة",tag:"اركضي واختاري البوابة",ic:"M13 4a2 2 0 1 0 0 .1M10 20l2-6 3 3v4M7 12l3-3 4 1 2 3h3M8 16l-3 1"},
+  catch:{name:"سلة الالتقاط",tag:"التقطي الصحيح فقط",ic:"M4 9h16l-2 10H6zM8 9l2-5M16 9l-2-5M12 3v2"},
+  pop:{name:"فرقعة الفقاعات",tag:"اضغطي قبل أن تهرب",ic:"M9 15a4 4 0 1 0 0 .1M16 8a3 3 0 1 0 0 .1M17 17a2 2 0 1 0 0 .1"},
   check:{name:"ارسمي وتحقّقي",tag:"المستوى الأخير",ic:"M4 20l4-1 11-11-3-3L5 16zM14 6l3 3"}
 };
 const G=()=>{S.game=S.game||{};return S.game};
@@ -124,9 +126,9 @@ function drawLevel(){
     el.querySelectorAll("input[data-k]").forEach(c=>c.onchange=()=>{PLAY.ticks[+c.dataset.k]=c.checked;$("#fin").disabled=!PLAY.ticks.every(Boolean)});
     $("#fin").onclick=()=>{PLAY.pts+=30;endLevel(3)};
   }
-  if(a.type==="runner"){
+  if(a.type==="runner"||a.type==="catch"||a.type==="pop"){
     el.innerHTML=`<div class="ph"><button class="btn ghost sm" id="toMap">خريطة المستويات</button><div class="ph-t"><small>المستوى ${PLAY.i+1}</small><b>${a.title}</b></div></div><div id="rnhost"></div>`;
-    const g=RUNNER($("#rnhost"),a,r=>{if(!PLAY||PLAY.a!==a)return;PLAY.pts=r.pts;PLAY.miss=r.miss;PLAY.out=r.out;endLevel(r.stars)});PLAY.stop=g.stop;PLAY.rt=g.R;
+    const g=({runner:RUNNER,catch:CATCH,pop:POP})[a.type]($("#rnhost"),a,r=>{if(!PLAY||PLAY.a!==a)return;PLAY.pts=r.pts;PLAY.miss=r.miss;PLAY.out=r.out;endLevel(r.stars)});PLAY.stop=g.stop;PLAY.rt=g.R;
   }
   if(window.fixFormulas)fixFormulas(el);
   const tm=$("#toMap");if(tm)tm.onclick=()=>{clearInterval(PLAY&&PLAY.tm);if(PLAY&&PLAY.stop)PLAY.stop();PLAY=null;render()};
@@ -134,7 +136,7 @@ function drawLevel(){
 function endLevel(stars){
   const {id,i}=PLAY,g=gstate(id),prev=g.lv[i];const res={stars,pts:PLAY.pts};
   if(!prev||res.pts>prev.pts||res.stars>prev.stars)g.lv[i]={stars:Math.max(stars,prev?prev.stars:0),pts:Math.max(res.pts,prev?prev.pts:0)};save();
-  const C=L(id),last=i===C.activities.length-1,msg=PLAY.out?"نفدت القلوب! أعيدي الجري لتجمعي نجومًا أكثر":stars===3?"أداء رائع!":stars===2?"أحسنتِ!":"بداية جيدة، أعيدي المحاولة لتجمعي نجومًا أكثر";
+  const C=L(id),last=i===C.activities.length-1,msg=PLAY.out?"نفدت القلوب! أعيدي المحاولة لتجمعي نجومًا أكثر":stars===3?"أداء رائع!":stars===2?"أحسنتِ!":"بداية جيدة، أعيدي المحاولة لتجمعي نجومًا أكثر";
   $("#play").innerHTML=`<div class="result"><div class="r-stars">${starsHTML(stars)}</div><h2>${msg}</h2><p class="r-pts"><b>${res.pts}</b> نقطة • <b>${PLAY.miss}</b> خطأ</p><div class="r-act"><button class="btn ghost" id="again">أعيدي المستوى</button>${last?`<button class="btn" id="toMap2">خريطة المستويات</button>`:`<button class="btn" id="next">المستوى التالي</button>`}</div></div>`;
   if(stars===3)confetti();refreshPath(id);
   $("#again").onclick=()=>startLevel(id,i);
