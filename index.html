@@ -293,6 +293,19 @@ footer .hand{font-size:20px;color:var(--palm)}
 .w-stage svg,.widget.static svg{width:100%;height:auto;display:block}
 .w-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
 .w-cap{flex:1;min-width:200px;color:var(--soft);font-size:15px}
+.crit-sum{display:grid;gap:14px}.crit-sum article{border-radius:14px;background:var(--sheet);box-shadow:inset 0 0 0 1px var(--rule);overflow:hidden}
+.crit-sum h3{display:flex;gap:10px;align-items:flex-start;margin:0;padding:12px 16px;background:var(--palm-tint);color:var(--palm);font-family:var(--display);font-size:17px;line-height:1.5}
+.crit-sum h3 span{flex:none;width:28px;height:28px;border-radius:50%;background:var(--palm);color:var(--paper);display:grid;place-items:center;font-size:15px}
+.crit-sum article>div{padding:12px 18px}.crit-sum p{margin:6px 0}.crit-sum ul{margin:6px 0;padding-inline-start:20px}.crit-sum li{margin:4px 0}
+.rn{display:grid;gap:10px}
+.rn-q{padding:12px 16px;border-radius:14px;background:var(--palm);color:#fff}.rn-qt{font-family:var(--display);font-size:19px;line-height:1.5}
+.rn-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}.rn-opts span{direction:rtl;text-align:center;background:rgba(255,255,255,.14);border-radius:10px;padding:6px 8px;font-size:15px}.rn-opts .rn-x{opacity:.5}
+.rn-stage{position:relative;border-radius:18px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--rule)}.rn-stage canvas{display:block;width:100%;height:min(62vh,520px);touch-action:none;cursor:pointer}
+.rn-hud{position:absolute;top:10px;inset-inline:12px;display:flex;justify-content:space-between;gap:10px;pointer-events:none;font-weight:600;color:#1A2622}.rn-hud>span{background:rgba(255,255,255,.88);border-radius:999px;padding:4px 12px}.rn-hud i{font-style:normal;color:#C9D1CE;font-size:18px}.rn-hud i.on{color:#C8473A}
+.rn-fact{position:absolute;top:52px;inset-inline:12px;background:rgba(255,255,255,.95);border-radius:12px;padding:10px 14px;box-shadow:0 6px 20px rgba(0,0,0,.15);font-size:15px}.rn-fact b{display:block;color:var(--date);font-family:var(--display)}
+.rn-over{position:absolute;inset:0;display:grid;place-items:center;background:rgba(15,40,33,.55);color:#fff;text-align:center;padding:16px}.rn-over[hidden]{display:none}.rn-over h3{font-family:var(--display);font-size:26px;margin:0 0 6px}.rn-over p{margin:0 0 12px;max-width:46ch}.rn-help{font-size:14px;opacity:.9}
+.rn-ctl{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.rn-ctl .btn{min-width:64px;justify-content:center}
+.rn-fb{min-height:44px;padding:10px 14px;border-radius:12px;background:var(--sheet);box-shadow:inset 0 0 0 1px var(--rule)}.rn-fb.ok{box-shadow:inset 0 0 0 2px #3F8A5E}.rn-fb.no{box-shadow:inset 0 0 0 2px #C8473A}.rn-fb span{display:block;color:var(--soft);font-size:15px;margin-top:2px}
 .ew-fig svg{display:block;width:100%;height:auto;border-radius:14px}
 .ew-card{margin-top:12px;padding:12px 16px;border-radius:12px;background:var(--palm-tint);min-height:56px}.ew-card h4{margin:0 0 4px;font-family:var(--display);font-size:18px;color:var(--palm)}.ew-card p{margin:4px 0}
 .ew-q{font-weight:600;margin:0 0 10px}.ew-b{display:flex;gap:8px;flex-wrap:wrap}
@@ -589,6 +602,7 @@ select.no{border-color:var(--chem);box-shadow:0 0 0 1px var(--chem)}
 <script src="js/envart.js"></script>
 <script src="js/widgets.js"></script>
 <script src="js/widgets-env.js"></script>
+<script src="js/runner.js"></script>
 <script src="js/game.js"></script>
 <script>
 /* ===== المنهج (من فهرس كتاب الطالب) ===== */
@@ -811,7 +825,7 @@ function stage(id,t){
   }
   if(t==="summary"){
     const S2=C.summary;
-    return `<section class="sec"><h2>الخلاصة في دقيقة</h2><ul class="ticks">${S2.points.map(p=>`<li>${p}</li>`).join("")}</ul></section>
+    return `${S2.criteria?`<section class="sec"><h2>ملخص الدرس حسب معايير النجاح</h2><p class="soft">كل معيار نجاح، وتحته ما تحتاجين معرفته لتحقيقه.</p><div class="crit-sum">${S2.criteria.map((c,i)=>`<article><h3><span>${i+1}</span>${c.t}</h3><div>${c.a}</div></article>`).join("")}</div></section>`:`<section class="sec"><h2>الخلاصة في دقيقة</h2><ul class="ticks">${S2.points.map(p=>`<li>${p}</li>`).join("")}</ul></section>`}
       <section class="sec"><h2>بطاقات المراجعة</h2><p class="soft">اقرئي السؤال، وأجيبي في ذهنك، ثم اضغطي البطاقة لتتأكدي.</p>
       <div class="cards">${S2.cards.map(x=>`<button class="flip"><div class="in"><div class="f"><div>${x[0]}<small>اضغطي لرؤية الإجابة</small></div></div><div class="b"><div>${x[1]}</div></div></div></button>`).join("")}</div></section>
       <section class="sec"><h2>مصطلحات الدرس</h2><div class="tbl"><table><thead><tr><th>المصطلح</th><th>بالإنجليزية</th></tr></thead><tbody>${S2.terms.map(x=>`<tr><td>${x[0]}</td><td dir="ltr" style="text-align:end">${x[1]}</td></tr>`).join("")}</tbody></table></div></section>`;
