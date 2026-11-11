@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>استقصاء 2-1 | استقصاء دورة الكربون (إثرائي) — أ. رتاج الراسبي</title>
+<style>
+  :root{
+    --bg:#f5f2ec;--paper:#fff;--ink:#232220;--muted:#66625a;
+    --main:#3b4a54;--amber:#d98a1f;--amber-soft:#fbefdc;
+    --leaf:#3f8a5e;--leaf-soft:#e3f1e8;--sea:#2b6f99;--sea-soft:#e0eef6;
+    --fire:#c8502e;--fire-soft:#fbe5dc;--rock:#8b7d6b;--rock-soft:#efe9e0;
+    --line:#ddd6ca;--radius:18px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:"Tajawal","Cairo","Segoe UI","Noto Sans Arabic",Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.85;font-size:19px}
+  header{
+    background:
+      radial-gradient(circle at 86% 26%, rgba(217,138,31,.45) 0 38px, transparent 39px),
+      radial-gradient(circle at 78% 64%, rgba(255,255,255,.08) 0 90px, transparent 91px),
+      radial-gradient(circle at 10% 30%, rgba(255,255,255,.07) 0 60px, transparent 61px),
+      linear-gradient(135deg,#232c33,#3b4a54 50%,#2f6b56);
+    color:#fff;padding:46px 24px 70px;position:relative;overflow:hidden}
+  header .wrap{max-width:1100px;margin:auto;position:relative;z-index:1}
+  .badge{display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);padding:4px 16px;border-radius:999px;font-size:15px}
+  .badge.x{background:var(--amber);border-color:var(--amber);font-weight:800;margin-inline-start:6px}
+  header h1{font-size:clamp(28px,4.4vw,46px);margin:14px 0 6px;line-height:1.35}
+  header p.sub{margin:0;opacity:.92;font-size:18px}
+  .teacher{margin-top:22px;display:inline-flex;align-items:center;gap:12px;background:#fff;color:var(--main);padding:10px 20px 10px 14px;border-radius:14px;font-weight:800;font-size:20px;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+  .teacher .ic{width:38px;height:38px;border-radius:50%;background:var(--amber-soft);display:grid;place-items:center;font-size:20px}
+  .edge{position:absolute;inset:auto 0 -2px 0;height:44px;background:var(--bg);clip-path:polygon(0 60%,15% 30%,30% 60%,45% 35%,60% 62%,75% 32%,90% 58%,100% 40%,100% 100%,0 100%)}
+
+  nav{position:sticky;top:0;z-index:10;background:rgba(245,242,236,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  nav .wrap{max-width:1100px;margin:auto;display:flex;gap:6px;overflow-x:auto;padding:10px 16px;align-items:center}
+  nav a{white-space:nowrap;text-decoration:none;color:var(--main);font-weight:700;font-size:16px;padding:6px 14px;border-radius:999px}
+  nav a:hover{background:var(--amber-soft)}
+  nav button{margin-inline-start:auto;white-space:nowrap;font-size:15px;padding:7px 14px}
+
+  main{max-width:1100px;margin:auto;padding:26px 18px 60px}
+  section{margin:0 0 30px;scroll-margin-top:70px}
+  .card{background:var(--paper);border-radius:var(--radius);padding:26px 28px;border:1px solid var(--line)}
+  h2{font-size:27px;margin:0 0 16px;display:flex;align-items:center;gap:12px;color:var(--main)}
+  h2 .num{background:var(--main);color:#fff;min-width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:19px;flex:none;padding:0 8px}
+  h3{margin:18px 0 8px;font-size:21px}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
+  ul.clean{margin:0;padding:0 22px 0 0}
+  ul.clean li{margin:3px 0}
+  .ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+  .eq{direction:ltr;text-align:center;background:#fbfaf6;border:1.5px dashed var(--line);border-radius:12px;padding:10px;font-weight:700;font-family:"Segoe UI",Tahoma,sans-serif;font-size:19px;margin:10px 0}
+  .eqw{text-align:center;background:#fbfaf6;border-radius:12px;padding:8px;font-weight:700;margin:6px 0}
+
+  .safety{background:var(--fire-soft);border:1px dashed var(--fire);border-radius:14px;padding:16px 20px}
+  .safety h3{color:var(--fire);margin-top:0}
+  .term{border-right:6px solid var(--amber);background:#fffaf2;border-radius:12px;padding:12px 16px;margin-bottom:10px}
+  .important{background:var(--sea-soft);border:1px solid #b8d6e8;border-radius:14px;padding:12px 16px}
+
+  /* cycle map */
+  .cycle{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+  .cy{border-radius:16px;padding:14px 16px;border:2px solid transparent;text-decoration:none;color:inherit;display:block;transition:.2s}
+  .cy:hover{transform:translateY(-3px)}
+  .cy .t{font-weight:800;font-size:20px}
+  .cy .f{font-size:16px;color:var(--muted)}
+  .c1{background:var(--leaf-soft);border-color:#bcdcc8}
+  .c2{background:var(--rock-soft);border-color:#d8cdbd}
+  .c3{background:var(--sea-soft);border-color:#b8d6e8}
+  .c4{background:var(--fire-soft);border-color:#f0c4b2}
+
+  /* section headers */
+  .sec-head{display:flex;align-items:center;gap:14px;border-radius:14px;padding:12px 16px;margin:-6px 0 16px}
+  .sec-head .ico{font-size:34px}
+  .sec-head b{font-size:22px}
+  .s1 .sec-head{background:var(--leaf-soft)} .s1 h2{color:var(--leaf)} .s1 h2 .num{background:var(--leaf)}
+  .s2 .sec-head{background:var(--rock-soft)} .s2 h2{color:#6f604c} .s2 h2 .num{background:var(--rock)}
+  .s3 .sec-head{background:var(--sea-soft)} .s3 h2{color:var(--sea)} .s3 h2 .num{background:var(--sea)}
+  .s4 .sec-head{background:var(--fire-soft)} .s4 h2{color:var(--fire)} .s4 h2 .num{background:var(--fire)}
+
+  ol.timeline{list-style:none;padding:0;margin:0;counter-reset:s}
+  ol.timeline li{counter-increment:s;position:relative;padding:8px 54px 8px 10px;margin-bottom:7px;background:#fbfaf6;border-radius:12px}
+  ol.timeline li::before{content:counter(s);position:absolute;right:10px;top:8px;width:32px;height:32px;border-radius:50%;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:800;font-size:16px}
+
+  .lab{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;align-items:start}
+  @media (max-width:900px){.lab{grid-template-columns:1fr}}
+  .bench{background:linear-gradient(#fbfaf6,#f1ede4);border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center}
+  .bench svg{width:100%;max-width:440px;height:auto}
+  .controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:8px}
+  button{font-family:inherit;font-size:17px;font-weight:700;border:none;cursor:pointer;padding:10px 18px;border-radius:12px;background:var(--main);color:#fff;transition:.15s}
+  button:hover{filter:brightness(1.1)}
+  button.ghost{background:#fff;color:var(--main);border:2px solid var(--main)}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .obs{font-weight:700;margin-top:8px;min-height:30px;color:var(--main)}
+
+  table{width:100%;border-collapse:collapse;font-size:17px;margin-top:6px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:center;vertical-align:middle}
+  th{background:#f1ede4;color:var(--main)}
+  td.a{background:#fffdf7;color:#1d4e3a;font-weight:600}
+  .cap{font-weight:800;margin:14px 0 4px;color:var(--main)}
+
+  /* answers */
+  .qa{background:#fbfaf6;border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
+  .qa .qq{padding:14px 18px;font-weight:700;display:flex;gap:12px;align-items:flex-start}
+  .qa .qq .q{background:var(--amber);color:#fff;min-width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex:none}
+  .qa .ans{padding:6px 22px 14px 66px;border-top:1px dashed var(--line);background:#fff}
+  .qa .ans p{margin:.5em 0}
+  .qa .ans::before{content:"✅ الإجابة";display:block;font-weight:800;color:var(--leaf);font-size:15px;margin-top:6px}
+  body.hide-ans .ans, body.hide-ans td.a{filter:blur(7px);user-select:none}
+  body.hide-ans .ans:hover, body.hide-ans td.a:hover{filter:none}
+  .note{font-size:15px;color:var(--muted)}
+
+  footer{text-align:center;color:var(--muted);padding:26px;border-top:1px solid var(--line);font-size:16px}
+  footer b{color:var(--main)}
+  @media print{nav,.controls{display:none!important} body.hide-ans .ans, body.hide-ans td.a{filter:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="badge">العلوم البيئية · الصف الحادي عشر · الوحدة الأولى: مقدمة في الإدارة البيئية</span><span class="badge x">إثرائي</span>
+    <h1>استقصاء عملي 2-1<br>استقصاء دورة الكربون</h1>
+    <p class="sub">أربع تجارب صغيرة نتتبّع فيها الكربون وهو ينتقل بين الكائنات الحية والصخور والمحيطات والغلاف الجوي.</p>
+    <div class="teacher"><span class="ic">♻️</span> أ. رتاج الراسبي</div>
+  </div>
+  <div class="edge"></div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <a href="#intro">المقدمة</a>
+    <a href="#tools">الأدوات والسلامة</a>
+    <a href="#prep">التمهيد</a>
+    <a href="#sec1">١ التنفّس</a>
+    <a href="#sec2">٢ التجوية</a>
+    <a href="#sec3">٣ الذوبان في المحيطات</a>
+    <a href="#sec4">٤ الاحتراق</a>
+    <a href="#analysis">التحليل والتقويم</a>
+    <button id="toggleAns" class="ghost">🙈 إخفاء الإجابات</button>
+  </div>
+</nav>
+
+<main>
+
+  <section id="intro" class="card">
+    <h2><span class="num">★</span> المقدمة وهدف الاستقصاء</h2>
+    <p style="margin-top:0">🎯 <b>الهدف:</b> جمع الملاحظات والقياسات والتقديرات وتسجيلها وعرضها.</p>
+    <p>تتضمّن دورة الكربون عمليات كيميائية تحوّل الكربون من شكل كيميائي إلى آخر. في هذا الاستقصاء نتعرّف هذه الأشكال وكيف يتحوّل الكربون بينها.</p>
+    <div class="term"><b>دورة الكربون</b> <span class="ltr" style="color:var(--muted);font-size:15px">Carbon cycle</span>: تدفّق الكربون بين مخازن الكربون المختلفة.</div>
+    <h3>الأقسام الأربعة على خريطة دورة الكربون</h3>
+    <div class="cycle">
+      <a class="cy c1" href="#sec1"><div class="t">🌱 ١ التنفّس</div><div class="f">الكائنات الحية ← الغلاف الجوي</div></a>
+      <a class="cy c2" href="#sec2"><div class="t">🪨 ٢ التجوية الكيميائية</div><div class="f">الصخور الكربونية ← الغلاف الجوي</div></a>
+      <a class="cy c3" href="#sec3"><div class="t">🌊 ٣ الذوبان في المحيطات</div><div class="f">الغلاف الجوي ⇄ المحيطات</div></a>
+      <a class="cy c4" href="#sec4"><div class="t">🔥 ٤ الاحتراق</div><div class="f">الوقود الأحفوري والحيوي ← الغلاف الجوي</div></a>
+    </div>
+    <div class="important" style="margin-top:14px">🧪 <b>اختبار ثاني أكسيد الكربون:</b> نستخدم <b>ماء الجير</b> (محلول هيدروكسيد الكالسيوم). يتحوّل من <b>رائق</b> إلى <b>حليبي (معكّر)</b> عند مرور CO₂ فيه، لأنه يتكوّن راسب أبيض من كربونات الكالسيوم.
+      <div class="eq">Ca(OH)₂ + CO₂ → CaCO₃ ↓ + H₂O</div>
+    </div>
+  </section>
+
+  <section id="tools" class="card">
+    <h2><span class="num">🧰</span> المواد والأدوات واحتياطات السلامة</h2>
+    <div class="grid2">
+      <ul class="clean">
+        <li>قطعة صغيرة من الطباشير أو الحجر الجيري.</li>
+        <li><span class="ltr">20 mL</span> من حمض الهيدروكلوريك (تركيز <span class="ltr">1.0 mol/L</span>)، وقطّارة.</li>
+        <li>أنبوبة اختبار ذات تفرّع جانبي، وأنابيب اختبار.</li>
+        <li>ماء الجير (<span class="ltr">20–30 mL</span> تقريبًا).</li>
+        <li>كأسان زجاجيتان سعة كل منهما <span class="ltr">100 mL</span>.</li>
+        <li>محلول الكاشف العالمي (حتى <span class="ltr">5 mL</span>).</li>
+        <li>مصاصة شرب أو أنبوبة للنفخ (ومحلول مطهّر إن أُعيد استخدامها).</li>
+        <li>ماء بحر أو ماء مالح (<span class="ltr">50 mL</span> تقريبًا).</li>
+        <li>قمع زجاجي، وسدادة مطاط بفتحتين، وأنبوبتا توصيل على شكل حرف U.</li>
+        <li>مضخة ماصّة (شفط).</li>
+        <li>شمعة برافين صغيرة، وقطع صغيرة من الخشب، وملقط.</li>
+      </ul>
+      <div class="safety">
+        <h3>⚠️ احتياطات الأمان والسلامة</h3>
+        <ul class="clean">
+          <li>ارتدي النظارات الواقية في كل التجارب.</li>
+          <li>ماء الجير قد يكون مهيّجًا: تجنّبي تطاير قطراته إلى العينين، واغسلي فورًا أي رذاذ يصل إلى الجلد.</li>
+          <li>تأكّدي أن المصاصة أو الأنبوبة معقّمة قبل النفخ فيها، و<b>انفخي فقط ولا تمتصّي</b> أي محلول.</li>
+          <li>تعاملي مع الحمض واللهب بحذر، واستخدمي الملقط مع قطع الخشب المشتعلة.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="prep" class="card">
+    <h2><span class="num">؟</span> التمهيد للاستقصاء</h2>
+    <div class="qa"><div class="qq"><span class="q">أ</span><span>ما المصدر الأصلي للكربون الموجود في الكتلة الحيوية للنبات؟</span></div>
+      <div class="ans"><p><b>ثاني أكسيد الكربون في الغلاف الجوي (الهواء).</b> يمتصّه النبات ويثبّته في عملية التمثيل الضوئي على شكل كربوهيدرات (جلوكوز)، ثم يبني منها بقية مركّباته العضوية مثل السليلوز والنشا والبروتينات.</p>
+        <div class="eqw">ثاني أكسيد الكربون + ماء ← (ضوء، كلوروفيل) ← جلوكوز + أكسجين</div></div></div>
+    <div class="qa"><div class="qq"><span class="q">ب</span><span>كيف ينتقل الكربون من مستوى غذائي إلى آخر؟</span></div>
+      <div class="ans"><p>ينتقل عن طريق <b>التغذّي في السلاسل والشبكات الغذائية</b>. عندما يأكل المستهلك المنتِج أو مستهلكًا آخر، يهضم المركّبات العضوية الكربونية ويمتصّها ويدمجها في أنسجته.</p>
+        <p>لا ينتقل كل الكربون إلى المستوى التالي: جزء منه يعود إلى الجو على شكل CO₂ بالتنفّس، وجزء يذهب إلى المحلِّلات مع الفضلات والبقايا الميتة.</p></div></div>
+  </section>
+
+  <!-- ===== SECTION 1 ===== -->
+  <section id="sec1" class="card s1">
+    <h2><span class="num">١</span> القسم الأول: التنفّس</h2>
+    <div class="sec-head"><span class="ico">🌱</span><div><b>من الكائنات الحية إلى الغلاف الجوي</b><br>تستخدم الكائنات الحية الكربوهيدرات لتحصل على الطاقة، ويخرج الكربون منها على شكل CO₂ في عملية التنفّس. نثبت هنا أن الكائنات الحية تنتج CO₂، ونتعرّف طريقة اختباره.</div></div>
+    <div class="lab">
+      <div>
+        <h3 style="margin-top:0">الطريقة</h3>
+        <ol class="timeline">
+          <li>املئي نصف أنبوبة اختبار تقريبًا بماء الجير.</li>
+          <li>أدخلي أحد طرفي المصاصة أو الأنبوبة الزجاجية في ماء الجير.</li>
+          <li>انفخي بلطف حتى تلاحظي تغيّرًا (الشكل 4-1).</li>
+        </ol>
+        <div class="eqw">جلوكوز + أكسجين ← ثاني أكسيد الكربون + ماء + طاقة</div>
+      </div>
+      <div class="bench">
+        <svg viewBox="0 0 300 260" id="svg1">
+          <path d="M150 10 L150 175" stroke="#a7b0b5" stroke-width="10" stroke-linecap="round" fill="none"/>
+          <text x="165" y="40" font-size="14" fill="#66625a">مصاصة</text>
+          <rect x="115" y="70" width="70" height="170" rx="10" fill="rgba(220,235,245,.35)" stroke="#7d8a90" stroke-width="3"/>
+          <rect id="lw1" x="118" y="150" width="64" height="87" rx="8" fill="#eef7fb"/>
+          <g id="bub1"></g>
+          <text x="200" y="200" font-size="14" fill="#66625a">ماء الجير</text>
+          <text id="breath" x="150" y="8" font-size="18" text-anchor="middle" opacity="0">💨</text>
+        </svg>
+        <div class="controls"><button id="b1">💨 انفخي في ماء الجير</button><button class="ghost" id="r1">↺ إعادة</button></div>
+        <div class="obs" id="o1">ماء الجير رائق عديم اللون.</div>
+      </div>
+    </div>
+    <div class="cap">الجدول 3-1: ملاحظات عند نفخ هواء الزفير في ماء الجير (محلول)</div>
+    <table>
+      <tr><th>لون ماء الجير قبل النفخ فيه</th><th>لون ماء الجير بعد النفخ فيه</th></tr>
+      <tr><td class="a">رائق (شفّاف) عديم اللون</td><td class="a">حليبي أبيض معكّر، لتكوّن راسب كربونات الكالسيوم</td></tr>
+    </table>
+    <p class="note" style="margin-bottom:0">📌 <b>الاستنتاج:</b> هواء الزفير يحتوي على CO₂ ناتج من تنفّس خلايا الجسم.</p>
+  </section>
+
+  <!-- ===== SECTION 2 ===== -->
+  <section id="sec2" class="card s2">
+    <h2><span class="num">٢</span> القسم الثاني: التجوية الكيميائية للصخور الكربونية</h2>
+    <div class="sec-head"><span class="ico">🪨</span><div><b>من الصخور إلى الغلاف الجوي</b><br>الطباشير والحجر الجيري بقايا كائنات حية عاشت قبل ملايين السنين، منها العوالق الجيرية. حصلت هذه الكائنات على الكربون بالتمثيل الضوئي والتغذّي، ثم تحجّرت بقاياها في الصخور. نثبت هنا أن هذه الصخور تحتوي على كربون يمكن أن يعود إلى الغلاف الجوي.</div></div>
+    <div class="lab">
+      <div>
+        <h3 style="margin-top:0">الطريقة</h3>
+        <ol class="timeline">
+          <li>املئي نصف أنبوبة اختبار تقريبًا بماء الجير.</li>
+          <li>ضعي <span class="ltr">20 mL</span> من حمض الهيدروكلوريك (<span class="ltr">1.0 mol/L</span>) في أنبوبة اختبار كبيرة.</li>
+          <li>أضيفي قطعة صغيرة من الطباشير أو الحجر الجيري إلى الحمض، ثم ضعي السدادة التي فيها أنبوبة التوصيل.</li>
+          <li>أدخلي الطرف الآخر من أنبوبة التوصيل في ماء الجير، ولاحظي فقاعات الغاز (الشكل 5-1).</li>
+        </ol>
+        <div class="eq">CaCO₃ + 2HCl → CaCl₂ + H₂O + CO₂ ↑</div>
+      </div>
+      <div class="bench">
+        <svg viewBox="0 0 380 260">
+          <rect x="40" y="70" width="70" height="170" rx="10" fill="rgba(220,235,245,.35)" stroke="#7d8a90" stroke-width="3"/>
+          <rect x="43" y="150" width="64" height="87" rx="8" fill="#f4f7e9"/>
+          <rect x="34" y="52" width="82" height="24" rx="5" fill="#6b5a48"/>
+          <ellipse id="chalk" cx="75" cy="225" rx="20" ry="10" fill="#f2efe6" stroke="#bdb4a3" stroke-width="2" opacity="0"/>
+          <g id="bub2a"></g>
+          <path d="M75 52 L75 25 L290 25 L290 175" stroke="#a7b0b5" stroke-width="8" fill="none" stroke-linejoin="round"/>
+          <rect x="255" y="70" width="70" height="170" rx="10" fill="rgba(220,235,245,.35)" stroke="#7d8a90" stroke-width="3"/>
+          <rect id="lw2" x="258" y="150" width="64" height="87" rx="8" fill="#eef7fb"/>
+          <g id="bub2b"></g>
+          <text x="75" y="258" font-size="13" text-anchor="middle" fill="#66625a">حمض HCl</text>
+          <text x="290" y="258" font-size="13" text-anchor="middle" fill="#66625a">ماء الجير</text>
+        </svg>
+        <div class="controls"><button id="b2">🪨 أضيفي الطباشير إلى الحمض</button><button class="ghost" id="r2">↺ إعادة</button></div>
+        <div class="obs" id="o2">الحمض رائق، وماء الجير رائق.</div>
+      </div>
+    </div>
+    <div class="cap">الجدول 4-1: الملاحظات عند إضافة صخر كربوني (حجر جيري أو طباشير) إلى الحمض</div>
+    <table>
+      <tr><th style="width:22%">المادة</th><th>الملاحظات والتغيّرات</th></tr>
+      <tr><td>الطباشير / الحجر الجيري</td><td class="a">يحدث فوران وتتصاعد فقاعات غاز من سطحه، ويصغر حجمه تدريجيًا حتى يذوب (يتآكل).</td></tr>
+      <tr><td>الحمض</td><td class="a">فقاعات غاز كثيرة (فوران)، ويبقى المحلول عديم اللون، وقد يدفأ قليلًا.</td></tr>
+      <tr><td>ماء الجير</td><td class="a">تمرّ فيه فقاعات الغاز، فيتحوّل من رائق إلى حليبي معكّر، وهذا دليل على أن الغاز CO₂.</td></tr>
+    </table>
+    <p class="note" style="margin-bottom:0">📌 <b>الربط بالطبيعة:</b> المطر حمضي ضعيف لأنه يذيب CO₂ ويكوّن حمض الكربونيك. لذلك يُذيب الصخور الجيرية ببطء، ويعيد بعض الكربون المخزّن فيها إلى الدورة.</p>
+  </section>
+
+  <!-- ===== SECTION 3 ===== -->
+  <section id="sec3" class="card s3">
+    <h2><span class="num">٣</span> القسم الثالث: الذوبان الجوي في المحيطات</h2>
+    <div class="sec-head"><span class="ico">🌊</span><div><b>بين الغلاف الجوي والمحيطات</b><br>البحار والمحيطات خزّان للغازات الذائبة ومنها CO₂، وهذا يساعد على ضبط مستواه في الجو. نقارن هنا ذوبان CO₂ في الماء العذب والماء المالح، وأثره في حموضة الماء.</div></div>
+    <div class="lab">
+      <div>
+        <h3 style="margin-top:0">الطريقة</h3>
+        <ol class="timeline">
+          <li>ضعي <span class="ltr">50 mL</span> تقريبًا من ماء البحر في كأس.</li>
+          <li>ضعي <span class="ltr">50 mL</span> تقريبًا من الماء العذب في كأس أخرى.</li>
+          <li>أضيفي قطرات من الكاشف العالمي إلى الكأسين حتى يظهر اختلاف واضح في اللون.</li>
+          <li>انفخي بلطف في إحدى الكأسين، وقيسي الزمن حتى يصبح الكاشف أصفر.</li>
+          <li>كرّري مع الكأس الأخرى بقوة النفخ نفسها، وسجّلي النتائج.</li>
+        </ol>
+        <div class="important" style="margin-top:8px">📌 <b>مهم:</b> ماء البحر قاعدي ضعيف، لذا يكون لون الكاشف فيه غالبًا أخضر داكن أو مزرقًّا.</div>
+        <div class="eq">CO₂ + H₂O ⇌ H₂CO₃ ⇌ H⁺ + HCO₃⁻</div>
+      </div>
+      <div class="bench">
+        <svg viewBox="0 0 380 250">
+          <g>
+            <path d="M40 70 L40 225 Q40 238 53 238 L147 238 Q160 238 160 225 L160 70" fill="none" stroke="#7d8a90" stroke-width="3"/>
+            <rect id="fw" x="43" y="110" width="114" height="125" rx="8" fill="#4caf50"/>
+            <text x="100" y="60" font-size="15" text-anchor="middle" font-weight="700" fill="#3b4a54">ماء عذب</text>
+            <text id="tf" x="100" y="180" font-size="22" text-anchor="middle" font-weight="800" fill="#fff">0 s</text>
+          </g>
+          <g>
+            <path d="M220 70 L220 225 Q220 238 233 238 L327 238 Q340 238 340 225 L340 70" fill="none" stroke="#7d8a90" stroke-width="3"/>
+            <rect id="sw" x="223" y="110" width="114" height="125" rx="8" fill="#1f7a6a"/>
+            <text x="280" y="60" font-size="15" text-anchor="middle" font-weight="700" fill="#3b4a54">ماء البحر</text>
+            <text id="ts" x="280" y="180" font-size="22" text-anchor="middle" font-weight="800" fill="#fff">0 s</text>
+          </g>
+          <g id="bub3"></g>
+        </svg>
+        <div class="controls"><button id="b3">💨 انفخي في الكأسين (بالقوة نفسها)</button><button class="ghost" id="r3">↺ إعادة</button></div>
+        <div class="obs" id="o3">الكاشف: أخضر في الماء العذب، وأخضر داكن مزرقّ في ماء البحر.</div>
+      </div>
+    </div>
+    <div class="cap">الجدول 5-1: الزمن الذي يستغرقه الكاشف العالمي ليتحوّل إلى الأصفر في ماء مختلف الملوحة</div>
+    <table>
+      <tr><th>عيّنة الماء</th><th>اللون الابتدائي للكاشف</th><th>الزمن حتى يصبح الكاشف أصفر / ثوانٍ</th></tr>
+      <tr><td>الماء العذب</td><td class="a">أخضر (pH ≈ 7)</td><td class="a">زمن أقصر، مثلًا ≈ 20–40 s</td></tr>
+      <tr><td>ماء البحر</td><td class="a">أخضر داكن / مزرقّ (pH ≈ 8)</td><td class="a">زمن أطول بوضوح، مثلًا ≈ 90–150 s</td></tr>
+    </table>
+    <p class="note">الأرقام تقريبية وتختلف حسب قوة النفخ وكمية الكاشف. المهم أن ماء البحر يحتاج وقتًا أطول دائمًا.</p>
+    <p style="margin-bottom:0">📌 <b>التفسير:</b> عند ذوبان CO₂ في الماء يتكوّن حمض الكربونيك فتقلّ قيمة pH ويصفرّ الكاشف. ماء البحر قاعدي ضعيف وفيه أيونات كربونات وبيكربونات تعادل الحمض (تعمل كمحلول منظِّم)، فيمتصّ <b>كمية أكبر من CO₂</b> قبل أن يتغيّر لونه. أي أن قدرة المحيطات على امتصاص CO₂ وتخزينه أكبر من المياه العذبة، لكن امتصاص المزيد منه يرفع حموضتها تدريجيًا (تحمّض المحيطات).</p>
+  </section>
+
+  <!-- ===== SECTION 4 ===== -->
+  <section id="sec4" class="card s4">
+    <h2><span class="num">٤</span> القسم الرابع: الاحتراق</h2>
+    <div class="sec-head"><span class="ico">🔥</span><div><b>من الوقود إلى الغلاف الجوي</b><br>الوقود الأحفوري يحتوي على كربون من بقايا كائنات بحرية متحجّرة منذ ملايين السنين. شمع البرافين يُستخرج من النفط الخام، والوقود الحيوي (كالخشب) يحتوي على كربون من كائنات عاشت حديثًا. نثبت هنا أن احتراق كلا النوعين يطلق CO₂.</div></div>
+    <div class="grid2" style="margin-bottom:12px">
+      <div class="term"><b>الوقود الأحفوري</b> <span class="ltr" style="color:var(--muted);font-size:15px">Fossil fuel</span>: مواد عضوية مدفونة من نباتات وحيوانات ميتة، تحوّلت إلى نفط أو فحم حجري أو غاز طبيعي بفعل الحرارة والضغط على مدى زمن طويل جدًا في قشرة الأرض.</div>
+      <div class="term"><b>الوقود الحيوي</b> <span class="ltr" style="color:var(--muted);font-size:15px">Biofuel</span>: وقود مشتق من الكتلة الحيوية (مواد نباتية، طحالب، نفايات حيوانية). يُعدّ طاقة متجدّدة إذا جُدّد مصدره، كإعادة الزراعة مثلًا.</div>
+    </div>
+    <div class="lab">
+      <div>
+        <h3 style="margin-top:0">الطريقة</h3>
+        <ol class="timeline">
+          <li>جهّزي الجهاز (الشكل 6-1)، على أن تكون أنبوبة الاختبار الكبيرة ممتلئة إلى نصفها بماء الجير.</li>
+          <li>شغّلي مضخة الشفط ليمرّ تيار لطيف من الهواء عبر الجهاز، فتظهر فقاعات في ماء الجير.</li>
+          <li>ضعي الشمعة الصغيرة تحت القمع، ولاحظي التغيّرات في ماء الجير وسجّليها.</li>
+          <li>أطفئي الشمعة وضعي ماء جير جديدًا.</li>
+          <li>كرّري التجربة بحرق قطع صغيرة من الخشب تحت القمع، ولاحظي وسجّلي.</li>
+        </ol>
+        <div class="eqw">وقود (هيدروكربون / كربوهيدرات) + أكسجين ← ثاني أكسيد الكربون + ماء + طاقة</div>
+      </div>
+      <div class="bench">
+        <svg viewBox="0 0 380 260">
+          <path d="M40 120 L120 120 L92 150 L92 175 L68 175 L68 150 Z" fill="rgba(220,235,245,.4)" stroke="#7d8a90" stroke-width="3"/>
+          <path d="M80 120 L80 40 L250 40 L250 180" stroke="#a7b0b5" stroke-width="8" fill="none" stroke-linejoin="round"/>
+          <rect x="215" y="80" width="70" height="160" rx="10" fill="rgba(220,235,245,.35)" stroke="#7d8a90" stroke-width="3"/>
+          <rect x="207" y="64" width="86" height="22" rx="5" fill="#6b5a48"/>
+          <rect id="lw4" x="218" y="150" width="64" height="87" rx="8" fill="#eef7fb"/>
+          <g id="bub4"></g>
+          <path d="M270 70 L270 30 L345 30" stroke="#a7b0b5" stroke-width="8" fill="none"/>
+          <text x="350" y="22" font-size="13" fill="#66625a" text-anchor="end">إلى المضخة ←</text>
+          <g id="fuel">
+            <rect x="62" y="200" width="36" height="40" rx="4" fill="#f5efe0" stroke="#c9bda5" stroke-width="2"/>
+            <line x1="80" y1="200" x2="80" y2="192" stroke="#333" stroke-width="2"/>
+          </g>
+          <g id="flame" opacity="0"><path d="M80 158 C70 175 72 190 80 192 C88 190 90 175 80 158 Z" fill="#f6a623"/><path d="M80 170 C76 180 77 188 80 190 C83 188 84 180 80 170 Z" fill="#ffe27a"/></g>
+          <text id="fuelLbl" x="80" y="256" font-size="13" text-anchor="middle" fill="#66625a">شمعة برافين</text>
+        </svg>
+        <div class="controls">
+          <button id="b4a">🕯️ أشعلي الشمعة</button>
+          <button id="b4b">🪵 أحرقي الخشب</button>
+          <button class="ghost" id="r4">↺ ماء جير جديد</button>
+        </div>
+        <div class="obs" id="o4">المضخة تعمل… فقاعات هواء في ماء الجير الرائق.</div>
+      </div>
+    </div>
+    <div class="cap">الجدول 6-1: ملاحظات عند احتراق أنواع مختلفة من الوقود ومرور الغازات عبر ماء الجير</div>
+    <table>
+      <tr><th style="width:26%">الوقود</th><th>ملاحظات عن ماء الجير عند احتراق الوقود</th></tr>
+      <tr><td>وقود أحفوري (شمع البرافين)</td><td class="a">يتعكّر ماء الجير ويصبح حليبيًا بعد مدة قصيرة، فاحتراق الشمع يطلق CO₂. وقد تتكثّف قطرات ماء على جدار القمع، ويظهر سخام أسود قليل.</td></tr>
+      <tr><td>خشب (وقود حيوي)</td><td class="a">يتعكّر ماء الجير ويصبح حليبيًا أيضًا، فاحتراق الخشب يطلق CO₂ كذلك. يصاحبه دخان وسخام أكثر بسبب الاحتراق غير الكامل، مع بخار ماء.</td></tr>
+    </table>
+    <p class="note" style="margin-bottom:0">📌 <b>الفرق المهم:</b> الوقود الأحفوري يعيد إلى الجو كربونًا كان مخزّنًا منذ ملايين السنين، فيزيد تركيز CO₂. أما الوقود الحيوي فيطلق كربونًا امتصّه النبات حديثًا، ويمكن تعويضه بإعادة الزراعة.</p>
+  </section>
+
+  <!-- ===== ANALYSIS ===== -->
+  <section id="analysis" class="card">
+    <h2><span class="num">✎</span> التحليل والاستنتاج والتقويم</h2>
+
+    <div class="qa"><div class="qq"><span class="q">1</span><span>يوجد CO₂ أيضًا في الغلاف الجوي. صفي تجربة ضابطة للقسم الرابع توضّح أن CO₂ الموجود في الهواء ليس وحده سبب تغيّر ماء الجير.</span></div>
+      <div class="ans">
+        <p><b>التجربة الضابطة:</b> نستخدم الجهاز نفسه بماء جير جديد بالحجم نفسه، ونشغّل المضخة بالسرعة نفسها وللمدة نفسها، لكن <b>دون إشعال أي وقود</b> تحت القمع (نضع شمعة غير مشتعلة).</p>
+        <p><b>النتيجة المتوقّعة:</b> يبقى ماء الجير رائقًا، أو يتعكّر تعكّرًا خفيفًا جدًا بعد وقت طويل، لأن نسبة CO₂ في الهواء صغيرة (≈ 0.04%).</p>
+        <p><b>الاستنتاج:</b> التعكّر السريع في التجربة الأصلية سببه CO₂ الناتج من الاحتراق، وليس CO₂ الهواء.</p>
+      </div></div>
+
+    <div class="qa"><div class="qq"><span class="q">2</span><span>كيف يمكن تعديل تجربة القسم الأول لتوضيح أن النباتات أو حيوانات أخرى تتنفّس أيضًا؟</span></div>
+      <div class="ans">
+        <ul class="clean">
+          <li>نضع كائنات حية في أنبوبة مغلقة فوق ماء الجير (أو كاشف الهيدروجين كربونات)، مع فاصل من الشاش حتى لا تلمس المحلول. مثل: بذور مُنبتة، أو حشرات صغيرة كقمل الخشب، أو ديدان.</li>
+          <li>أو نوصل الأنبوبة بمضخة الشفط من القسم الرابع ليمرّ الهواء من حول الكائنات إلى ماء الجير.</li>
+          <li><b>للنباتات:</b> نغطّي الأنبوبة بورق ألومنيوم أو نضعها في الظلام، لمنع التمثيل الضوئي من استهلاك CO₂.</li>
+          <li><b>تجربة ضابطة:</b> أنبوبة مماثلة فيها بذور مغليّة (ميتة) أو خرز زجاجي بالحجم نفسه.</li>
+          <li><b>النتيجة:</b> يتعكّر ماء الجير مع الكائنات الحية فقط، فهي تتنفّس وتطلق CO₂.</li>
+        </ul>
+      </div></div>
+
+    <div class="qa"><div class="qq"><span class="q">3</span><span>اقترحي كيف تؤثّر التغيّرات في تركيز CO₂ في الغلاف الجوي على تركيزه في المحيطات.</span></div>
+      <div class="ans">
+        <p>العلاقة <b>طردية</b>. كلما زاد تركيز CO₂ في الجو زاد الضغط الجزئي للغاز فوق سطح الماء، فيذوب منه قدر أكبر في المحيطات ويرتفع تركيزه فيها. ولو انخفض تركيزه في الجو، تطلق المحيطات جزءًا من CO₂ الذائب إلى الجو حتى يحدث توازن.</p>
+        <p><b>النتيجة البيئية:</b> زيادة CO₂ الذائب تكوّن حمض الكربونيك، فتنخفض قيمة pH ماء البحر (<b>تحمّض المحيطات</b>). هذا يقلّل أيونات الكربونات التي تحتاجها المرجانيات والرخويات والعوالق الجيرية لبناء أصدافها وهياكلها.</p>
+      </div></div>
+
+    <div class="qa"><div class="qq"><span class="q">4</span><span>اقترحي كيف يمكن أن تؤثّر إزالة الغابات على تركيز CO₂ في الغلاف الجوي. فسّري إجابتك.</span></div>
+      <div class="ans">
+        <p>إزالة الغابات <b>تزيد</b> تركيز CO₂ في الغلاف الجوي، للأسباب الآتية:</p>
+        <ul class="clean">
+          <li>يقلّ عدد الأشجار التي تقوم بالتمثيل الضوئي، فيقلّ امتصاص CO₂ من الجو. الغابة مصرف كربون مهم.</li>
+          <li>حرق الأشجار بعد قطعها، أو تحلّل بقاياها، يطلق الكربون المخزّن في الخشب على شكل CO₂.</li>
+          <li>انكشاف التربة يسرّع تحلّل المادة العضوية فيها، فيخرج منها كربون إضافي.</li>
+        </ul>
+      </div></div>
+
+    <div class="qa"><div class="qq"><span class="q">5</span><span>تشمل دورة الكربون التحلّل أيضًا. اقترحي تجربة بسيطة توضّح أن التحلّل ينتج CO₂.</span></div>
+      <div class="ans">
+        <p><b>الفكرة:</b> نستخدم أدوات القسم الرابع (مضخة الشفط وماء الجير)، كما ينصح صندوق «مهم» في الكتاب.</p>
+        <ol>
+          <li>نضع كمية من مادة متحلّلة في دورق: أوراق شجر رطبة متساقطة، أو تربة حديقة، أو قطع فاكهة.</li>
+          <li>نضع في دورق ثانٍ <b>الكتلة نفسها</b> من المادة نفسها بعد تعقيمها بالتسخين، لقتل البكتيريا والفطريات. هذه التجربة الضابطة.</li>
+          <li>نغلق الدورقين، ونسحب الهواء من كل منهما بالمضخة إلى أنبوبة ماء جير مستقلة، بالسرعة والمدة نفسيهما وفي مكان دافئ.</li>
+          <li><b>النتيجة:</b> يتعكّر ماء الجير في جهة المادة غير المعقّمة أسرع وأكثر. المحلِّلات (البكتيريا والفطريات) تتنفّس وهي تحلّل المادة العضوية فتطلق CO₂.</li>
+        </ol>
+      </div></div>
+
+    <div class="qa"><div class="qq"><span class="q">💭</span><span>تأمّلي: كيف ساعدتكِ الأنشطة التي نفّذتِها ولاحظتِها في فهم دورة الكربون؟</span></div>
+      <div class="ans">
+        <p>أظهرت الأنشطة أن الكربون <b>لا يفنى بل ينتقل بين مخازن مختلفة</b> بعمليات يمكن رؤيتها وقياسها:</p>
+        <ul class="clean">
+          <li><b>التنفّس:</b> ينقل الكربون من الكائنات الحية إلى الغلاف الجوي.</li>
+          <li><b>التجوية الكيميائية:</b> تنقله من الصخور الكربونية (الغلاف الصخري) إلى الجو.</li>
+          <li><b>الذوبان:</b> يبادله بين الجو والمحيطات، وأظهر أن ماء البحر يمتصّ كمية أكبر منه.</li>
+          <li><b>الاحتراق:</b> يطلق كربون الوقود الأحفوري القديم والوقود الحيوي إلى الجو.</li>
+        </ul>
+        <p>وكان ماء الجير «مفتاحًا» واحدًا يثبت وجود CO₂ في كل مرة. ساعدني ذلك على أن أربط كل عملية في الدورة بدليل تجريبي، وأن أفهم كيف تخلّ الأنشطة البشرية (حرق الوقود وإزالة الغابات) بتوازن هذه الدورة.</p>
+      </div></div>
+  </section>
+
+</main>
+
+<footer>
+  إعداد وتصميم: <b>أ. رتاج الراسبي</b> · العلوم البيئية للصف الحادي عشر · الفصل الدراسي الأول
+</footer>
+
+<script>
+(function(){
+  const NS='http://www.w3.org/2000/svg';
+  const $=id=>document.getElementById(id);
+
+  /* toggle answers */
+  $('toggleAns').onclick=()=>{
+    document.body.classList.toggle('hide-ans');
+    $('toggleAns').textContent=document.body.classList.contains('hide-ans')?'👁️ إظهار الإجابات':'🙈 إخفاء الإجابات';
+  };
+
+  /* bubbles helper */
+  function bubbles(g,x0,x1,yTop,yBot,ms,color){
+    let alive=true;
+    function spawn(){
+      if(!alive)return;
+      const c=document.createElementNS(NS,'circle');
+      const x=x0+Math.random()*(x1-x0);
+      c.setAttribute('cx',x);c.setAttribute('cy',yBot);c.setAttribute('r',2+Math.random()*3);
+      c.setAttribute('fill',color||'rgba(255,255,255,.9)');c.setAttribute('stroke','#9fb2bb');c.setAttribute('stroke-width','.8');
+      g.appendChild(c);
+      const t0=performance.now(),dur=900+Math.random()*600;
+      (function step(t){const p=(t-t0)/dur;if(p>=1){c.remove();return}
+        c.setAttribute('cy',yBot-(yBot-yTop)*p);requestAnimationFrame(step)})(t0);
+      setTimeout(spawn,ms);
+    }
+    spawn();
+    return ()=>{alive=false};
+  }
+  function lerpColor(a,b,p){const h=s=>[1,3,5].map(i=>parseInt(s.substr(i,2),16));const A=h(a),B=h(b);
+    return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*p).toString(16).padStart(2,'0')).join('')}
+  function fadeFill(el,from,to,dur,done){const t0=performance.now();
+    (function step(t){const p=Math.min(1,(t-t0)/dur);el.setAttribute('fill',lerpColor(from,to,p));if(p<1)requestAnimationFrame(step);else if(done)done()})(t0)}
+
+  /* section 1 */
+  let stop1;
+  $('b1').onclick=()=>{
+    $('b1').disabled=true;$('breath').setAttribute('opacity',1);
+    $('o1').textContent='تمرّ فقاعات هواء الزفير في ماء الجير…';
+    stop1=bubbles($('bub1'),140,160,152,228,90);
+    fadeFill($('lw1'),'#eef7fb','#f3f1ec',4000,()=>{stop1();$('breath').setAttribute('opacity',0);
+      $('lw1').setAttribute('fill','#f6f4ef');$('o1').textContent='✅ تحوّل ماء الجير إلى حليبي معكّر: هواء الزفير يحتوي على CO₂.'});
+  };
+  $('r1').onclick=()=>{if(stop1)stop1();$('lw1').setAttribute('fill','#eef7fb');$('b1').disabled=false;$('breath').setAttribute('opacity',0);$('o1').textContent='ماء الجير رائق عديم اللون.'};
+
+  /* section 2 */
+  let s2a,s2b,chalkTimer;
+  $('b2').onclick=()=>{
+    $('b2').disabled=true;const ch=$('chalk');ch.setAttribute('opacity',1);ch.setAttribute('rx',20);ch.setAttribute('ry',10);
+    $('o2').textContent='فوران! فقاعات غاز تتصاعد من الطباشير…';
+    s2a=bubbles($('bub2a'),55,95,155,220,60);
+    setTimeout(()=>{s2b=bubbles($('bub2b'),280,300,152,228,110);
+      fadeFill($('lw2'),'#eef7fb','#f3f1ec',4500,()=>{$('lw2').setAttribute('fill','#f6f4ef');
+        $('o2').textContent='✅ الطباشير يصغر ويذوب، وماء الجير أصبح حليبيًا: الغاز الناتج CO₂.'})},900);
+    let r=20;chalkTimer=setInterval(()=>{r-=0.5;if(r<=6){clearInterval(chalkTimer);setTimeout(()=>{s2a&&s2a();s2b&&s2b()},800)}
+      ch.setAttribute('rx',r);ch.setAttribute('ry',r/2)},150);
+  };
+  $('r2').onclick=()=>{s2a&&s2a();s2b&&s2b();clearInterval(chalkTimer);$('chalk').setAttribute('opacity',0);
+    $('lw2').setAttribute('fill','#eef7fb');$('b2').disabled=false;$('o2').textContent='الحمض رائق، وماء الجير رائق.'};
+
+  /* section 3: universal indicator race */
+  let s3,raf3;
+  const FW=['#4caf50','#9ccc3c','#d4e157','#f2e33c'];
+  const SW=['#1f7a6a','#2e8b57','#4caf50','#9ccc3c','#d4e157','#f2e33c'];
+  function ramp(cols,p){const n=cols.length-1;const i=Math.min(n-1,Math.floor(p*n));return lerpColor(cols[i],cols[i+1],p*n-i)}
+  $('b3').onclick=()=>{
+    $('b3').disabled=true;$('o3').textContent='النفخ مستمر بالقوة نفسها في الكأسين…';
+    const g=$('bub3');const st1=bubbles(g,70,130,115,230,140),st2=bubbles(g,250,310,115,230,140);s3=()=>{st1();st2()};
+    const FT=30,ST=120,SPEED=12; // seconds; animation speed factor
+    const t0=performance.now();let fDone=false,sDone=false;
+    (function step(t){
+      const sec=(t-t0)/1000*SPEED;
+      const pf=Math.min(1,sec/FT),ps=Math.min(1,sec/ST);
+      $('fw').setAttribute('fill',ramp(FW,pf));$('sw').setAttribute('fill',ramp(SW,ps));
+      if(!fDone){$('tf').textContent=Math.round(Math.min(sec,FT))+' s';if(pf>=1){fDone=true;$('tf').setAttribute('fill','#5a4a00');$('o3').textContent='🟡 الماء العذب أصبح أصفر بعد ~'+FT+' s… وماء البحر لم يتغيّر بعد!'}}
+      if(!sDone){$('ts').textContent=Math.round(Math.min(sec,ST))+' s';if(ps>=1){sDone=true;$('ts').setAttribute('fill','#5a4a00')}}
+      if(!sDone){raf3=requestAnimationFrame(step)}else{s3();$('o3').textContent='✅ ماء البحر احتاج ~'+ST+' s مقابل ~'+FT+' s للماء العذب: ماء البحر يمتصّ كمية أكبر من CO₂.'}
+    })(t0);
+  };
+  $('r3').onclick=()=>{s3&&s3();cancelAnimationFrame(raf3);$('fw').setAttribute('fill','#4caf50');$('sw').setAttribute('fill','#1f7a6a');
+    ['tf','ts'].forEach(i=>{$(i).textContent='0 s';$(i).setAttribute('fill','#fff')});$('b3').disabled=false;
+    $('o3').textContent='الكاشف: أخضر في الماء العذب، وأخضر داكن مزرقّ في ماء البحر.'};
+
+  /* section 4 */
+  let s4air=bubbles($('bub4'),240,260,152,228,420),s4,busy=false;
+  function burn(kind){
+    if(busy)return;busy=true;$('b4a').disabled=$('b4b').disabled=true;
+    const fuel=$('fuel');
+    if(kind==='wood'){fuel.innerHTML='<rect x="58" y="214" width="44" height="10" rx="3" fill="#8a5a2b" transform="rotate(-12 80 219)"/><rect x="58" y="222" width="44" height="10" rx="3" fill="#a06b38" transform="rotate(10 80 227)"/>';$('fuelLbl').textContent='قطع خشب'}
+    else{fuel.innerHTML='<rect x="62" y="200" width="36" height="40" rx="4" fill="#f5efe0" stroke="#c9bda5" stroke-width="2"/><line x1="80" y1="200" x2="80" y2="192" stroke="#333" stroke-width="2"/>';$('fuelLbl').textContent='شمعة برافين'}
+    const fl=$('flame');fl.setAttribute('opacity',1);fl.setAttribute('transform',kind==='wood'?'translate(0,22) scale(1)':'');
+    $('o4').textContent=kind==='wood'?'الخشب يحترق… الغازات تُسحب عبر ماء الجير، ويظهر دخان.':'الشمعة مشتعلة… الغازات تُسحب عبر ماء الجير.';
+    s4air();s4=bubbles($('bub4'),240,260,152,228,110);
+    fadeFill($('lw4'),'#eef7fb','#f3f1ec',kind==='wood'?3500:5000,()=>{s4();fl.setAttribute('opacity',0);$('lw4').setAttribute('fill','#f6f4ef');
+      s4air=bubbles($('bub4'),240,260,152,228,420);
+      $('o4').textContent='✅ ماء الجير أصبح حليبيًا: احتراق '+(kind==='wood'?'الخشب (وقود حيوي)':'شمع البرافين (وقود أحفوري)')+' يطلق CO₂. اضغطي «ماء جير جديد» لتجربة الوقود الآخر.';busy=false});
+  }
+  $('b4a').onclick=()=>burn('candle');$('b4b').onclick=()=>burn('wood');
+  $('r4').onclick=()=>{if(busy)return;$('lw4').setAttribute('fill','#eef7fb');$('flame').setAttribute('opacity',0);$('b4a').disabled=$('b4b').disabled=false;
+    $('o4').textContent='المضخة تعمل… فقاعات هواء في ماء الجير الرائق.'};
+})();
+</script>
+</body>
+</html>

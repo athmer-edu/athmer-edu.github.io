@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>استقصاء 1-1 | تجربة التمثيل الضوئي (إثرائي) — أ. رتاج الراسبي</title>
+<style>
+  :root{
+    --bg:#f4f6ee;--paper:#fff;--ink:#1f281f;--muted:#5e6a5c;
+    --main:#2e7d32;--main-2:#66a84a;--soft:#e4f2df;--lime:#c9e27a;
+    --sun:#f2b632;--sun-soft:#fdf3d8;--water:#3b82b5;--water-soft:#e1eef7;
+    --clay:#c8743a;--clay-soft:#fbeadb;--line:#d8dccd;--radius:18px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:"Tajawal","Cairo","Segoe UI","Noto Sans Arabic",Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.85;font-size:19px}
+  header{
+    background:
+      radial-gradient(circle at 87% 24%, rgba(255,222,120,.85) 0 34px, rgba(255,222,120,.25) 35px 70px, transparent 71px),
+      radial-gradient(circle at 12% 75%, rgba(255,255,255,.08) 0 100px, transparent 101px),
+      linear-gradient(135deg,#1b4d24,#2e7d32 50%,#7fae3e);
+    color:#fff;padding:46px 24px 70px;position:relative;overflow:hidden}
+  header .wrap{max-width:1100px;margin:auto;position:relative;z-index:1}
+  .badge{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.32);padding:4px 16px;border-radius:999px;font-size:15px}
+  .badge.x{background:var(--sun);border-color:var(--sun);color:#3a2c00;font-weight:800;margin-inline-start:6px}
+  header h1{font-size:clamp(28px,4.4vw,46px);margin:14px 0 6px;line-height:1.35}
+  header p.sub{margin:0;opacity:.93;font-size:18px}
+  .teacher{margin-top:22px;display:inline-flex;align-items:center;gap:12px;background:#fff;color:var(--main);padding:10px 20px 10px 14px;border-radius:14px;font-weight:800;font-size:20px;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+  .teacher .ic{width:38px;height:38px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-size:20px}
+  .edge{position:absolute;inset:auto 0 -2px 0;height:44px;background:var(--bg);clip-path:polygon(0 55%,6% 35%,12% 55%,20% 30%,28% 58%,38% 32%,48% 56%,58% 30%,68% 58%,78% 34%,88% 56%,95% 38%,100% 52%,100% 100%,0 100%)}
+
+  nav{position:sticky;top:0;z-index:10;background:rgba(244,246,238,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  nav .wrap{max-width:1100px;margin:auto;display:flex;gap:6px;overflow-x:auto;padding:10px 16px;align-items:center}
+  nav a{white-space:nowrap;text-decoration:none;color:var(--main);font-weight:700;font-size:16px;padding:6px 14px;border-radius:999px}
+  nav a:hover{background:var(--soft)}
+  nav button{margin-inline-start:auto;white-space:nowrap;font-size:15px;padding:7px 14px}
+
+  main{max-width:1100px;margin:auto;padding:26px 18px 60px}
+  section{margin:0 0 30px;scroll-margin-top:70px}
+  .card{background:var(--paper);border-radius:var(--radius);padding:26px 28px;border:1px solid var(--line)}
+  h2{font-size:27px;margin:0 0 16px;display:flex;align-items:center;gap:12px;color:var(--main)}
+  h2 .num{background:var(--main);color:#fff;min-width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:19px;flex:none;padding:0 8px}
+  h3{margin:18px 0 8px;font-size:21px}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
+  ul.clean{margin:0;padding:0 22px 0 0}
+  ul.clean li{margin:3px 0}
+  .ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+  .eq{direction:ltr;text-align:center;background:#fbfcf7;border:1.5px dashed var(--line);border-radius:12px;padding:10px;font-weight:700;font-family:"Segoe UI",Tahoma,sans-serif;font-size:20px;margin:10px 0}
+  .eqw{text-align:center;background:var(--soft);border-radius:12px;padding:10px;font-weight:800;margin:8px 0;font-size:20px}
+  .safety{background:var(--clay-soft);border:1px dashed var(--clay);border-radius:14px;padding:16px 20px}
+  .safety h3{color:var(--clay);margin-top:0}
+  .why{background:var(--sun-soft);border-right:6px solid var(--sun);border-radius:12px;padding:12px 16px;margin-top:10px}
+  .goal{background:var(--soft);padding:14px 16px;border-radius:14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+  .verbs{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+  .verb{background:#f3f1ea;border-radius:10px;padding:6px 12px;font-size:16px}
+
+  .beakers{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+  .bk{border-radius:14px;padding:12px 14px;text-align:center;font-weight:700}
+  .bk .l{font-size:30px;display:block}
+  .bk.a{background:var(--water-soft)} .bk.b{background:#eaf4e2} .bk.c{background:#f3eef8} .bk.d{background:var(--sun-soft)}
+
+  ol.timeline{list-style:none;padding:0;margin:0;counter-reset:s}
+  ol.timeline li{counter-increment:s;position:relative;padding:9px 56px 9px 10px;margin-bottom:7px;background:#fbfcf7;border-radius:12px}
+  ol.timeline li::before{content:counter(s);position:absolute;right:10px;top:9px;width:34px;height:34px;border-radius:50%;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:800;font-size:16px}
+  ol.timeline li .tip{display:block;font-size:15px;color:var(--muted)}
+
+  /* lab */
+  .lab{background:linear-gradient(#fbfcf7,#eef2e4);border:1px solid var(--line);border-radius:18px;padding:14px;position:relative;overflow:hidden;transition:background .6s}
+  .lab.dark{background:linear-gradient(#1e2420,#2b322c)}
+  .lab.dark .lbl{color:#dfe6dc}
+  .stage{display:grid;grid-template-columns:120px 1fr 1fr;gap:14px;align-items:end}
+  @media (max-width:760px){.stage{grid-template-columns:1fr 1fr}.lamp{grid-column:1/-1}}
+  .lamp{text-align:center}
+  .lamp svg{width:110px;height:auto}
+  .beaker{position:relative;text-align:center}
+  .beaker svg{width:100%;max-width:300px;height:auto}
+  .lbl{font-weight:800;color:var(--ink);margin-top:4px}
+  .counter{font-size:15px;color:var(--muted)}
+  .lab.dark .counter{color:#b9c4b5}
+  .controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:12px}
+  button{font-family:inherit;font-size:17px;font-weight:700;border:none;cursor:pointer;padding:10px 18px;border-radius:12px;background:var(--main);color:#fff;transition:.15s}
+  button:hover{filter:brightness(1.1)}
+  button.sun{background:var(--sun);color:#3a2c00}
+  button.dark{background:#2b322c}
+  button.ghost{background:#fff;color:var(--main);border:2px solid var(--main)}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .clock{font-size:26px;font-weight:800;text-align:center;color:var(--main);margin-top:6px}
+  .lab.dark .clock{color:var(--lime)}
+  .obs{font-weight:700;text-align:center;min-height:30px;color:var(--main)}
+  .lab.dark .obs{color:var(--lime)}
+
+  table{width:100%;border-collapse:collapse;font-size:17px;margin-top:6px}
+  th,td{border:1px solid var(--line);padding:8px 8px;text-align:center}
+  th{background:var(--soft);color:var(--main)}
+  td.a{background:#fffdf5;color:#1d4e2a;font-weight:700}
+  .cap{font-weight:800;margin:14px 0 4px;color:var(--main)}
+  .chart{background:#fbfcf7;border:1px solid var(--line);border-radius:14px;padding:8px;margin-top:12px}
+  .chart svg{width:100%;height:auto;display:block}
+
+  .qa{background:#fbfcf7;border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
+  .qa .qq{padding:14px 18px;font-weight:700;display:flex;gap:12px;align-items:flex-start}
+  .qa .qq .q{background:var(--clay);color:#fff;min-width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex:none}
+  .qa .ans{padding:6px 22px 14px 66px;border-top:1px dashed var(--line);background:#fff}
+  .qa .ans p{margin:.5em 0}
+  .qa .ans::before{content:"✅ الإجابة";display:block;font-weight:800;color:var(--main);font-size:15px;margin-top:6px}
+  body.hide-ans .ans, body.hide-ans td.a{filter:blur(7px);user-select:none}
+  body.hide-ans .ans:hover, body.hide-ans td.a:hover{filter:none}
+  .note{font-size:15px;color:var(--muted)}
+
+  footer{text-align:center;color:var(--muted);padding:26px;border-top:1px solid var(--line);font-size:16px}
+  footer b{color:var(--main)}
+  @media print{nav,.controls{display:none!important} body.hide-ans .ans, body.hide-ans td.a{filter:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="badge">العلوم البيئية · الصف الحادي عشر · الوحدة الأولى: مقدمة في الإدارة البيئية</span><span class="badge x">إثرائي</span>
+    <h1>استقصاء عملي 1-1<br>تجربة التمثيل الضوئي</h1>
+    <p class="sub">أقراص السبانخ تغطس… ثم تطفو! نقيس معدل التمثيل الضوئي بعدّ الأقراص الطافية.</p>
+    <div class="teacher"><span class="ic">🍃</span> أ. رتاج الراسبي</div>
+  </div>
+  <div class="edge"></div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <a href="#intro">المقدمة</a>
+    <a href="#tools">الأدوات والسلامة</a>
+    <a href="#prep">التمهيد والتنبّؤ</a>
+    <a href="#method">الطريقة</a>
+    <a href="#lab">المختبر التفاعلي</a>
+    <a href="#results">النتائج والتمثيل البياني</a>
+    <a href="#questions">الأسئلة</a>
+    <a href="#ext">نشاط التوسّع</a>
+    <button id="toggleAns" class="ghost">🙈 إخفاء الإجابات</button>
+  </div>
+</nav>
+
+<main>
+
+  <section id="intro" class="card">
+    <h2><span class="num">★</span> المقدمة وأهداف الاستقصاء</h2>
+    <div class="goal">📝 <span>جمع الملاحظات والقياسات والتقديرات وتسجيلها وعرضها.</span></div>
+    <div class="goal">📈 <span>تحليل بيانات التجربة للوصول إلى استنتاجات وتفسيرها.</span></div>
+    <p>الكائنات التي تقوم بالتمثيل الضوئي تلتقط طاقة الشمس لتكوّن الجلوكوز وتطلق الأكسجين. في هذه التجربة نختبر <b>معدل التمثيل الضوئي</b> في أقراص من ورق السبانخ، ونعمل في مجموعات ثنائية أو ثلاثية.</p>
+    <div class="eqw">ثاني أكسيد الكربون + ماء ← (ضوء، كلوروفيل) ← جلوكوز + أكسجين</div>
+    <div class="eq">6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂</div>
+    <div class="why">💡 <b>فكرة التجربة:</b> نسحب الهواء من داخل الأقراص فتغطس. وعند التمثيل الضوئي يتجمّع <b>الأكسجين</b> الناتج في الفراغات الهوائية داخل الورقة، فتقلّ كثافتها و<b>تطفو</b>. كلما طفت الأقراص أسرع، كان معدل التمثيل الضوئي أعلى.</div>
+  </section>
+
+  <section id="tools" class="card">
+    <h2><span class="num">🧰</span> المواد والأدوات واحتياطات السلامة</h2>
+    <div class="grid2">
+      <ul class="clean">
+        <li>أوراق سبانخ طازجة (تُحفظ في الماء لتبقى نضرة).</li>
+        <li>مثقاب، أو مصاصة شرب معدنية، أو خرّامة ورق.</li>
+        <li>بيكربونات الصوديوم (صودا الخبز).</li>
+        <li>ماء صنبور تُرك جانبًا 24 ساعة.</li>
+        <li>سائل تنظيف الأطباق.</li>
+        <li>محقنان طبيان (<span class="ltr">10 mL</span> أو أكبر، بلا إبرة).</li>
+        <li>4 كؤوس زجاجية شفافة، وأقلام للكتابة على الزجاج.</li>
+        <li>مخبار مدرّج، وملعقة كيميائيات أو ميزان إلكتروني.</li>
+        <li>مصدر ضوء (الشمس أو مصباح)، وساعة إيقاف.</li>
+      </ul>
+      <div>
+        <div class="safety">
+          <h3>⚠️ احتياطات الأمان والسلامة</h3>
+          <ul class="clean">
+            <li>تحقّقي من المواد الكيميائية المستخدمة، وتأكّدي أنك تتعاملين معها بأمان.</li>
+            <li>استخدمي الأدوات الزجاجية بحذر لمنع الكسور والجروح.</li>
+            <li>لا تلمسي المصباح الساخن، وأبعدي الماء عن الأسلاك الكهربائية.</li>
+          </ul>
+        </div>
+        <div class="why">🤔 <b>لماذا هذه المواد؟</b>
+          <ul class="clean">
+            <li><b>بيكربونات الصوديوم:</b> مصدر لثاني أكسيد الكربون الذائب.</li>
+            <li><b>سائل التنظيف:</b> يقلّل التوتر السطحي، فيبلّل سطح الورقة الشمعي، ويساعد المحلول على الدخول ويمنع التصاق الأقراص بالجدار.</li>
+            <li><b>ماء تُرك 24 ساعة:</b> ليتخلّص من الكلور وتصبح حرارته مثل حرارة الغرفة.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="prep" class="card">
+    <h2><span class="num">؟</span> التمهيد للاستقصاء</h2>
+    <ul class="clean">
+      <li>تأكّدي أن جميع الأدوات الزجاجية مسمّاة بوضوح، واكتبي على المحقنين (أ) و(ب).</li>
+      <li>جهّزي المحاليل واحفظيها في أوعية عليها أسماؤها.</li>
+      <li>تأكّدي أن المصباح جاهز فور انتهاء التحضير.</li>
+    </ul>
+    <div class="qa" style="margin-top:14px"><div class="qq"><span class="q">🔮</span><span>تنبّئي: ماذا سيحدث لأقراص السبانخ عند وضعها في ماء فيه بيكربونات الصوديوم، معرّضة لضوء الشمس؟ برّري إجابتكِ.</span></div>
+      <div class="ans">
+        <p><b>التنبّؤ:</b> ستغطس الأقراص أولًا، ثم تبدأ بالطفو واحدًا بعد الآخر، حتى تطفو كلها خلال دقائق.</p>
+        <p><b>التبرير:</b> البيكربونات توفّر CO₂، والضوء يوفّر الطاقة، فتقوم الأقراص بالتمثيل الضوئي وتطلق O₂. يتجمّع الأكسجين في الفراغات الهوائية داخل نسيج الورقة فتقلّ كثافتها وتطفو. أما الأقراص في الماء وحده فلن تطفو، أو ستطفو ببطء شديد، لقلّة CO₂ فيه.</p>
+        <p><b>بعد التجربة:</b> كان التنبّؤ صحيحًا. طفت أقراص البيكربونات تدريجيًا، وبقيت أقراص الماء في القاع تقريبًا.</p>
+      </div></div>
+    <div class="verbs"><span class="verb"><b>تنبّئي Predict:</b> اقترحي ما قد يحدث بناءً على المعلومات المتاحة.</span><span class="verb"><b>برّري Justify:</b> ادعمي الموضوع بالأدلة والحجة.</span></div>
+  </section>
+
+  <section id="method" class="card">
+    <h2><span class="num">⚙️</span> الطريقة</h2>
+    <h3 style="margin-top:0">الكؤوس الأربع</h3>
+    <div class="beakers">
+      <div class="bk a"><span class="l">أ</span>ماء</div>
+      <div class="bk b"><span class="l">ب</span>محلول البيكربونات</div>
+      <div class="bk c"><span class="l">ج</span>محلول منظّف</div>
+      <div class="bk d"><span class="l">د</span>بيكربونات + محلول منظّف</div>
+    </div>
+    <ol class="timeline" style="margin-top:14px">
+      <li>اكتبي أسماء الكؤوس: (أ) ماء، (ب) محلول البيكربونات، (ج) محلول منظّف، (د) بيكربونات ومحلول منظّف.</li>
+      <li>اخلطي <span class="ltr">0.6 g</span> (ثُمن ملعقة صغيرة) من بيكربونات الصوديوم في <span class="ltr">300 mL</span> من ماء الصنبور المتروك 24 ساعة.</li>
+      <li>ضعي في الكأس الثانية <span class="ltr">200 mL</span> ماء وقطرة من سائل التنظيف، واخلطي بلطف حتى لا تتكوّن فقاعات.</li>
+      <li>اسكبي نصف محلول البيكربونات (<span class="ltr">150 mL</span>) في الكأس الثالثة، وأضيفي قطرة من سائل التنظيف، مع التأكّد من عدم وجود فقاعات.</li>
+      <li>اقطعي 20–30 قرصًا من أوراق السبانخ بالمثقاب.<span class="tip">تجنّبي العروق والحواف، واثقبي في المناطق المسطّحة.</span></li>
+      <li>اكتبي على المحقنين: (أ) ماء، (ب) بيكربونات ومحلول تنظيف. انزعي المكبس، وضعي نصف الأقراص في كل محقن، ثم أعيدي المكبس واضغطيه ببطء لإخراج أكبر كمية من الهواء.<span class="tip">احرصي على عدم سحق الأقراص.</span></li>
+      <li>اسحبي <span class="ltr">3 mL</span> من ماء الصنبور في المحقن (أ)، ومن خليط البيكربونات والمنظّف في المحقن (ب). انقري بلطف لتتعلّق الأقراص في المحلول.</li>
+      <li>سدّي نهاية كل محقن بإصبعك، واسحبي المكبس لتكوين فراغ، وحافظي عليه نحو 10 ثوانٍ مع تحريك المحلول بلطف. كرّري حتى تغطس جميع الأقراص.<span class="tip">إن لم تغطس، ابدئي من جديد بأقراص طازجة ومحلول جديد.</span></li>
+      <li>انزعي المكبس، وصبّي أقراص المحقن (أ) في كأس الماء، وأقراص المحقن (ب) في كأس البيكربونات والمنظّف.<span class="tip">تأكّدي أن الأقراص كلها في القاع ولا تلتصق بالجوانب.</span></li>
+      <li>عرّضي الكؤوس لمصدر الضوء، وشغّلي ساعة الإيقاف.</li>
+      <li>راقبي الأقراص، ولاحظي تكوّن فقاعات صغيرة حولها.</li>
+      <li>سجّلي عدد الأقراص الطافية كل دقيقة حتى تطفو كلها (الجدول 2-1).</li>
+      <li>عندما تطفو جميع الأقراص، ضعي الكأس في خزانة مظلمة 15 دقيقة ولاحظي ما يحدث.</li>
+    </ol>
+  </section>
+
+  <section id="lab" class="card">
+    <h2><span class="num">🔬</span> المختبر التفاعلي</h2>
+    <p style="margin-top:0">محاكاة للخطوات 10–13: شغّلي الضوء، وراقبي الأقراص تطفو، ثم انقلي الكأسين إلى الخزانة المظلمة.</p>
+    <div class="lab" id="labBox">
+      <div class="stage">
+        <div class="lamp">
+          <svg viewBox="0 0 120 170">
+            <g id="rays" opacity="0">
+              <path d="M70 70 L118 40 M72 85 L120 85 M70 100 L118 130" stroke="#f2b632" stroke-width="5" stroke-linecap="round"/>
+            </g>
+            <path d="M20 160 L80 160 M50 160 L50 110" stroke="#59615a" stroke-width="7" stroke-linecap="round"/>
+            <path d="M20 60 L70 40 L70 130 L20 110 Z" fill="#59615a"/>
+            <circle id="bulb" cx="70" cy="85" r="18" fill="#d9d4c4"/>
+          </svg>
+          <div class="lbl">مصدر الضوء</div>
+        </div>
+        <div class="beaker">
+          <svg viewBox="0 0 220 230" id="bkA">
+            <path d="M20 20 L20 205 Q20 222 37 222 L183 222 Q200 222 200 205 L200 20" fill="none" stroke="#8a948b" stroke-width="4"/>
+            <rect x="23" y="55" width="174" height="165" rx="12" fill="#d7ebf7" opacity=".85"/>
+            <g class="discs"></g>
+          </svg>
+          <div class="lbl">(أ) ماء فقط</div>
+          <div class="counter">الأقراص الطافية: <b id="cA">0</b> / 10</div>
+        </div>
+        <div class="beaker">
+          <svg viewBox="0 0 220 230" id="bkD">
+            <path d="M20 20 L20 205 Q20 222 37 222 L183 222 Q200 222 200 205 L200 20" fill="none" stroke="#8a948b" stroke-width="4"/>
+            <rect x="23" y="55" width="174" height="165" rx="12" fill="#dcefe0" opacity=".9"/>
+            <g class="discs"></g>
+          </svg>
+          <div class="lbl">(د) بيكربونات + منظّف</div>
+          <div class="counter">الأقراص الطافية: <b id="cD">0</b> / 10</div>
+        </div>
+      </div>
+      <div class="clock" id="clock">⏱️ 0:00</div>
+      <div class="obs" id="obs">الأقراص كلها في القاع بعد سحب الهواء منها. شغّلي الضوء!</div>
+      <div class="controls">
+        <button class="sun" id="lightBtn">💡 شغّلي الضوء وساعة الإيقاف</button>
+        <button class="dark" id="darkBtn" disabled>🌑 ضعيها في خزانة مظلمة (15 دقيقة)</button>
+        <button class="ghost" id="resetBtn">↺ إعادة</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="results" class="card">
+    <h2><span class="num">📊</span> النتائج والتمثيل البياني</h2>
+    <div class="cap">الجدول 2-1: نتائج الاستقصاء 1-1 (10 أقراص في كل كأس)</div>
+    <table>
+      <tr><th>الزمن / دقائق</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+      <tr><th>عدد الأقراص الطافية في الماء</th><td class="a">0</td><td class="a">0</td><td class="a">0</td><td class="a">0</td><td class="a">0</td><td class="a">1</td></tr>
+      <tr><th>عدد الأقراص الطافية في البيكربونات</th><td class="a">0</td><td class="a">1</td><td class="a">3</td><td class="a">6</td><td class="a">9</td><td class="a">10</td></tr>
+    </table>
+    <p class="note">نتائج نموذجية متوقّعة. الأرقام الفعلية تختلف حسب شدة الضوء وحرارة المحلول ونضارة الأوراق، وقد يحتاج طفو كل الأقراص أكثر من 6 دقائق.</p>
+    <div class="chart"><svg id="graph" viewBox="0 0 640 380"></svg></div>
+    <p style="margin-bottom:0">📌 <b>قراءة الرسم:</b> منحنى البيكربونات يرتفع بسرعة بعد الدقيقة الأولى، ويتغيّر شكله إلى S تقريبًا، ثم يثبت عند 10 أقراص. أما منحنى الماء فيبقى قرب الصفر. إذن توفّر CO₂ يزيد معدل التمثيل الضوئي.</p>
+  </section>
+
+  <section id="questions" class="card">
+    <h2><span class="num">✎</span> أسئلة نهاية الاستقصاء العملي</h2>
+
+    <div class="qa"><div class="qq"><span class="q">أ</span><span>اذكري سبب استخدام بيكربونات الصوديوم في هذه التجربة.</span></div>
+      <div class="ans"><p>بيكربونات الصوديوم (<span class="ltr">NaHCO₃</span>) <b>مصدر لثاني أكسيد الكربون</b> في المحلول، فهي تطلق أيونات الهيدروجين كربونات (<span class="ltr">HCO₃⁻</span>) التي توفّر CO₂ الذائب. وCO₂ مادة خام ضرورية للتمثيل الضوئي، ولولاها لما وجدت الأقراص ما يكفي منه داخل المحقن والكأس.</p></div></div>
+
+    <div class="qa"><div class="qq"><span class="q">ب</span><span>حدّدي التجربة الضابطة في هذا الاستقصاء. لماذا ينبغي إجراء التجربتين في الوقت نفسه؟</span></div>
+      <div class="ans">
+        <p><b>التجربة الضابطة:</b> الأقراص في <b>الماء فقط</b> (المحقن أ والكأس أ) دون بيكربونات. نقارن بها لنثبت أن طفو الأقراص سببه توفّر CO₂ والتمثيل الضوئي. والأفضل إضافة قطرة المنظّف إلى الماء أيضًا، فيكون الفرق الوحيد هو البيكربونات.</p>
+        <p><b>لماذا في الوقت نفسه؟</b> لتتعرّض الكأسان للظروف نفسها تمامًا: شدة الضوء نفسها (ضوء الشمس يتغيّر مع الوقت والغيوم)، ودرجة الحرارة نفسها، والأوراق نفسها. هكذا يكون <b>الاختبار عادلًا</b>، ويكون المتغيّر الوحيد المختلف هو وجود البيكربونات.</p>
+      </div></div>
+
+    <div class="qa"><div class="qq"><span class="q">ج</span><span>ماذا حدث لأقراص السبانخ عندما أطلقت الأكسجين أثناء التمثيل الضوئي؟</span></div>
+      <div class="ans"><p>ظهرت فقاعات صغيرة حول الأقراص، ثم <b>طفت إلى السطح</b>. تجمّع الأكسجين الناتج في الفراغات الهوائية بين خلايا النسيج المتوسط (الإسفنجي) داخل القرص، فقلّت كثافته عن كثافة المحلول، وصار طافيًا.</p></div></div>
+
+    <div class="qa"><div class="qq"><span class="q">د</span><span>ماذا يحدث لأقراص السبانخ عند إيقاف مصدر الإضاءة؟</span></div>
+      <div class="ans"><p>في الظلام <b>يتوقّف التمثيل الضوئي</b>، لكن <b>التنفّس يستمر</b>. تستهلك الخلايا الأكسجين المخزّن في الفراغات الهوائية وتنتج CO₂، وهو أكثر ذوبانًا في الماء فيذوب في المحلول. فيقلّ الغاز داخل الأقراص وتزداد كثافتها، و<b>تغطس تدريجيًا</b> إلى القاع خلال الـ 15 دقيقة.</p></div></div>
+
+    <div class="qa"><div class="qq"><span class="q">هـ</span><span>ما المركّبان الضروريان لحدوث عملية التمثيل الضوئي؟</span></div>
+      <div class="ans"><p><b>ثاني أكسيد الكربون (CO₂)</b> و<b>الماء (H₂O)</b>، مع وجود الضوء مصدرًا للطاقة والكلوروفيل لامتصاصه.</p></div></div>
+
+    <div class="qa"><div class="qq"><span class="q">و</span><span>ما العوامل غير المعروفة التي تؤثّر في نتائج التجربة؟</span></div>
+      <div class="ans">
+        <p>هي عوامل لم نضبطها أو لم نقسها بدقة، وقد تغيّر النتائج:</p>
+        <ul class="clean">
+          <li><b>درجة حرارة المحلول:</b> قد ترتفع بحرارة المصباح أو الشمس فتزيد معدل التفاعلات الإنزيمية.</li>
+          <li><b>شدة الضوء:</b> تغيّر ضوء الشمس بالغيوم، واختلاف بُعد كل كأس عن المصباح.</li>
+          <li><b>حالة الأوراق:</b> عمرها وسُمكها ونضارتها، ومحتواها من الكلوروفيل.</li>
+          <li><b>تلف الأقراص</b> أثناء الثقب أو السحق في المحقن.</li>
+          <li><b>كمية الهواء</b> التي بقيت في الأقراص بعد سحب الفراغ.</li>
+          <li>كمية CO₂ الذائبة أصلًا في ماء الصنبور، والتركيز الدقيق للبيكربونات والمنظّف.</li>
+          <li>التصاق بعض الأقراص بجدار الكأس.</li>
+        </ul>
+      </div></div>
+
+    <div class="qa"><div class="qq"><span class="q">ز</span><span>اعرضي نتائجك في تمثيل بياني باستخدام رموز مختلفة للتجربتين، واكتبي مسمّى المحورين والرموز.</span></div>
+      <div class="ans">
+        <ul class="clean">
+          <li><b>المحور الأفقي (س):</b> الزمن / دقائق (المتغيّر المستقل).</li>
+          <li><b>المحور الرأسي (ص):</b> عدد الأقراص الطافية (المتغيّر التابع).</li>
+          <li><b>الرموز:</b> ● دائرة للبيكربونات و ▲ مثلث للماء، مع مفتاح يوضّحهما وعنوان للرسم.</li>
+          <li>نصل النقاط بخط أو منحنى لكل تجربة.</li>
+        </ul>
+        <p>الرسم البياني في قسم «النتائج والتمثيل البياني» مرسوم بهذه المواصفات من بيانات الجدول 2-1.</p>
+      </div></div>
+  </section>
+
+  <section id="ext" class="card">
+    <h2><span class="num">🚀</span> نشاط للتوسّع</h2>
+    <p style="margin-top:0">جرّبي التجربة مع أنواع مختلفة من الأوراق أو في ظروف مختلفة، ولاحظي هل تختلف الأوراق في سلوكها. تجنّبي العروق دائمًا عند ثقب الأقراص، وراعي المتغيّرات لتتمكّني من مقارنة النتائج، وناقشي زميلاتك في الاختلافات وأسبابها.</p>
+    <div class="qa"><div class="qq"><span class="q">💡</span><span>أمثلة مقترحة ونتائجها المتوقّعة</span></div>
+      <div class="ans">
+        <ul class="clean">
+          <li><b>أنواع أوراق مختلفة</b> (خسّ، نعناع، ملوخية، أوراق أشجار): الأوراق الرقيقة الغنية بالكلوروفيل تطفو أسرع. الأوراق السميكة أو الشمعية أبطأ، لأن الغاز ينتشر فيها بصعوبة.</li>
+          <li><b>شدة الضوء:</b> نغيّر بُعد المصباح (10، 20، 30، 40 cm). كلما قرب المصباح زاد معدل الطفو حتى حدّ معيّن، ثم يصبح عامل آخر هو المحدِّد.</li>
+          <li><b>لون الضوء:</b> نستخدم مرشّحات ملوّنة. الضوء الأحمر والأزرق يعطيان معدلًا أعلى من الأخضر، لأن الكلوروفيل يعكس الأخضر.</li>
+          <li><b>تركيز البيكربونات:</b> 0.2 و 0.6 و 1.0 g لكل 300 mL. زيادة CO₂ تزيد المعدل حتى يصبح الضوء هو العامل المحدِّد.</li>
+          <li><b>درجة الحرارة:</b> ماء بارد، وبحرارة الغرفة، ودافئ. المعدل يزيد مع الحرارة حتى حدّ مثالي، ثم يقلّ إذا تلفت الإنزيمات.</li>
+        </ul>
+        <p><b>المتغيّرات الضابطة:</b> عدد الأقراص وحجمها، وحجم المحلول، ونوع الورقة (إلا إذا كانت هي المتغيّر المستقل)، وزمن سحب الفراغ.</p>
+      </div></div>
+  </section>
+
+</main>
+
+<footer>
+  إعداد وتصميم: <b>أ. رتاج الراسبي</b> · العلوم البيئية للصف الحادي عشر · الفصل الدراسي الأول
+</footer>
+
+<script>
+(function(){
+  const NS='http://www.w3.org/2000/svg', $=id=>document.getElementById(id);
+
+  $('toggleAns').onclick=()=>{document.body.classList.toggle('hide-ans');
+    $('toggleAns').textContent=document.body.classList.contains('hide-ans')?'👁️ إظهار الإجابات':'🙈 إخفاء الإجابات'};
+
+  /* ---------- graph ---------- */
+  (function(){
+    const W=640,H=380,L=70,R=150,T=24,B=60, svg=$('graph');
+    const water=[0,0,0,0,0,0,1], bic=[0,0,1,3,6,9,10];
+    const X=t=>L+t/6*(W-L-R), Y=v=>H-B-v/10*(H-T-B);
+    let g='';
+    for(let i=0;i<=6;i++){g+='<line x1="'+X(i)+'" y1="'+T+'" x2="'+X(i)+'" y2="'+(H-B)+'" stroke="#e3e7d9"/><text x="'+X(i)+'" y="'+(H-B+22)+'" font-size="14" text-anchor="middle" fill="#5e6a5c">'+i+'</text>'}
+    for(let v=0;v<=10;v+=2){g+='<line x1="'+L+'" y1="'+Y(v)+'" x2="'+(W-R)+'" y2="'+Y(v)+'" stroke="#e3e7d9"/><text x="'+(L-10)+'" y="'+(Y(v)+5)+'" font-size="14" text-anchor="end" fill="#5e6a5c">'+v+'</text>'}
+    g+='<line x1="'+L+'" y1="'+(H-B)+'" x2="'+(W-R)+'" y2="'+(H-B)+'" stroke="#1f281f" stroke-width="2"/><line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(H-B)+'" stroke="#1f281f" stroke-width="2"/>';
+    g+='<text x="'+((L+W-R)/2)+'" y="'+(H-14)+'" font-size="16" font-weight="700" text-anchor="middle" fill="#2e7d32">الزمن / دقائق</text>';
+    g+='<text transform="translate(22,'+((T+H-B)/2)+') rotate(-90)" font-size="16" font-weight="700" text-anchor="middle" fill="#2e7d32">عدد الأقراص الطافية</text>';
+    const path=(d,c,dash)=>'<polyline fill="none" stroke="'+c+'" stroke-width="3" '+(dash?'stroke-dasharray="7 5"':'')+' points="'+d.map((v,i)=>X(i)+','+Y(v)).join(' ')+'"/>';
+    g+=path(bic,'#2e7d32')+path(water,'#3b82b5',true);
+    bic.forEach((v,i)=>g+='<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="7" fill="#2e7d32" stroke="#fff" stroke-width="2"/>');
+    water.forEach((v,i)=>{const x=X(i),y=Y(v);g+='<polygon points="'+x+','+(y-8)+' '+(x-7)+','+(y+6)+' '+(x+7)+','+(y+6)+'" fill="#3b82b5" stroke="#fff" stroke-width="1.5"/>'});
+    const lx=W-R+18;
+    g+='<rect x="'+(lx-6)+'" y="'+(T+4)+'" width="132" height="76" rx="10" fill="#fff" stroke="#d8dccd"/>';
+    g+='<circle cx="'+(lx+112)+'" cy="'+(T+28)+'" r="7" fill="#2e7d32"/><text x="'+(lx+98)+'" y="'+(T+33)+'" font-size="14" text-anchor="end">بيكربونات</text>';
+    const ly=T+58;g+='<polygon points="'+(lx+112)+','+(ly-8)+' '+(lx+105)+','+(ly+6)+' '+(lx+119)+','+(ly+6)+'" fill="#3b82b5"/><text x="'+(lx+98)+'" y="'+(ly+5)+'" font-size="14" text-anchor="end">ماء</text>';
+    svg.innerHTML=g;
+  })();
+
+  /* ---------- floating-disc lab ---------- */
+  const N=10, beakers={A:$('bkA'),D:$('bkD')};
+  let discs={A:[],D:[]}, timer=null, t=0, phase='idle';
+  // float times in simulated seconds
+  function makeTimes(kind){
+    if(kind==='A'){const arr=Array(N).fill(Infinity);arr[0]=330+Math.random()*30;return arr}
+    const base=[75,130,150,185,200,215,250,265,280,320];return base.map(v=>v+Math.random()*20-10).sort((a,b)=>a-b);
+  }
+  function build(){
+    Object.keys(beakers).forEach(k=>{
+      const g=beakers[k].querySelector('.discs');g.innerHTML='';discs[k]=[];
+      const times=makeTimes(k);
+      for(let i=0;i<N;i++){
+        const x=40+i*15.5+Math.random()*4, yb=205-(i%2)*6;
+        const grp=document.createElementNS(NS,'g');
+        const e=document.createElementNS(NS,'ellipse');
+        e.setAttribute('rx',11);e.setAttribute('ry',4);e.setAttribute('fill','#3f8f3a');e.setAttribute('stroke','#2a6127');
+        grp.appendChild(e);
+        const b=document.createElementNS(NS,'g');grp.appendChild(b);
+        g.appendChild(grp);
+        discs[k].push({grp,e,b,x,yb,y:yb,ty:yb,ft:times[i],floating:false,bub:0});
+        place(discs[k][i]);
+      }
+    });
+  }
+  function place(d){d.e.setAttribute('cx',d.x);d.e.setAttribute('cy',d.y);
+    d.b.innerHTML='';for(let j=0;j<d.bub;j++){const c=document.createElementNS(NS,'circle');c.setAttribute('cx',d.x-8+j*4);c.setAttribute('cy',d.y-5-(j%2)*2);c.setAttribute('r',1.6);c.setAttribute('fill','#fff');c.setAttribute('stroke','#9cc');d.b.appendChild(c)}}
+  function fmt(s){const m=Math.floor(s/60),r=Math.floor(s%60);return m+':'+String(r).padStart(2,'0')}
+  function count(k){return discs[k].filter(d=>d.floating).length}
+
+  function tick(){
+    t+=phase==='light'?3:6; // simulated seconds per frame step
+    ['A','D'].forEach(k=>discs[k].forEach(d=>{
+      if(phase==='light'){
+        if(k==='D' && !d.floating && t>d.ft-60) d.bub=Math.min(4,Math.floor((t-(d.ft-60))/15));
+        if(!d.floating && t>=d.ft){d.floating=true;d.ty=62+Math.random()*6}
+      }else if(phase==='dark'){
+        if(d.floating && t>=d.sinkAt){d.floating=false;d.ty=d.yb;d.bub=0}
+      }
+      d.y+= (d.ty-d.y)*0.12; place(d);
+    }));
+    $('cA').textContent=count('A');$('cD').textContent=count('D');
+    if(phase==='light'){
+      $('clock').textContent='⏱️ '+fmt(t);
+      const c=count('D');
+      $('obs').textContent=c===0?'فقاعات أكسجين صغيرة تبدأ بالظهور حول الأقراص في كأس البيكربونات…':
+        (c<N?'🍃 بدأت الأقراص تطفو في البيكربونات ('+c+' من '+N+')، وأقراص الماء ما زالت في القاع.':'✅ طفت جميع أقراص البيكربونات! يمكنكِ الآن نقلها إلى الخزانة المظلمة.');
+      if(c===N){$('darkBtn').disabled=false}
+      if(t>=380){clearInterval(timer);timer=null}
+    }else if(phase==='dark'){
+      $('clock').textContent='🌑 في الظلام: '+fmt(t);
+      const c=count('D');
+      $('obs').textContent=c>0?'الأقراص تغطس تدريجيًا… (التنفّس مستمر والتمثيل الضوئي متوقّف)':'✅ بعد 15 دقيقة في الظلام غطست الأقراص من جديد.';
+      if(t>=900){clearInterval(timer);timer=null}
+    }
+  }
+  $('lightBtn').onclick=()=>{
+    if(phase!=='idle')return;phase='light';t=0;
+    $('rays').setAttribute('opacity',1);$('bulb').setAttribute('fill','#ffe37a');$('lightBtn').disabled=true;
+    timer=setInterval(tick,50);
+  };
+  $('darkBtn').onclick=()=>{
+    if(timer)clearInterval(timer);phase='dark';t=0;$('darkBtn').disabled=true;
+    $('labBox').classList.add('dark');$('rays').setAttribute('opacity',0);$('bulb').setAttribute('fill','#555');
+    ['A','D'].forEach(k=>discs[k].forEach(d=>{d.sinkAt=200+Math.random()*600;d.bub=0}));
+    timer=setInterval(tick,50);
+  };
+  $('resetBtn').onclick=()=>{
+    if(timer)clearInterval(timer);timer=null;phase='idle';t=0;
+    $('labBox').classList.remove('dark');$('rays').setAttribute('opacity',0);$('bulb').setAttribute('fill','#d9d4c4');
+    $('lightBtn').disabled=false;$('darkBtn').disabled=true;$('clock').textContent='⏱️ 0:00';
+    $('obs').textContent='الأقراص كلها في القاع بعد سحب الهواء منها. شغّلي الضوء!';
+    build();$('cA').textContent=0;$('cD').textContent=0;
+  };
+  build();
+})();
+</script>
+</body>
+</html>

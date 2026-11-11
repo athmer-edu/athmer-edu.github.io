@@ -293,6 +293,16 @@ footer .hand{font-size:20px;color:var(--palm)}
 .w-stage svg,.widget.static svg{width:100%;height:auto;display:block}
 .w-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
 .w-cap{flex:1;min-width:200px;color:var(--soft);font-size:15px}
+.ew-fig svg{display:block;width:100%;height:auto;border-radius:14px}
+.ew-card{margin-top:12px;padding:12px 16px;border-radius:12px;background:var(--palm-tint);min-height:56px}.ew-card h4{margin:0 0 4px;font-family:var(--display);font-size:18px;color:var(--palm)}.ew-card p{margin:4px 0}
+.ew-q{font-weight:600;margin:0 0 10px}.ew-b{display:flex;gap:8px;flex-wrap:wrap}
+.ew-sust{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}.ew-sc{padding:12px;border-radius:12px;box-shadow:inset 0 0 0 1px var(--rule)}.ew-sc p{margin:0 0 8px}.ew-sc.ok{box-shadow:inset 0 0 0 2px #3F8A5E;background:color-mix(in srgb,#3F8A5E 8%,transparent)}.ew-sc.no{box-shadow:inset 0 0 0 2px #C8473A;background:color-mix(in srgb,#C8473A 8%,transparent)}.ew-why{margin-top:8px;font-size:15px}
+.ew-iq .btn.ew-ok{box-shadow:inset 0 0 0 2px #3F8A5E;color:#2D6B47}.ew-iq .btn.ew-no{box-shadow:inset 0 0 0 2px #C8473A;color:#C8473A}
+.ew-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}@media(max-width:700px){.ew-two{grid-template-columns:1fr}}
+.ew-rng{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 10px}.ew-rng input[type=range]{flex:1;min-width:140px}.ew-rng select,.ew-rng input[type=number]{font:inherit;padding:4px 8px;border-radius:8px;border:1px solid var(--rule);background:var(--sheet);color:var(--ink)}
+.ew-meter{margin-top:8px}.ew-meter>span{font-size:14px;color:var(--soft)}.ew-meter>div{height:16px;border-radius:9px;background:var(--rule);overflow:hidden;margin:4px 0}.ew-meter i{display:block;height:100%;background:linear-gradient(90deg,#7FB069,#3F8A5E);transition:width .3s}
+.ew-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.wp,.cp,.hl,.wn,.sb,.tb{outline:none}.wp:focus-visible,.cp:focus-visible,.wn:focus-visible{outline:3px solid var(--date)}
 .legend{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--soft)}
 .legend i{font-style:normal;display:inline-grid;place-items:center;border-radius:50%}
 .k-ion{width:20px;height:20px;background:var(--ct);box-shadow:inset 0 0 0 1.5px var(--c);color:var(--c);font-weight:700;font-size:13px}
@@ -572,8 +582,13 @@ select.no{border-color:var(--chem);box-shadow:0 0 0 1px var(--chem)}
 <script src="content/chem10-2-2.js"></script>
 <script src="content/chem10-2-3.js"></script>
 <script src="content/chem10-2-4.js"></script>
+<script src="content/env11-1-1.js"></script>
+<script src="content/env11-1-2.js"></script>
+<script src="content/env11-1-3.js"></script>
 <script src="js/art2.js"></script>
+<script src="js/envart.js"></script>
 <script src="js/widgets.js"></script>
+<script src="js/widgets-env.js"></script>
 <script src="js/game.js"></script>
 <script>
 /* ===== المنهج (من فهرس كتاب الطالب) ===== */
@@ -757,7 +772,7 @@ function vSubject(sk){
         <h1>${s.name}</h1>
         <p class="lede">أربع وحدات و${p.t} درسًا. افتحي أي درس لتجدي شرحه وملخصه وأنشطته وأسئلته.</p>
         <div class="progress"><span class="track"><i style="width:${p.p}%"></i></span><span>أثمر ${p.d} من ${p.t}</span></div>
-        ${(()=>{const nx=lessonsOf(sk).find(x=>st(x.id)!=="fruit");return nx?`<a class="btn" style="margin-top:22px" href="#${nx.id}">${p.d?"الدرس التالي":"ابدأ من الدرس الأول"}: ${nx.l[1]}</a>`:`<p class="hand" style="font-size:22px;color:var(--date);margin:18px 0 0">أثمرت شجرتك كلها، أحسنتِ!</p>`})()}
+        ${(()=>{const nx=lessonsOf(sk).find(x=>st(x.id)!=="fruit");return nx?`<a class="btn" style="margin-top:22px" href="#${nx.id}">${p.d?"الدرس التالي":"ابدئي من الدرس الأول"}: ${nx.l[1]}</a>`:`<p class="hand" style="font-size:22px;color:var(--date);margin:18px 0 0">أثمرت شجرتك كلها، أحسنتِ!</p>`})()}
       </div>
       <figure class="tree-card" style="margin:0">${tree(sk)}<figcaption>شجرتك في ${s.name}</figcaption></figure>
     </div></header>
@@ -884,7 +899,7 @@ function hydrate(id){
     const svg=el.querySelector("svg");const eg=svg.querySelector(".els");let pts="";for(let y=0;y<g.rows;y++)for(let x=0;x<g.cols;x++){pts+=`<circle cx="${10+g.gap*(x+1)}" cy="${10+g.gap*(y+1)}" r="5" class="e"/>`}eg.innerHTML=pts;
     let n=0;el.querySelector('[data-a="hit"]').onclick=e=>{n++;svg.querySelectorAll(".row").forEach((r,i)=>{r.style.transform=`translateX(${-(g.rows-1-i)*(n%2?g.gap/2:0)}px)`});e.target.textContent=n%2?"أعد الطبقات":"اطرقي الفلز";el.querySelector(".w-cap").textContent=n%2?"انزلقت الطبقات فوق بعضها، وبقي بحر الإلكترونات يمسكها، فتغيّر الشكل ولم يتفكك الفلز.":"جرّبي: اضغطي «اطرقي الفلز» وراقبي الطبقات."};
   });
-  document.querySelectorAll('[data-widget="slides"]').forEach(el=>{const C=L(id);el.className="widget slot";el.innerHTML=C&&C.slides?`<div class="deck"><iframe src="${C.slides}" title="عرض الدرس" loading="lazy" allow="fullscreen"></iframe></div><div class="w-bar"><a class="btn sm" href="${C.slides}" target="_blank" rel="noopener">فتح العرض في صفحة كاملة</a><span class="w-cap">العرض نفسه الذي شُرح في الحصة. استخدمي الأسهم أو زر «التالي» للتنقل.</span></div>`:`<div class="slide"><div><h3>عرض الدرس</h3><p>سيُضاف هنا عرض الدرس.</p></div></div>`});
+  document.querySelectorAll('[data-widget="slides"]').forEach(el=>{const C=L(id),src=el.dataset.src||(C&&C.slides);el.className="widget slot";el.innerHTML=src?`<div class="deck"><iframe src="${src}" title="عرض الدرس" loading="lazy" allow="fullscreen"></iframe></div><div class="w-bar"><a class="btn sm" href="${src}" target="_blank" rel="noopener">فتح العرض في صفحة كاملة</a><span class="w-cap">العرض نفسه الذي شُرح في الحصة. استخدمي الأسهم أو زر «التالي» للتنقل.</span></div>`:`<div class="slide"><div><h3>عرض الدرس</h3><p>سيُضاف هنا عرض الدرس.</p></div></div>`});
   /* التنقل داخل الشرح */
   document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{const go=b.dataset.go;const jump=()=>{const t=document.getElementById(go);if(t)t.scrollIntoView({behavior:reduce?"auto":"smooth",block:"start"})};if(tab!=="explain"){tab="explain";render();setTimeout(jump,30)}else jump()});
   /* معايير النجاح */
