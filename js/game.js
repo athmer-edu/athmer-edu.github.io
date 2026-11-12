@@ -142,7 +142,7 @@ function endLevel(stars){
   $("#again").onclick=()=>startLevel(id,i);
   const n=$("#next");if(n)n.onclick=()=>startLevel(id,i+1);
   const m=$("#toMap2");if(m)m.onclick=()=>{PLAY=null;render()};
-  if(gameTotals(id).done===C.activities.length&&last){toast("أنهيتِ كل المستويات! خطوة جديدة نحو الشهادة")}
+  if(gameTotals(id).done===C.activities.length&&last){toast("أنهيتِ كل المستويات! أحسنتِ")}
 }
 function hydrateStatic(){if(window.__staticLattice)window.__staticLattice()}
 
@@ -157,15 +157,15 @@ function pathState(id){const C=L(id);if(!C)return null;const seen=((S.seen||{})[
 function finishBox(id,sk){
   const P=pathState(id),done=st(id)==="fruit";
   if(!P)return done?`<div class="finish"><p>أثمر هذا الدرس في شجرتك.</p><a class="btn ghost sm" href="#${sk}">العودة إلى الوحدات</a></div>`:`<div class="finish"><p>أنهيتِ الدرس وفهمتِه؟</p><button class="btn date" id="done">${IC.fruit}إنهاء الدرس وإضافة ثمرته</button></div>`;
-  const steps=[["الشرح","افتحي تبويب الشرح وشاهدي العرض",P.seen,"explain"],["الأنشطة",`أنهي مستويات اللعبة (${P.T.done}/${P.T.n})`,P.game,"activities"],["أسئلة الاختبارات",`حلّي أسئلة الاختيار من متعدد (${Math.min(P.ex.n||0,P.nX)}/${P.nX})`,P.exam,"exams"]];
-  const ready=steps.every(s=>s[2]);
-  return `<div class="path"><div class="path-h"><b>طريق الإثمار</b><span class="soft">ثلاث خطوات، وبعدها شهادتك</span></div>
-   <ol class="path-s">${steps.map((s,i)=>`<li class="${s[2]?'ok':''}"><button data-gotab="${s[3]}"><span class="dot">${s[2]?'✓':i+1}</span><span><b>${s[0]}</b><small>${s[1]}</small></span></button></li>`).join("")}<li class="${done?'ok':''} cert-step"><span class="dot">${done?'✓':'★'}</span><span><b>الشهادة</b><small>${done?'استلمتِها':'تُفتح بعد الخطوات الثلاث'}</small></span></li></ol>
+  const steps=[["الشرح","افتحي تبويب الشرح وشاهدي العرض",P.seen,"explain"],["الأنشطة (اختيارية)",`نجومها ترفع وسام شهادتكِ (${P.T.done}/${P.T.n})`,P.game,"activities",1],["أسئلة الاختبارات",`حلّي أسئلة الاختيار من متعدد (${Math.min(P.ex.n||0,P.nX)}/${P.nX})`,P.exam,"exams"]];
+  const ready=steps.every(s=>s[2]||s[4]);
+  return `<div class="path"><div class="path-h"><b>طريق الإثمار</b><span class="soft">الشرح وأسئلة الاختبارات، وبعدها شهادتك</span></div>
+   <ol class="path-s">${steps.map((s,i)=>`<li class="${s[2]?'ok':''}${s[4]?' opt':''}"><button data-gotab="${s[3]}"><span class="dot">${s[2]?'✓':i+1}</span><span><b>${s[0]}</b><small>${s[1]}</small></span></button></li>`).join("")}<li class="${done?'ok':''} cert-step"><span class="dot">${done?'✓':'★'}</span><span><b>الشهادة</b><small>${done?'استلمتِها':'تُفتح بعد الشرح وأسئلة الاختبارات'}</small></span></li></ol>
    <div class="path-a">${done?`<button class="btn date" id="cert">${IC.fruit}عرض شهادتي</button>`:`<button class="btn date" id="done" ${ready?'':'disabled'}>${IC.fruit}إنهاء الدرس واستلام الشهادة</button>`}</div></div>`;
 }
 
 /* ===== الشهادة ===== */
-function medalOf(id){const P=pathState(id);const g=P.T.max?P.T.stars/P.T.max:1;const e=P.nX?(P.ex.best||0)/P.nX:1;const sc=Math.round((g*.5+e*.5)*100);return sc>=85?{k:"ذهبية",c:"#C9962B",c2:"#F2D27A",sc}:sc>=65?{k:"فضية",c:"#8A97A0",c2:"#D9E1E6",sc}:{k:"برونزية",c:"#A3653A",c2:"#E3B08A",sc}}
+function medalOf(id){const P=pathState(id);const g=P.T.max?P.T.stars/P.T.max:1;const e=P.nX?(P.ex.best||0)/P.nX:1;const sc=Math.round((P.T.done?Math.max(e,g*.5+e*.5):e)*100);return sc>=85?{k:"ذهبية",c:"#C9962B",c2:"#F2D27A",sc}:sc>=65?{k:"فضية",c:"#8A97A0",c2:"#D9E1E6",sc}:{k:"برونزية",c:"#A3653A",c2:"#E3B08A",sc}}
 async function showCert(id){
   const f=find(id),s=SUBJECTS[f.sk];const acct=(S.user&&S.user.name)||"";if(!S.certNameEdited)S.certName=acct;
   const ov=document.createElement("div");ov.className="cert-ov";ov.innerHTML=`<div class="cert-box" role="dialog" aria-modal="true" aria-label="شهادة إتمام الدرس"><div class="cert-top"><label for="cn">اسمكِ في الشهادة <small style="font-weight:400;color:var(--soft)">(من حسابكِ، ويمكنكِ تصحيحه)</small></label><input id="cn" value="${S.certName.replace(/"/g,"&quot;")}" maxlength="40"><button class="btn ghost sm" id="cx">إغلاق</button></div><canvas id="cv" width="1600" height="1130"></canvas><div class="cert-act"><a class="btn" id="dl" download="شهادة-${f.l[0]}.png">تحميل الشهادة</a><button class="btn ghost" id="pr">طباعة</button></div></div>`;
