@@ -10,7 +10,7 @@ let idx=0,S={},cur={};
 const QA=(Q,cols=1,fs=30)=>`<div class="qa" style="gap:12px;grid-template-columns:repeat(${cols},1fr)">${Q.map((q,i)=>`<div class="card" tabindex="0" style="padding:8px 20px"><div class="q" style="font-size:calc(${fs}px*var(--fs))">${q[0]}</div><div class="a" style="font-size:calc(${fs}px*var(--fs))">${q[1]}</div><div class="tapme">اضغطي لإظهار الإجابة</div></div>`).join('')}</div>`;
 const C5=(C,cols)=>`<div class="cols5" style="grid-template-columns:repeat(${cols||C.length},1fr)">${C.map((c,i)=>`<div class="c5" style="--c:${c[0]};justify-content:center" data-s="${i+1}">${c[3]?`<span class="no">${ar(i+1)}</span>`:''}<div class="tt">${c[1]}</div><div class="why">${c[2]}</div></div>`).join('')}</div>`;
 function home(t1,t2,sub,pages,fig,cap){return el=>{el.innerHTML=`<div class="home"><div class="col" style="gap:20px">
-  <div class="sub">العلوم البيئية • الصف الحادي عشر • الوحدة الأولى: مقدمة في الإدارة البيئية</div>
+  <div class="sub">العلوم البيئية • الصف الحادي عشر • ${typeof DECK_UNIT!=="undefined"?DECK_UNIT:"الوحدة الأولى: مقدمة في الإدارة البيئية"}</div>
   <h1>${t1} <span>${t2}</span></h1><div class="sub" style="color:var(--turq)">${sub}</div>
   <div class="sub">إعداد: أ. رتاج الراسبي • كتاب الطالب صـ ${pages} • ٤٠ دقيقة</div>
   <div><button class="big" id="go1">ابدئي الدرس ←</button></div></div>

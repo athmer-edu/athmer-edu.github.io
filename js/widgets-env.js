@@ -91,3 +91,142 @@ W.oman=el=>{el.className="widget";
 /* مختبر إثرائي داخل الصفحة: <div data-widget="sim" data-src="..." data-t="..."> */
 W.sim=el=>{el.className="sim-box";el.innerHTML=`<div class="sim-head"><b>${el.dataset.t}</b><a href="${el.dataset.src}" target="_blank" rel="noopener">فتح بملء الشاشة</a></div><iframe src="${el.dataset.src}" loading="lazy" title="${el.dataset.t}"></iframe>`};
 })();
+
+/* ===== رسومات تفاعلية: العلوم البيئية، الوحدة الثانية (البحوث البيئية وجمع البيانات) ===== */
+(function(){
+if(!window.ENVART||!window.ENVART.smethod)return;
+const E=window.ENVART,W=window.WIDGETS;
+const bar=cap=>`<div class="w-bar"><span class="w-cap">${cap}</span></div>`;
+const $q=(el,s)=>el.querySelector(s);
+const r2=(x,d=3)=>+x.toFixed(d);
+
+/* تصنيف عام: <div data-widget="cls" data-k="qq"> */
+const CLS={
+ qq:{q:"صنّفي كل مثال: بيانات نوعية أم بيانات كمية؟",c:["نوعية","كمية"],it:[
+  ["أطوال جميع الطالبات في صف دراسي واحد",1,"قياسات عددية."],["آراء الناس بخصوص الحلوى الأفضل مذاقًا",0,"آراء وصفية لا تُعد."],
+  ["حضور 500 شخص ندوة",1,"عدد."],["دراسة حالة في كتاب مدرسي",0,"وصف."],["إجابات «نعم» و«لا» في استبانة",0,"كلمات (فئات) لا قياس."],
+  ["صور فوتوجرافية للحياة البرية",0,"صور = بيانات نوعية."],["متوسط درجة الحرارة اليومية لبلدة على مدى شهر",1,"قياس عددي."],["وصف لدب قطبي",0,"وصف."],
+  ["مساحات قاعات التدريس بالمتر المربع",1,"قياس عددي (m²)."],["مذكرات وصفية لعالم عن عمله الميداني",0,"ملاحظات وصفية."]]},
+ hyp:{q:"هل هذه العبارة فرضية جيدة؟",c:["فرضية جيدة","ليست فرضية جيدة"],it:[
+  ["تناقص هطول الأمطار السنوي يتسبب في موت النباتات في هذه المنطقة.",0,"جملة قصيرة فيها سبب ونتيجة، ويمكن اختبارها."],
+  ["لماذا تموت النباتات في هذه المنطقة؟",1,"هذا سؤال، والفرضية لا تكون على شكل سؤال."],
+  ["تسرّب مواد سامة لوّث التربة فماتت النباتات.",0,"سبب ونتيجة، ويمكن اختبارها بتحليل التربة."],
+  ["النباتات جميلة في فصل الربيع.",1,"رأي لا يتضمن سببًا ونتيجة، ولا يمكن اختباره بتجربة."],
+  ["نمو النبات يتحسن عند إضافة الأسمدة السائلة إلى مياه الري.",0,"قابلة للاختبار بمجموعة ضابطة وتجريبية."],
+  ["ربما يحدث شيء ما للأسماك بسبب أشياء كثيرة في البحر والهواء والشمس والناس.",1,"غير مختصرة وغير محددة، فلا يمكن اختبارها."]]},
+ gtype:{q:"ما التمثيل البياني الأنسب لكل مجموعة بيانات؟",c:["أعمدة أو دائري","خطي","مبعثر"],it:[
+  ["عدد كل حيوان (زرافة، فيل، ظبي) في محمية",0,"بيانات ذات فئات."],["درجة الحرارة اليومية في موقعين خلال أسبوعين",1,"بيانات مستمرة تتغير مع الزمن."],
+  ["طول الشجرة مقابل قطرها لعشرين شجرة",2,"علاقة بين متغيرين مستمرين."],["عدد صغار البيسون في أربع محميات",0,"فئات (محميات)."],
+  ["عدد أسماك السلمون كل عام من 2007 إلى 2016",1,"بيانات مستمرة مع الزمن."],["مستوى الزئبق في التربة مقابل البعد عن المنجم",1,"تغيّر قيمة مع المسافة (الكتاب يطلب تمثيلًا خطيًا)."]]},
+ rs:{q:"عشوائية أم منتظمة؟",c:["عشوائية","منتظمة"],it:[
+  ["سحب أرقام من حقيبة لتحديد مربعات الشبكة",0,"الاختيار بالقرعة."],["كل ثالث منزل في الجانب الأيسر من الشارع",1,"فاصل منتظم."],
+  ["عينة بعد كل خمسة أمتار على النمط الشبكي",1,"مسافات منتظمة."],["إحداثيات ينتجها برنامج حاسوبي",0,"أرقام عشوائية."],
+  ["مربع قياسي كل 3 m على مقطع من المد المنخفض إلى المد العالي",1,"مسافات منتظمة على مقطع."],["تقلل تحيز الباحث لأن لكل فرد فرصة متساوية",0,"هذه ميزة العشوائية."]]},
+ tech:{q:"اختاري تقنية جمع العينات المناسبة:",c:["المربع القياسي","المصيدة الشراكية","شبكة الاصطياد","الجمع بالركل","ضع علامة-أطلق-أعد الإمساك"],it:[
+  ["الأعشاب والحزازيات في حقل",0,"كائنات ثابتة."],["الخنافس النشطة على سطح الأرض ليلًا",1,"حشرات زاحفة على الأرض."],
+  ["الحشرات على الأعشاب الطويلة",2,"تُمسح الأعشاب بحركة الرقم 8."],["يرقات اللافقاريات في قاع فلج",3,"مياه جارية ضحلة."],
+  ["تقدير حجم جماعة البط في بحيرة",4,"حيوانات متنقلة يصعب عدّها كلها (مؤشر لينكولن)."],["البرنقيل والمحار على شاطئ صخري",0,"كائنات ثابتة."],
+  ["الحلازين البطيئة الحركة على الصخور",0,"تتحرك ببطء شديد."],["تقدير عدد أسماك القرش المطرقة حول جزيرة",4,"إمساك ووسم ثم إعادة إمساك."]]}
+};
+W.cls=el=>{el.className="widget";const D=CLS[el.dataset.k];let n=0;
+  el.innerHTML=`<p class="ew-q">${D.q}</p><div class="ew-sust">${D.it.map((s,i)=>`<div class="ew-sc" data-i="${i}"><p>${s[0]}</p><div class="ew-b">${D.c.map((c,j)=>`<button class="btn ghost sm" data-v="${j}">${c}</button>`).join("")}</div><div class="ew-why" hidden></div></div>`).join("")}</div>${bar(`<span class="cls-s">أجبتِ عن 0 من ${D.it.length}</span>`)}`;
+  let ok=0;el.querySelectorAll(".ew-sc").forEach(c=>c.onclick=e=>{const b=e.target.closest("button");if(!b||c.dataset.done)return;const it=D.it[+c.dataset.i],good=+b.dataset.v===it[1];c.dataset.done=1;n++;if(good)ok++;c.classList.add(good?"ok":"no");const w=$q(c,".ew-why");w.hidden=false;w.innerHTML=`<b>${good?"صحيح.":"الإجابة: "+D.c[it[1]]+"."}</b> ${it[2]}`;$q(el,".cls-s").textContent=`أجبتِ عن ${n} من ${D.it.length} • الصحيح ${ok}`})};
+
+/* 2-1: حلقة المنهج العلمي */
+const SMD=["مراقبة أو مشاهدة تصف مشكلة. غالبًا تكون نوعية في البداية: «النباتات تموت في هذه المنطقة».","سؤال واحد قصير يبدأ بـ: ماذا/لماذا/كيف/هل. مثل: «لماذا تموت النباتات هنا؟»","إجابة محتملة عن «لماذا؟»: جملة مختصرة فيها سبب ونتيجة، قابلة للاختبار. «تناقص هطول الأمطار يسبب موت النباتات».","جملة تبين النتيجة المتوقعة إن كانت الفرضية صحيحة: «النباتات التي تُروى أقل ستذبل أسرع».","تجربة بلا تحيز: متغير مستقل واحد يُغيَّر، ومتغير تابع يُقاس، ومتغيرات ضابطة ثابتة، ومجموعة ضابطة للمقارنة.","تمثيل البيانات بيانيًا، والبحث عن الأنماط والقيم الشاذة: هل تدعم الفرضية أم تدحضها؟","إن دعمت البيانات الفرضية تُقدَّم النتائج، ويمكن إعادة اختبارها لاحقًا. وإن تكرر دعمها كثيرًا قد تصبح نظرية علمية."];
+W.smloop=el=>{el.className="widget";let hl=-1,fail=false;
+  const draw=()=>{$q(el,".ew-fig").innerHTML=E.smethod({hl,fail});el.querySelectorAll(".smn").forEach(g=>{g.setAttribute("tabindex","0");g.onclick=g.onkeydown=ev=>{if(ev.type==="keydown"&&ev.key!=="Enter")return;hl=+g.dataset.i;fail=false;show()}})};
+  const show=()=>{draw();$q(el,".ew-card").innerHTML=fail?`<h4 style="color:#C8473A">الفرضية غير صحيحة: حلقة التغذية الراجعة</h4><p>لا نتوقف! نعود إلى خطوة الفرضية فنقترح <b>فرضية ثانية</b> ونختبرها بتجربة جديدة. لهذا يُسمّى المنهج العلمي <b>حلقة تغذية راجعة</b>: النتائج تعود فتوجّه الخطوة التالية.</p>`:hl<0?`<p>اضغطي على أي خطوة لتقرئي ما يحدث فيها، أو جرّبي زر «الفرضية غير صحيحة».</p>`:`<h4 style="color:${E.SM[hl][1]}">${hl+1}. ${E.SM[hl][0]}</h4><p>${SMD[hl]}</p>`};
+  el.innerHTML=`<div class="ew-fig"></div><div class="ew-card" aria-live="polite"></div><div class="w-bar"><button class="btn ghost sm" id="smf">الفرضية غير صحيحة؟</button><button class="btn ghost sm" id="smn">الخطوة التالية ←</button><span class="w-cap">الشكل 2-1: المنهج العلمي حلقة تغذية راجعة.</span></div>`;
+  $q(el,"#smf").onclick=()=>{fail=!fail;hl=-1;show()};$q(el,"#smn").onclick=()=>{fail=false;hl=(hl+1)%7;show()};show()};
+
+/* 2-1: تحديد المتغيرات في تجربة */
+const VX=[["تأثير الأسمدة على نمو النبات","كمية الأسمدة المستخدمة","معدل نمو النبات","نباتات لم تُزوَّد بالأسمدة","درجة الحرارة، كمية الماء، كمية الضوء، نوع النبات"],
+ ["تأثير الملح على ملوحة الماء","كمية الملح المضافة إلى الماء","ملوحة الماء","ماء بدون إضافة ملح","حجم الماء، درجة الحرارة"],
+ ["تأثير ضوء الشمس على نمو النبات","كمية ضوء الشمس","معدل النمو أو تدهور حالة النبات","نباتات تتعرض لكمية قياسية من الضوء","كمية الماء، نوع التربة، الرياح، الآفات"],
+ ["تأثير pH على فقس بيض الأسماك","مستوى حامضية الماء أو قاعديته (pH)","فقس بيض الأسماك","بيض من النوع نفسه عند pH الطبيعي له","درجة الحرارة، نوع السمك، حجم الماء"],
+ ["تأثير تسرب مياه الصرف الصحي على الكائنات المائية","تسرب مياه الصرف الصحي","الكائنات الحية المائية في اتجاه التسرب","عينات من موقع بعيد لم يتأثر بالتسرب","وقت جمع العينات، طريقة الجمع، عمق الماء"],
+ ["تأثير درجة حرارة الغرفة على درجات الاختبار","درجة حرارة الغرفة","درجات الطالبات في اختبار الرياضيات","الدرجات عندما تكون حرارة الغرفة معتدلة","راحة الطالبات، الإضاءة، الضوضاء، الزمن المتاح"]];
+const VR=[["المتغير المستقل","#2E7DB5"],["المتغير التابع","#3F8A5E"],["المجموعة الضابطة","#D9822B"],["المتغيرات الضابطة","#6A5ACD"]];
+W.varid=el=>{el.className="widget";let k=0;
+  const draw=()=>{const x=VX[k];const opts=[1,2,3,4].map(j=>[x[j],j-1]).sort(()=>Math.random()-.5);
+    $q(el,".vx-body").innerHTML=`<p class="ew-q">التجربة: <b>${x[0]}</b>. ضعي كل عبارة في دورها: اختاري الدور ثم اضغطي العبارة.</p><div class="ew-tabs">${VR.map((r,j)=>`<button class="btn ghost sm vr" data-r="${j}" style="box-shadow:inset 0 0 0 2px ${r[1]}">${r[0]}</button>`).join("")}</div><div class="ew-sust">${opts.map(o=>`<div class="ew-sc vo" data-a="${o[1]}"><p>${o[0]}</p><div class="ew-why" hidden></div></div>`).join("")}</div>`;
+    let role=-1;el.querySelectorAll(".vr").forEach(b=>b.onclick=()=>{role=+b.dataset.r;el.querySelectorAll(".vr").forEach(z=>z.style.background="");b.style.background=VR[role][1]+"22"});
+    el.querySelectorAll(".vo").forEach(c=>c.onclick=()=>{if(role<0||c.dataset.done){if(role<0)$q(el,".vx-msg").textContent="اختاري الدور أولًا من الأزرار الملوّنة.";return}const a=+c.dataset.a,ok=a===role;const w=$q(c,".ew-why");w.hidden=false;if(ok){c.dataset.done=1;c.classList.add("ok");w.innerHTML=`<b style="color:${VR[a][1]}">${VR[a][0]}</b> ✔`}else{c.classList.add("no");w.innerHTML=`ليس «${VR[role][0]}». حاولي دورًا آخر.`;setTimeout(()=>{c.classList.remove("no");w.hidden=true},1400)}
+      const done=el.querySelectorAll(".vo[data-done]").length;$q(el,".vx-msg").textContent=done===4?"أحسنتِ! حدّدتِ الأدوار الأربعة.":`حدّدتِ ${done} من 4.`})};
+  el.innerHTML=`<div class="ew-tabs">${VX.map((x,i)=>`<button class="btn ghost sm vt" data-k="${i}">${i+1}</button>`).join("")}</div><div class="vx-body"></div>${bar(`<span class="vx-msg">الجدولان 2-2 و 2-3 من كتاب الطالب.</span>`)}`;
+  el.querySelectorAll(".vt").forEach(b=>b.onclick=()=>{k=+b.dataset.k;draw();$q(el,".vx-msg").textContent="حدّدتِ 0 من 4."});draw()};
+
+/* 2-2: محاكاة جمع العينات في حقل */
+W.sampfield=el=>{el.className="widget";let mode="rand",kind="point",pts=[],ys=[];const F=E.FIELD;
+  const trueA=F.filter(p=>p[2]===0).length,trueB=F.filter(p=>p[2]===1).length;
+  const newRand=()=>{pts=[];for(let i=0;i<24;i++){let x;do{x=42+Math.random()*816}while(x>468&&x<532);pts.push([x,42+Math.random()*316])}ys=[0,1,2,3].map(()=>32+Math.random()*336)};
+  const est=()=>{let cA=0,cB=0,aA=0,aB=0;
+    if(kind==="point"){const P=mode==="sys"?(()=>{const a=[];for(let y=70;y<380;y+=78)for(let x=70;x<880;x+=100)a.push([x,y]);return a})():pts;
+      P.forEach(p=>{const n=F.filter(f=>Math.abs(f[0]-p[0])<22&&Math.abs(f[1]-p[1])<22).length;if(p[0]<490){cA+=n;aA++}else{cB+=n;aB++}});
+      const sq=44*44,eA=aA?Math.round(cA/aA/sq*(450*360)):0,eB=aB?Math.round(cB/aB/sq*(370*360)):0;return [eA,eB,aA,aB]}
+    const Y=mode==="sys"?[80,160,240,320]:ys;Y.forEach(y=>{F.forEach(f=>{if(Math.abs(f[1]-y)<12){if(f[0]<490)cA++;else cB++}})});const band=24*Y.length;return [Math.round(cA/band*360),Math.round(cB/band*360),Y.length,Y.length]};
+  const draw=()=>{$q(el,".ew-fig").innerHTML=E.field({mode,kind,pts,ys});const [eA,eB,nA,nB]=est();
+    $q(el,".ew-card").innerHTML=`<p>العدد الحقيقي للنبات: المنطقة A = <b>${trueA}</b>، المنطقة B = <b>${trueB}</b></p><p>تقدير العينة: المنطقة A ≈ <b>${eA}</b> (${nA} ${kind==="point"?"مربعات":"مقاطع"})، المنطقة B ≈ <b>${eB}</b> (${nB} ${kind==="point"?"مربعات":"مقاطع"})</p><p class="soft">${mode==="rand"?"اضغطي «عينة عشوائية جديدة» عدة مرات: قد تقع النقاط كلها في الجزء الكثيف أو الفارغ من B، فيُبالغ التقدير أو ينقص.":"العينة المنتظمة تغطي المنطقة كلها بالتساوي، فتُظهر أن النبات في B متجمّع في الأعلى."}</p>`};
+  el.innerHTML=`<div class="ew-tabs"><button class="btn ghost sm" data-m="rand">عشوائية</button><button class="btn ghost sm" data-m="sys">منتظمة</button><span style="width:12px"></span><button class="btn ghost sm" data-kd="point">نقطية (مربعات)</button><button class="btn ghost sm" data-kd="line">خطية (مقاطع)</button><span style="width:12px"></span><button class="btn sm" id="sfn">عينة عشوائية جديدة</button></div><div class="ew-fig"></div><div class="ew-card" aria-live="polite"></div>${bar("الشكل 2-6: الاستراتيجية نفسها قد تعطي نتائج مختلفة في المنطقة B.")}`;
+  const mark=()=>{el.querySelectorAll("[data-m]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.m===mode));el.querySelectorAll("[data-kd]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.kd===kind));$q(el,"#sfn").disabled=mode!=="rand"};
+  el.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{mode=b.dataset.m;mark();draw()});el.querySelectorAll("[data-kd]").forEach(b=>b.onclick=()=>{kind=b.dataset.kd;mark();draw()});
+  $q(el,"#sfn").onclick=()=>{newRand();draw()};newRand();mark();draw()};
+
+/* 2-2: حجم العينة */
+W.ssize=el=>{el.className="widget";
+  el.innerHTML=`<label class="ew-rng">حجم الجماعة الأحيائية (أو عدد المنازل): <input type="number" id="pn" min="1" max="1000000" value="7200" style="width:140px"></label><div class="ew-card" aria-live="polite"></div>${bar("القاعدة: الحد الأدنى 100، والحد الأقصى 10% من الجماعة بشرط ألا يتجاوز 1000، وإن كانت الجماعة أقل من 100 نشمل الجميع.")}`;
+  const f=()=>{const N=Math.max(1,Math.round(+$q(el,"#pn").value||1));let h;
+    if(N<100)h=`<h4>نشمل الجميع: ${N}</h4><p>الجماعة أقل من 100، فيجب تضمين جميع الأفراد أو نقاط جمع العينة في المسح.</p>`;
+    else{const t=Math.round(N*.1),mx=Math.min(t,1000);h=`<h4>الحد الأقصى = ${mx}</h4><p>10% من ${N} = <b>${t}</b>${t>1000?" وهو أكبر من 1000، فالحد الأقصى <b>1000</b>":""}.</p><p>الحد الأدنى الذي يعطي نتائج ذات معنى: <b>${Math.min(100,N)}</b>.</p>`}
+    $q(el,".ew-card").innerHTML=h};$q(el,"#pn").oninput=f;f()};
+
+/* 2-2: مؤشر لينكولن */
+W.lincoln=el=>{el.className="widget";
+  el.innerHTML=`<div class="ew-two"><div><label class="ew-rng">n₁ (أُمسكت ووُسمت أولًا): <b id="v1"></b><input type="range" id="n1" min="5" max="300" value="200"></label><label class="ew-rng">n₂ (أُمسكت في العينة الثانية): <b id="v2"></b><input type="range" id="n2" min="5" max="300" value="200"></label><label class="ew-rng">m₂ (الموسومة بينها): <b id="v3"></b><input type="range" id="m2" min="1" max="100" value="20"></label>
+  <div class="ew-b"><button class="btn ghost sm" data-p="200,200,20">البط (المثال 1)</button><button class="btn ghost sm" data-p="22,14,2">نسور السمك</button><button class="btn ghost sm" data-p="25,40,10">القواقع السوداء</button><button class="btn ghost sm" data-p="20,10,5">القرش المطرقة</button></div></div><div class="ew-card" aria-live="polite"></div></div>${bar("N = (n₁ × n₂) ÷ m₂ • يُعطى الجواب عددًا صحيحًا لأنه لا يوجد «جزء من كائن حي».")}`;
+  const f=()=>{const a=+$q(el,"#n1").value,b=+$q(el,"#n2").value;const m=Math.min(+$q(el,"#m2").value,b);$q(el,"#m2").value=m;$q(el,"#v1").textContent=a;$q(el,"#v2").textContent=b;$q(el,"#v3").textContent=m;
+    $q(el,".ew-card").innerHTML=`<p style="direction:ltr;text-align:center;font-size:20px;font-family:var(--display)">N = (${a} × ${b}) ÷ ${m} = ${a*b} ÷ ${m} = <b>${Math.round(a*b/m)}</b></p><p>حجم الجماعة الأحيائية التقديري ≈ <b>${Math.round(a*b/m)}</b> فردًا.</p><p class="soft">لاحظي: كلما قلّ عدد الموسومة المعاد إمساكها (m₂) كان التقدير أكبر، لأن الموسومة «ضاعت» بين أفراد كثيرين.</p>`};
+  ["#n1","#n2","#m2"].forEach(s=>$q(el,s).oninput=f);el.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{const p=b.dataset.p.split(",");$q(el,"#n1").value=p[0];$q(el,"#n2").value=p[1];$q(el,"#m2").value=p[2];f()});f()};
+
+/* 2-2: مؤشر سيمبسون: جدول قابل للتعديل */
+const SP={"المثال 2":[["أ",5],["ب",8],["ج",2],["د",7],["هـ",3]],"أسماك النهر":[["السلمون المرقط",83],["الباس",65],["الكارب",110],["السلور",9]],"الشاطئ A":[["محار",320],["حلزون بحري",335],["برنقيل",345]],"الشاطئ B":[["محار",20],["حلزون بحري",39],["برنقيل",941]],"معدة الفقمة":[["سرطان البحر",73],["المحار",55],["الحلزون",47],["مزدوجات الأرجل",32],["كريل",18]]};
+W.simpson=el=>{el.className="widget";let rows=SP["المثال 2"].map(r=>r.slice());
+  el.innerHTML=`<div class="ew-tabs">${Object.keys(SP).map(k=>`<button class="btn ghost sm" data-s="${k}">${k}</button>`).join("")}</div><div class="sp-t"></div><div class="ew-fig sp-f"></div>${bar("D = 1 − Σ(n/N)² • غيّري الأعداد ولاحظي: التنوع يكبر عندما تتقارب أعداد الأنواع.")}`;
+  const draw=()=>{const N=rows.reduce((s,r)=>s+(+r[1]||0),0);let S=0;
+    const tr=rows.map((r,i)=>{const p=N?(+r[1]||0)/N:0;S+=p*p;return `<tr><td>${r[0]}</td><td><input type="number" min="0" value="${r[1]}" data-i="${i}" style="width:80px"></td><td>${r2(p)}</td><td>${r2(p*p,4)}</td></tr>`}).join("");
+    const D=r2(1-S,2);
+    $q(el,".sp-t").innerHTML=`<div class="tbl-wrap"><table class="ew-tbl"><thead><tr><th>النوع</th><th>العدد n</th><th>n/N</th><th>(n/N)²</th></tr></thead><tbody>${tr}</tbody><tfoot><tr><td>المجموع</td><td>N = ${N}</td><td></td><td>Σ = ${r2(S,3)}</td></tr></tfoot></table></div><p style="direction:ltr;text-align:center;font-family:var(--display);font-size:20px">D = 1 − ${r2(S,3)} = <b>${D}</b></p><p class="soft">الحساب هنا بلا تقريب؛ الكتاب يقرّب كل قيمة فيحصل على مجموع مختلف قليلًا (0.236 بدل 0.242 في المثال 2)، والجواب النهائي نفسه.</p><p>${D>=.6?"تنوع بيولوجي <b>كبير</b>":D>=.3?"تنوع <b>متوسط</b>":"تنوع <b>منخفض</b>: نوع واحد يسود العينة"}. معنى D = ${D}: لو اخترتِ فردين عشوائيًا فاحتمال أن يكونا من نوعين مختلفين ≈ ${Math.round(D*100)}%.</p>`;
+    $q(el,".sp-f").innerHTML=E.simpsonScale({v:D});
+    el.querySelectorAll(".sp-t input").forEach(inp=>inp.onchange=()=>{rows[+inp.dataset.i][1]=Math.max(0,+inp.value||0);draw()})};
+  el.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{rows=SP[b.dataset.s].map(r=>r.slice());draw()});draw()};
+
+/* 2-2: المربع الشبكي: النسبة المئوية للتغطية و ACFOR */
+W.gridq=el=>{el.className="widget";let on=new Set();
+  const seed=()=>{on=new Set();for(let r=0;r<10;r++)for(let c=0;c<10;c++){const d=Math.hypot(r-3.5,c-6);if(d<3.2+Math.random()*.8)on.add(r*10+c)}};
+  const letter=p=>p>80?["A","وفيرة جدًا"]:p>60?["C","شائعة"]:p>40?["F","متكررة"]:p>20?["O","عرضية"]:p>0?["R","نادرة"]:["N","غير موجودة"];
+  el.innerHTML=`<div class="ew-two"><div><p class="ew-q">اضغطي المربعات الصغيرة التي يشغل النبات <b>نصفها على الأقل</b>.</p><div class="gq" role="grid" aria-label="مربع قياسي شبكي 10 × 10">${Array.from({length:100},(_,i)=>`<button class="gq-c" data-i="${i}" aria-label="مربع ${i+1}"></button>`).join("")}</div><div class="ew-b" style="margin-top:8px"><button class="btn ghost sm" id="gqr">نبات جديد</button><button class="btn ghost sm" id="gqc">مسح</button></div></div><div class="ew-card" aria-live="polite"></div></div>${bar("النسبة المئوية للتغطية = (عدد المربعات المغطاة ÷ العدد الكلي) × 100")}`;
+  const draw=()=>{el.querySelectorAll(".gq-c").forEach(b=>b.classList.toggle("on",on.has(+b.dataset.i)));const p=on.size;const L=letter(p);
+    $q(el,".ew-card").innerHTML=`<p style="direction:ltr;text-align:center;font-family:var(--display);font-size:20px">(${p} ÷ 100) × 100 = <b>${p}%</b></p><h4>مقياس ACFOR: ${L[0]} (${L[1]})</h4><p class="soft">A أكبر من 80% • C من 61 إلى 80% • F من 41 إلى 60% • O من 21 إلى 40% • R من 1 إلى 20% • N تساوي 0%</p><p>العدّ بالشبكة يقلل تحيز الباحث مقارنة بالتقدير بالعين في المربع المفتوح.</p>`};
+  el.querySelectorAll(".gq-c").forEach(b=>b.onclick=()=>{const i=+b.dataset.i;on.has(i)?on.delete(i):on.add(i);draw()});
+  $q(el,"#gqr").onclick=()=>{seed();draw()};$q(el,"#gqc").onclick=()=>{on=new Set();draw()};seed();draw()};
+
+/* 2-2: النسبة المئوية للتكرار */
+W.freq=el=>{el.className="widget";
+  el.innerHTML=`<div class="ew-two"><div><label class="ew-rng">عدد المربعات التي وُجد فيها النوع: <b id="fv1"></b><input type="range" id="f1" min="0" max="50" value="6"></label><label class="ew-rng">العدد الكلي للمربعات: <b id="fv2"></b><input type="range" id="f2" min="1" max="50" value="30"></label><div class="ew-b"><button class="btn ghost sm" data-p="6,30">القرع مع الدجاج</button><button class="btn ghost sm" data-p="20,30">القرع بلا دجاج</button><button class="btn ghost sm" data-p="27,35">مرجان ميت مع نجم البحر</button><button class="btn ghost sm" data-p="2,35">مرجان ميت بلا نجم البحر</button></div></div><div class="ew-card" aria-live="polite"></div></div>${bar("النسبة المئوية للتكرار = (عدد المربعات التي يوجد فيها النوع ÷ عدد المربعات الكلي) × 100")}`;
+  const f=()=>{const t=+$q(el,"#f2").value,a=Math.min(+$q(el,"#f1").value,t);$q(el,"#f1").value=a;$q(el,"#fv1").textContent=a;$q(el,"#fv2").textContent=t;const p=Math.round(a/t*100);
+    $q(el,".ew-card").innerHTML=`<p style="direction:ltr;text-align:center;font-family:var(--display);font-size:20px">(${a} ÷ ${t}) × 100 = <b>${p}%</b></p><div class="ew-meter"><div><i style="width:${p}%"></i></div></div><p>احتمال وجود النوع في مربع قياسي واحد من منطقة العينة ≈ <b>${p}%</b>.</p>`};
+  ["#f1","#f2"].forEach(s=>$q(el,s).oninput=f);el.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{const p=b.dataset.p.split(",");$q(el,"#f2").value=p[1];$q(el,"#f1").value=p[0];f()});f()};
+
+/* 2-2: بطاقات التقنيات: الطريقة والفوائد والمحددات */
+const TQ=[["المربع القياسي","quadrats","الأنواع الثابتة أو البطيئة جدًا: النباتات، البرنقيل، الحلازين.","يوضع الإطار عند كل إحداثية (عشوائية) أو على طول المقطع كل مسافة ثابتة (منتظمة)، ويُعد أفراد كل نوع أو تُقدّر التغطية.",["سهل وسريع وغير مكلف."],["التقدير قد يؤدي إلى التحيز والحسابات الخاطئة فبيانات غير موثوقة.","الشبكي يحتاج معرفة كافية لتمييز الأنواع المتشابهة."]],
+ ["المصيدة الشراكية","pitfall","الحشرات النشطة على سطح الأرض.","كوب يُدفن وحافته مستوية مع الأرض، قرب الغطاء النباتي، ويُترك طوال الليل (أو يُفحص كل بضع ساعات نهارًا)، ثم يُفرغ في صينية وتُحدد الحشرات وتُطلق.",["سهلة وغير مكلفة في الإعداد.","يمكن تركها مدة طويلة لزيادة فرصة جمع العينات."],["قد تأكل المفترسة الحشرات الأخرى (لذا تُضاف مادة مضادة للتجمد).","التعرف على الحشرات يتطلب تدريبًا ومهارة.","زيارة المواقع تستغرق وقتًا فيكون عدد المواقع محدودًا.","قد تمتلئ بالماء فتغرق الحشرات أو تُجرف.","الحشرات الطائرة تهرب.","لا تناسب المناطق الحضرية ذات الأسطح الصلبة."]],
+ ["شباك اصطياد الحشرات","sweep","الحشرات واللافقاريات على الأعشاب الطويلة.","تُحرّك الشبكة فوق النباتات بحركة الرقم 8 أو بحركة بندولية بينها، موازية للأرض، ثم تُغلق حتى لا تهرب الحشرات وتُفرغ في صينية.",["غير مكلفة وسهلة.","لا تتطلب وقتًا طويلًا ولا مهارة، ويستطيع المتطوعون المساعدة."],["الغطاء النباتي الكثيف لا يصلح لها.","ليست كل الحشرات سهلة الصيد فقد لا تمثل العينة كل الأنواع.","قد تتلف النباتات."]],
+ ["الجمع بالركل","kick","اللافقاريات في قاع نهر أو وادٍ أو فلج.","تُمسك شبكة دقيقة المسامات في اتجاه المجرى، ويُركل القاع مدة محددة فتنجرف الكائنات إلى الشبكة. تُجمع أولًا من أدنى نقطة ثم صعودًا.",["سريع التنفيذ وفعّال من حيث التكلفة."],["قد تُفقد الأنواع الصغيرة إذا كانت فتحات الشبكة كبيرة.","تُفقد الأنواع الملتصقة بالصخور.","صعب في المياه الكثيرة الطمي."]],
+ ["ضع علامة - أطلق - أعد الإمساك","mrr","تقدير حجم جماعة حيوانات متنقلة لا يمكن إمساكها كلها (مؤشر لينكولن).","اصطياد مباشر، ثم علامة لا تؤذي (طلاء مضاد للماء، حلقة ملونة، علامة راديو RFID)، وتسجيل البيانات والإطلاق. بعد فترة مناسبة يُعاد الإمساك ويُعد الموسوم وغير الموسوم.",["أدنى حد من الأذى للكائنات.","يمكن تنفيذها في المواقع النائية وإعادة زيارة النقطة نفسها لاحقًا."],["الإمساك أو العلامة قد يقللان فرص نجاة الكائن.","قد لا تُرى العلامة بسهولة.","قد يتعلم الكائن تحاشي المصائد.","يجب فحص المصائد بانتظام حتى لا تتأذى الكائنات."]]];
+W.techs=el=>{el.className="widget";let k=0;
+  const draw=()=>{const t=TQ[k];el.querySelectorAll("[data-t]").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.t===k));
+    $q(el,".tq-b").innerHTML=`<div class="ew-two"><div class="ew-fig">${E[t[1]]()}</div><div><h4 style="font-family:var(--display);margin:0 0 6px">${t[0]}</h4><p><b>لجمع:</b> ${t[2]}</p><p><b>الطريقة:</b> ${t[3]}</p></div></div><div class="ew-two" style="margin-top:10px"><div class="ew-card" style="background:color-mix(in srgb,#3F8A5E 10%,transparent)"><h4>الفوائد</h4><ul>${t[4].map(x=>`<li>${x}</li>`).join("")}</ul></div><div class="ew-card" style="background:color-mix(in srgb,#C8473A 9%,transparent)"><h4 style="color:#B03A2E">المحددات</h4><ul>${t[5].map(x=>`<li>${x}</li>`).join("")}</ul></div></div>`};
+  el.innerHTML=`<div class="ew-tabs">${TQ.map((t,i)=>`<button class="btn ghost sm" data-t="${i}">${t[0]}</button>`).join("")}</div><div class="tq-b"></div>${bar("الجدول 2-5 والصفحات 62-67 من كتاب الطالب.")}`;
+  el.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{k=+b.dataset.t;draw()});draw()};
+})();

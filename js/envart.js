@@ -142,3 +142,128 @@ function techBars(o={}){const x0=70,y0=330,bw=104,g=22;return `<svg viewBox="0 0
 
 return {water,WP,interception,hierarchy,pyramid,chain,web,carbon,CP,leaf,limitGraph,omanBars,SECT,techBars,TECH,tree,sun,cloud,fish};
 })();
+
+/* ===== رسومات الوحدة الثانية: البحوث البيئية وجمع البيانات (تُضاف إلى window.ENVART) ===== */
+Object.assign(window.ENVART,(function(){
+const K="#16302B",LEAF="#3F8A5E",GRASS="#7FB069",SOIL="#B08A5B",SEA="#2E7DB5";
+const T=(x,y,t,fs=22,c=K,ex="")=>`<text x="${x}" y="${y}" font-family="Baloo Bhaijaan 2, Tahoma, sans-serif" font-weight="700" font-size="${fs}" fill="${c}" text-anchor="middle" ${ex}>${t}</text>`;
+const mk=c=>`<marker id="u2-${c.replace('#','')}" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${c}"/></marker>`;
+const ar=(d,c,w=5,dash="")=>`<path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" ${dash?`stroke-dasharray="${dash}"`:""} marker-end="url(#u2-${c.replace('#','')})"/>`;
+const svg=(w,h,lab,body,cols=[])=>`<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:auto" role="img" aria-label="${lab}"><defs>${cols.map(mk).join("")}</defs>${body}</svg>`;
+/* نبتة بسيطة: x,y قاعدة الساق، h الطول */
+const plant=(x,y,h,c=LEAF,n=3)=>{let g=`<path d="M${x} ${y}V${y-h}" stroke="#4E7B3A" stroke-width="5" stroke-linecap="round"/>`;for(let i=0;i<n;i++){const yy=y-h*(i+1)/(n+1),s=i%2?1:-1;g+=`<ellipse cx="${x+s*16}" cy="${yy}" rx="17" ry="8" transform="rotate(${s*-28} ${x+s*16} ${yy})" fill="${c}"/>`}return g+`<ellipse cx="${x}" cy="${y-h}" rx="11" ry="15" fill="${c}"/>`};
+const pot=(x,y,w=110)=>`<path d="M${x-w/2} ${y}h${w}l-12 70h${-(w-24)}z" fill="#C46A3C"/><rect x="${x-w/2-6}" y="${y-8}" width="${w+12}" height="16" rx="6" fill="#A85A31"/>`;
+
+/* 1) المنهج العلمي: حلقة تغذية راجعة (الشكل 2-1). hl: رقم الخطوة المضاءة، fail: إظهار مسار «حاولي مرة أخرى» */
+const SM=[["لاحظي","#1b5c86"],["اطرحي سؤالًا","#119da4"],["ضعي فرضية تجيب عن السؤال","#3F8A5E"],["تنبّئي بناءً على الفرضية","#7FA032"],["نفّذي تجربة لاختبار التنبؤ","#D9822B"],["حلّلي البيانات واستخلصي الاستنتاجات","#B5487A"],["قدّمي النتائج","#6A5ACD"]];
+function smethod(o={}){const hl=o.hl==null?-1:o.hl,fail=!!o.fail;
+  const P=[[790,70],[480,70],[170,70],[170,250],[170,430],[480,430],[790,250]];
+  const box=(i)=>{const [x,y]=P[i],[t,c]=SM[i],on=hl<0||hl===i;const w=270;const words=t.split(" ");const two=words.length>2;const h=Math.ceil(words.length/2);const l1=two?words.slice(0,h).join(" "):t,l2=two?words.slice(h).join(" "):"";
+    return `<g class="smn" data-i="${i}" style="cursor:pointer;opacity:${on?1:.3}"><rect x="${x-w/2}" y="${y-40}" width="${w}" height="80" rx="22" fill="${c}"/><circle cx="${x+w/2-4}" cy="${y-38}" r="18" fill="#fff" stroke="${c}" stroke-width="4"/>${T(x+w/2-4,y-30,i+1,20,c)}${two?T(x,y-6,l1,24,"#fff")+T(x,y+26,l2,24,"#fff"):T(x,y+9,t,27,"#fff")}</g>`};
+  const okc=fail?"#b9c6c1":"#3F8A5E",noc=fail?"#C8473A":"#e3b3ae";
+  return svg(960,520,"المنهج العلمي: لاحظي، اطرحي سؤالًا، ضعي فرضية، تنبّئي، نفّذي تجربة، حلّلي البيانات؛ إن كانت الفرضية صحيحة قدّمي النتائج، وإن لم تكن صحيحة حاولي مرة أخرى بفرضية جديدة",
+   `<rect width="960" height="520" rx="24" fill="#F6FBF9"/>
+   ${ar("M648 70H630","#4E6B62",5)}<path d="M650 70H622" stroke="#4E6B62" stroke-width="5"/>${ar("M340 70H318","#4E6B62",5)}<path d="M340 70H312" stroke="#4E6B62" stroke-width="5"/>
+   ${ar("M170 112V196","#4E6B62",5)}${ar("M170 292V376","#4E6B62",5)}${ar("M308 430H330","#4E6B62",5)}<path d="M306 430H336" stroke="#4E6B62" stroke-width="5"/>
+   ${ar("M618 430H676","#4E6B62",5)}
+   <g><path d="M790 372L880 430L790 488L700 430Z" fill="#fff" stroke="#16302B" stroke-width="4"/>${T(790,424,"هل الفرضية",19)}${T(790,450,"صحيحة؟",19)}</g>
+   <path d="M790 372V300" stroke="${okc}" stroke-width="6"/>${ar("M790 340V296",okc,6)}${T(862,345,"نعم ✔",22,okc)}
+   <path d="M712 418C600 330 420 250 300 104" stroke="${noc}" stroke-width="6" fill="none" stroke-dasharray="16 10"/>${ar("M330 140L296 98",noc,6)}
+   <g>${T(600,205,"لا ✘ حاولي مرة أخرى",22,noc)}${T(600,233,"(فرضية جديدة)",18,noc)}</g>
+   ${[0,1,2,3,4,5].map(box).join("")}
+   ${(()=>{const on=(hl<0||hl===6)&&!fail;const [x,y]=P[6];return `<g class="smn" data-i="6" style="cursor:pointer;opacity:${on?1:.3}"><rect x="${x-135}" y="${y-40}" width="270" height="80" rx="22" fill="#6A5ACD"/><circle cx="${x+131}" cy="${y-38}" r="18" fill="#fff" stroke="#6A5ACD" stroke-width="4"/>${T(x+131,y-30,7,20,"#6A5ACD")}${T(x,y+9,"قدّمي النتائج",27,"#fff")}</g>`})()}`,["#4E6B62","#3F8A5E","#C8473A","#b9c6c1","#e3b3ae"])}
+
+/* 2) المجموعة الضابطة والتجريبية (الشكل 2-3) */
+function plants(o={}){return svg(900,470,"تجربة على نبات: المجموعة التجريبية رُويت بمحلول السماد فبلغ طولها 32 cm، والمجموعة الضابطة رُويت بالماء العادي فبلغ طولها 18 cm",
+ `<rect width="900" height="470" rx="24" fill="#F6FBF9"/>
+ <g>${T(670,46,"المجموعة التجريبية",28,"#D9822B")}${T(670,80,"\u2066200 ml\u2069 محلول سماد • مرتين أسبوعيًا • 3 أسابيع",17,"#4E6B62")}${plant(670,330,192,LEAF,5)}${pot(670,330)}
+ <path d="M770 330V138" stroke="#D9822B" stroke-width="4"/><path d="M760 138h20M760 330h20" stroke="#D9822B" stroke-width="4"/>${T(820,240,"32 cm",28,"#D9822B",'direction="ltr"')}</g>
+ <g>${T(230,46,"المجموعة الضابطة",28,"#1b5c86")}${T(230,80,"\u2066200 ml\u2069 ماء عادي • مرتين أسبوعيًا • 3 أسابيع",17,"#4E6B62")}${plant(230,330,108,GRASS,3)}${pot(230,330)}
+ <path d="M130 330V222" stroke="#1b5c86" stroke-width="4"/><path d="M120 222h20M120 330h20" stroke="#1b5c86" stroke-width="4"/>${T(80,282,"18 cm",28,"#1b5c86",'direction="ltr"')}</g>
+ <rect x="250" y="420" width="400" height="38" rx="19" fill="#FFF4D6"/>${T(450,446,"الفرق الوحيد: محلول السماد (المتغير المستقل)",19,"#8a6410")}`)}
+
+/* 3) المتغير المستقل والتابع (الشكل 2-2) */
+function ivdv(){return svg(900,330,"المتغير المستقل كمية الماء يُغيَّر، والمتغيرات التابعة حجم النبات وعدد الأوراق وهل تعيش النبتة أم تموت",
+ `<rect width="900" height="330" rx="24" fill="#F6FBF9"/>
+ <rect x="560" y="40" width="300" height="250" rx="26" fill="#E3F1FB" stroke="${SEA}" stroke-width="4"/>${T(710,84,"المتغير المستقل",30,SEA)}${T(710,116,"المتغير الذي يتم تغييره",19,"#4E6B62")}
+ <path d="M680 170h60l-10 34h-40z" fill="#9BC7E8" stroke="${SEA}" stroke-width="3"/><path d="M700 150c0 10 10 10 10 20" stroke="${SEA}" stroke-width="3" fill="none"/>${T(710,256,"كمية الماء",28)}
+ ${ar("M545 165H365","#16302B",7)}${T(455,148,"يؤثر في",22)}
+ <rect x="40" y="40" width="300" height="250" rx="26" fill="#EAF5EC" stroke="${LEAF}" stroke-width="4"/>${T(190,84,"المتغير التابع",30,LEAF)}${T(190,116,"المتغير الذي يتأثر (يُقاس)",19,"#4E6B62")}
+ ${T(190,170,"حجم النبات",24)}${T(190,212,"عدد الأوراق",24)}${T(190,254,"تعيش أم تموت النبتة؟",24)}`,["#16302B"])}
+
+/* 4) أنواع التمثيلات البيانية (الشكل 2-4). k: 0 أعمدة، 1 دائري، 2 خطي، 3 مبعثر؛ بلا k: الأربعة */
+const GT=[["تمثيل بياني بالأعمدة","بيانات ذات فئات","#2E7DB5"],["مخطط دائري","بيانات ذات فئات","#D9822B"],["تمثيل بياني خطي","بيانات مستمرة","#3F8A5E"],["تمثيل بياني مبعثر","بيانات مستمرة","#B5487A"]];
+function g1(k,x,y,w,h){const c=GT[k][2];let b=`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="18" fill="#fff" stroke="#D6E4DF" stroke-width="3"/>${T(x+w/2,y+36,GT[k][0],24,c)}${T(x+w/2,y+62,GT[k][1],17,"#4E6B62")}`;
+  const ox=x+50,oy=y+h-40,W=w-90,H=h-120;const ax=`<path d="M${ox} ${oy-H}V${oy}H${ox+W}" stroke="${K}" stroke-width="3" fill="none"/>`;
+  if(k===0){const v=[[25,"حمار وحشي"],[12,"ظبي"],[8,"فيل"],[30,"زرافة"]];b+=ax+v.map((d,i)=>{const bw=W/4-18,bx=ox+W-(i+1)*(W/4)+9,bh=d[0]/32*H;return `<rect x="${bx}" y="${oy-bh}" width="${bw}" height="${bh}" rx="5" fill="${c}"/>${T(bx+bw/2,oy+22,d[1],14)}`}).join("")}
+  if(k===1){const cx=x+w/2,cy=y+h/2+30,r=Math.min(W,H)/2;const v=[41,105,89,87],tot=322;let a=-Math.PI/2;const cs=["#D9822B","#F2B632","#C46A3C","#E8A87C"];b+=v.map((d,i)=>{const a2=a+d/tot*2*Math.PI,l=a2-a>Math.PI?1:0;const p=`M${cx} ${cy}L${cx+r*Math.cos(a)} ${cy+r*Math.sin(a)}A${r} ${r} 0 ${l} 1 ${cx+r*Math.cos(a2)} ${cy+r*Math.sin(a2)}z`;const m=(a+a2)/2;a=a2;return `<path d="${p}" fill="${cs[i]}" stroke="#fff" stroke-width="3"/>${T(cx+r*.62*Math.cos(m),cy+r*.62*Math.sin(m)+6,d,17,"#fff",'direction="ltr"')}`}).join("")}
+  if(k===2){const s1=[20,22,21,25,27,26,30],s2=[14,15,17,16,18,20,19];const pt=(s)=>s.map((v,i)=>`${ox+W-i*W/6} ${oy-(v-10)/22*H}`).join(" L");b+=ax+`<path d="M${pt(s1)}" stroke="${c}" stroke-width="4" fill="none"/><path d="M${pt(s2)}" stroke="#D9822B" stroke-width="4" fill="none" stroke-dasharray="10 7"/>`}
+  if(k===3){const P=[[1,4],[1.5,6],[2,9],[2.4,10],[3,14],[3.3,15],[3.8,19],[4.2,20],[2.8,11],[1.2,7]];b+=ax+P.map(p=>`<circle cx="${ox+W-p[0]/4.5*W}" cy="${oy-p[1]/22*H}" r="7" fill="${c}"/>`).join("")}
+  return `<g class="gt" data-k="${k}">${b}</g>`}
+function graphs(o={}){if(o.k!=null)return svg(440,330,GT[o.k][0]+" للـ"+GT[o.k][1],g1(o.k,0,0,440,330));
+  return svg(900,690,"أربعة أنواع من التمثيلات البيانية: الأعمدة والدائري للبيانات ذات الفئات، والخطي والمبعثر للبيانات المستمرة",[0,1,2,3].map(k=>g1(k,k%2?20:460,k<2?10:350,420,330)).join(""))}
+
+/* 5) حقل لجمع العينات: نبات منتشر في منطقتين A وB (الشكل 2-6). mode: rand|sys، kind: point|line، pts: نقاط عشوائية جاهزة */
+const FIELD=(()=>{let s=7;const r=()=>(s=(s*9301+49297)%233280)/233280;const P=[];for(let i=0;i<70;i++)P.push([24+r()*442,24+r()*352,0]);for(let i=0;i<55;i++)P.push([514+r()*362,24+r()*166,1]);for(let i=0;i<10;i++)P.push([514+r()*362,200+r()*176,1]);return P})();
+function field(o={}){const mode=o.mode||"rand",kind=o.kind||"point";let marks="";
+  if(kind==="point"){const pts=mode==="sys"?(()=>{const a=[];for(let y=70;y<380;y+=78)for(let x=70;x<880;x+=100)a.push([x,y]);return a})():(o.pts||[]);
+    marks=pts.map(p=>`<rect x="${p[0]-22}" y="${p[1]-22}" width="44" height="44" fill="none" stroke="#16302B" stroke-width="4" rx="3"/>`).join("")}
+  else{const ys=mode==="sys"?[80,160,240,320]:(o.ys||[]);marks=ys.map(y=>`<path d="M20 ${y}H880" stroke="#16302B" stroke-width="4" stroke-dasharray="14 8"/>`).join("")}
+  return svg(900,420,"منطقة دراسة فيها نبات منتشر؛ المنطقة A يتوزع فيها النبات بانتظام تقريبي، والمنطقة B يتجمع فيها النبات في الجزء العلوي",
+  `<rect width="900" height="420" rx="22" fill="#EAF5E2"/><path d="M490 20V400" stroke="#9DB98A" stroke-width="3" stroke-dasharray="8 8"/>
+  ${T(250,410,"المنطقة A",22,"#4E6B62")}${T(690,410,"المنطقة B",22,"#4E6B62")}
+  ${FIELD.map(p=>`<g transform="translate(${p[0]} ${p[1]})"><circle r="9" fill="#B5487A"/><circle r="4" fill="#F2B632"/></g>`).join("")}${marks}`)}
+
+/* 6) المقطع الخطي من الغابة إلى البحيرة مع مربعات كل 25 m (الشكل 2-7) */
+function transect(){return svg(900,300,"مقطع خطي طوله 100 m يمتد من الغابة إلى البحيرة، توضع عليه مربعات قياسية على مسافات منتظمة كل 25 m",
+ `<rect width="900" height="300" rx="22" fill="#F6FBF9"/><rect x="20" y="40" width="300" height="200" rx="16" fill="#CFE8F6"/>${T(170,80,"بحيرة",28,SEA)}
+ <rect x="580" y="40" width="300" height="200" rx="16" fill="#D7ECD2"/>${[0,1,2,3,4,5].map(i=>`<g transform="translate(${620+(i%3)*95} ${i<3?100:205}) scale(.7)"><rect x="-6" y="-6" width="12" height="40" fill="#7A5230"/><circle cy="-26" r="28" fill="${LEAF}"/></g>`).join("")}${T(730,236,"",1)}${T(830,66,"غابة",24,LEAF)}
+ <path d="M840 140H80" stroke="#16302B" stroke-width="5"/>${[0,25,50,75,100].map((m,i)=>{const x=840-i*190;return `<rect x="${x-24}" y="116" width="48" height="48" fill="rgba(255,255,255,.6)" stroke="#D9822B" stroke-width="5"/>${T(x,196,m+" m",19,K,'direction="ltr"')}`}).join("")}
+ ${T(450,272,"مقطع \u2066100 m\u2069 • مربع قياسي كل \u206625 m\u2069",22,"#8a6410")}`)}
+
+/* 7) المربع القياسي المفتوح والشبكي (الصورة 2-4) */
+function quadrats(){const tuft=(x,y)=>`<g transform="translate(${x} ${y})"><path d="M0 0l-8-22M0 0l0-26M0 0l8-22" stroke="${LEAF}" stroke-width="4" stroke-linecap="round"/></g>`;
+ const pts=[[40,50],[90,120],[150,70],[200,180],[60,200],[130,160],[220,60],[180,230],[100,240]];
+ return svg(900,380,"مربع قياسي مفتوح إطاره بلا شبكة، ومربع قياسي شبكي مقسّم إلى 100 مربع صغير",
+ `<rect width="900" height="380" rx="22" fill="#F6FBF9"/>
+ <g transform="translate(560 40)"><rect width="280" height="280" fill="#E7F2DD" stroke="#7A5230" stroke-width="9"/>${pts.map(p=>tuft(p[0],p[1])).join("")}</g>${T(700,360,"مربع قياسي مفتوح",24,"#7A5230")}
+ <g transform="translate(60 40)"><rect width="280" height="280" fill="#E7F2DD"/>${[1,2,3,4,5,6,7,8,9].map(i=>`<path d="M${i*28} 0V280M0 ${i*28}H280" stroke="#7A5230" stroke-width="2"/>`).join("")}<rect width="280" height="280" fill="none" stroke="#7A5230" stroke-width="9"/>${pts.map(p=>tuft(p[0],p[1])).join("")}</g>${T(200,360,"مربع قياسي شبكي (10 × 10)",24,"#7A5230")}`)}
+
+/* 8) تقنيات جمع العينات: المصيدة الشراكية، شبكة الاصطياد، الجمع بالركل، ضع علامة-أطلق-أعد الإمساك */
+function pitfall(){return svg(440,330,"مصيدة شراكية: كوب مدفون حافته مستوية مع سطح الأرض، وفوقه غطاء مرفوع بمسامير، وفيه مادة مضادة للتجمد",
+ `<rect width="440" height="330" rx="20" fill="#F6FBF9"/><rect x="0" y="130" width="440" height="200" fill="${SOIL}"/><path d="M0 130H440" stroke="#7FB069" stroke-width="10"/>
+ <path d="M160 130l14 150h92l14-150z" fill="#E9F2F7" stroke="#16302B" stroke-width="4"/><path d="M172 230h96l-4 50h-88z" fill="#8FD0C6"/>
+ <rect x="140" y="70" width="160" height="14" rx="5" fill="#7A5230"/><path d="M155 84V130M285 84V130" stroke="#5c5c5c" stroke-width="5"/>
+ <g transform="translate(330 120)"><ellipse rx="14" ry="8" fill="#222"/><path d="M-10 4l-8 8M0 6v10M10 4l8 8" stroke="#222" stroke-width="2"/></g>
+ ${T(220,60,"سطح علوي (غطاء)",19)}${T(220,262,"مادة مضادة للتجمد",17,"#0F5E57")}${T(370,110,"حشرة",17)}${T(90,180,"كوب مدفون",19,"#fff")}`)}
+function sweep(){return svg(440,330,"شبكة اصطياد الحشرات: شبكة على عصا تُحرّك بين الأعشاب الطويلة بحركة على شكل الرقم 8",
+ `<rect width="440" height="330" rx="20" fill="#F6FBF9"/><rect y="230" width="440" height="100" fill="#D7ECD2"/>${[30,70,110,150,300,340,380,420].map(x=>`<path d="M${x} 330c-6-40 4-70-4-110M${x+12} 330c4-40-8-60 2-100" stroke="${LEAF}" stroke-width="5" fill="none"/>`).join("")}
+ <path d="M60 60L230 190" stroke="#7A5230" stroke-width="10" stroke-linecap="round"/><ellipse cx="270" cy="210" rx="56" ry="26" fill="none" stroke="#16302B" stroke-width="6" transform="rotate(-20 270 210)"/><path d="M226 222c10 70 70 80 100 20" fill="rgba(255,255,255,.7)" stroke="#16302B" stroke-width="3"/>
+ <path d="M140 120c40-40 90 40 130 0s-90-40-130 0z" fill="none" stroke="#D9822B" stroke-width="4" stroke-dasharray="9 7"/>${T(340,60,"حركة الرقم 8",19,"#D9822B")}`)}
+function kick(){return svg(440,330,"الجمع بالركل: يقف الباحث في مياه ضحلة ويضع الشبكة في اتجاه مجرى الماء ويركل القاع فتنجرف اللافقاريات إلى الشبكة",
+ `<rect width="440" height="330" rx="20" fill="#F6FBF9"/><path d="M0 150H440V330H0z" fill="#CFE8F6"/><path d="M0 280H440V330H0z" fill="#B9A27A"/>${[40,110,300,380].map(x=>`<ellipse cx="${x}" cy="285" rx="22" ry="10" fill="#8C7B63"/>`).join("")}
+ ${ar("M400 200H300",SEA,5)}${ar("M400 240H300",SEA,5)}${T(355,185,"اتجاه المجرى",17,SEA)}
+ <path d="M150 170l40 110" stroke="#7A5230" stroke-width="7"/><path d="M130 190c-10 60 30 90 70 90l-10-100z" fill="rgba(255,255,255,.75)" stroke="#16302B" stroke-width="3"/>
+ <path d="M250 60v120l20 100" stroke="#16302B" stroke-width="12" stroke-linecap="round"/><path d="M250 180l-20 90" stroke="#16302B" stroke-width="12" stroke-linecap="round"/><circle cx="250" cy="44" r="20" fill="#16302B"/><path d="M270 280h26" stroke="#16302B" stroke-width="10" stroke-linecap="round"/>
+ ${T(110,140,"الشبكة",19)}${T(330,300,"ركل القاع",19,"#fff")}`,[SEA])}
+function mrr(o={}){const st=o.st==null?3:o.st;const bug=(x,y,m)=>`<g transform="translate(${x} ${y})"><ellipse rx="16" ry="11" fill="#5B6B3A"/><circle cx="-16" r="6" fill="#5B6B3A"/>${m?`<circle cx="4" cy="-2" r="6" fill="#F2B632" stroke="#fff" stroke-width="2"/>`:""}</g>`;
+ const P=[[60,90],[120,150],[90,220],[160,70],[200,190],[40,170]],Q=[[300,80],[360,150],[330,230],[400,90],[390,210],[280,170]];
+ return svg(440,330,"ضع علامة - أطلق - أعد الإمساك: تُمسك أفراد وتُوسم ثم تُطلق، ثم تُمسك عينة ثانية ويُعد الموسوم فيها",
+ `<rect width="440" height="330" rx="20" fill="#F6FBF9"/><path d="M220 20V300" stroke="#D6E4DF" stroke-width="3"/>${T(115,40,"العينة الأولى: ضعي علامة وأطلقي",16,"#D9822B")}${T(335,40,"العينة الثانية: أعيدي الإمساك",16,"#1b5c86")}
+ ${P.map(p=>bug(p[0],p[1]+20,1)).join("")}${Q.map((p,i)=>bug(p[0],p[1]+20,i<2)).join("")}${T(345,318,"الموسومة منها:",17,"#8a6410")}${T(268,318,"m₂",19,"#8a6410",'direction="ltr"')}${T(130,318,"كلها موسومة:",17,"#8a6410")}${T(60,318,"n₁",19,"#8a6410",'direction="ltr"')}`)}
+
+/* 9) مقياس سيمبسون 0 ← 1 */
+function simpsonScale(o={}){const v=o.v;const x=v==null?null:60+v*780;return svg(900,170,"مؤشر سيمبسون من 0 (لا تنوع) إلى 1 (تنوع عالٍ جدًا)",
+ `<defs><linearGradient id="u2sg" x1="0" x2="1"><stop offset="0" stop-color="#C8473A"/><stop offset=".5" stop-color="#F2B632"/><stop offset="1" stop-color="#3F8A5E"/></linearGradient></defs>
+ <rect x="60" y="60" width="780" height="34" rx="17" fill="url(#u2sg)"/>${T(60,130,"0",28,K,'direction="ltr"')}${T(840,130,"1",28,K,'direction="ltr"')}${T(130,40,"عدم وجود تنوع",22,"#C8473A")}${T(770,40,"تنوع عالٍ جدًا",22,"#2D6B47")}${T(450,140,"كلما اقتربت D من 1 ازداد التنوع ←",22,"#4E6B62")}
+ ${x!=null?`<path d="M${x} 50v54" stroke="#16302B" stroke-width="6"/><circle cx="${x}" cy="77" r="12" fill="#fff" stroke="#16302B" stroke-width="5"/>${T(x,162,"D = "+v,22,K,'direction="ltr"')}`:""}`)}
+
+/* 10) العينة الممثلة (الشكل 2-5) */
+function sampleRep(){const dots=(cx,cy,r,n,seed)=>{let s=seed,g="";const rr=()=>(s=(s*9301+49297)%233280)/233280;for(let i=0;i<n;i++){const a=rr()*6.28,d=Math.sqrt(rr())*r;g+=`<circle cx="${cx+d*Math.cos(a)}" cy="${cy+d*Math.sin(a)}" r="7" fill="${["#2E7DB5","#D9822B","#3F8A5E"][i%3]}"/>`}return g};
+ return svg(900,330,"جماعة أحيائية كبيرة تُجمع منها عينة صغيرة ممثلة، ثم يُستدل من العينة على الجماعة كلها",
+ `<rect width="900" height="330" rx="22" fill="#F6FBF9"/><circle cx="660" cy="160" r="135" fill="#E3F1FB" stroke="${SEA}" stroke-width="4"/>${dots(660,160,120,90,3)}${T(660,320,"جماعة أحيائية",24,SEA)}
+ <circle cx="200" cy="160" r="70" fill="#FFF4D6" stroke="#D9822B" stroke-width="4"/>${dots(200,160,58,15,11)}${T(200,262,"عينة",24,"#D9822B")}
+ ${ar("M515 120C440 70 340 80 285 120","#D9822B",5)}${T(400,70,"جمع عينة",22,"#D9822B")}${ar("M285 205C340 250 440 250 515 205","#1b5c86",5,"12 8")}${T(400,270,"استدلال (تعميم)",22,"#1b5c86")}`,["#D9822B","#1b5c86"])}
+
+return {smethod,SM,plants,ivdv,graphs,GT,field,FIELD,transect,quadrats,pitfall,sweep,kick,mrr,simpsonScale,sampleRep};
+})());
