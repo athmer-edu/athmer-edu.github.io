@@ -670,7 +670,15 @@ const IC = {
 /* ===== الحالة (المعاينة تحفظ في المتصفح؛ النسخة النهائية في Firebase) ===== */
 const store={get(){try{return JSON.parse(localStorage.getItem("athmer-demo-2")||"{}")}catch(e){return{}}},set(s){try{localStorage.setItem("athmer-demo-2",JSON.stringify(s))}catch(e){}}};
 let S=Object.assign({user:null,status:{},saved:{},open:{}},store.get());
-const save=()=>store.set(S);
+const save=()=>{store.set(S);pushProgress()};
+// حفظ تقدم الطالبة في Firestore داخل users/{uid} (فقط عند تسجيل الدخول)
+function pushProgress(){
+  const FB=window.ATHMER_FB;if(!FB||!S.user||!S.user.uid)return;
+  FB.db.collection("users").doc(S.user.uid).set({
+    name:S.user.name, status:S.status, saved:S.saved, last:S.last||null,
+    updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+  },{merge:true}).catch(e=>console.warn("تعذّر حفظ التقدم:",e.code||e));
+}
 function applyTheme(){if(S.theme)document.documentElement.dataset.theme=S.theme;else delete document.documentElement.dataset.theme}
 applyTheme();
 const isDark=()=>S.theme?S.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
@@ -717,11 +725,27 @@ function login(){
 }
 function logout(){const FB=window.ATHMER_FB;if(FB)FB.auth.signOut().then(()=>toast("تم تسجيل الخروج"))}
 // تزامن حالة الدخول من Firebase مع الواجهة (يعمل عند فتح الصفحة وعند الدخول والخروج)
+const RANK={seed:0,grow:1,fruit:2};
 function watchAuth(){
   const FB=window.ATHMER_FB;if(!FB)return;
   FB.auth.onAuthStateChanged(u=>{
-    S.user=u?{name:u.displayName||u.email||"طالبة",uid:u.uid}:null;
-    save();render();
+    if(!u){ // خروج: نفرّغ التقدم عشان ما يبقى على جهاز مشترك
+      S.user=null;S.status={};S.saved={};S.last=null;save();render();return;
+    }
+    S.user={name:u.displayName||u.email||"طالبة",uid:u.uid};
+    FB.db.collection("users").doc(u.uid).get()
+      .then(d=>{
+        const c=d.exists?d.data():{};
+        const st={...S.status};
+        Object.entries(c.status||{}).forEach(([k,v])=>{
+          if((RANK[v]??-1)>(RANK[st[k]]??-1))st[k]=v;   // نأخذ الأعلى بين الجهاز والسحابة
+        });
+        S.status=st;
+        S.saved={...(c.saved||{}),...S.saved};          // اتحاد المحفوظات
+        S.last=S.last||c.last||null;
+      })
+      .catch(e=>console.warn("تعذّر تحميل التقدم:",e.code||e))
+      .finally(()=>{save();render()});
   });
 }
 function needLogin(){if(!S.user){toast("سجّلي الدخول ليُحفظ تقدّمك");return true}return false}
