@@ -5,7 +5,7 @@ const E=window.ENVART,W=window.WIDGETS;
 const bar=cap=>`<div class="w-bar"><span class="w-cap">${cap}</span></div>`;
 
 /* رسم ثابت من ENVART: <div data-widget="efig" data-f="interception" data-cap="..."> */
-W.efig=el=>{el.className="widget";const f=el.dataset.f;el.innerHTML=`<div class="ew-fig">${E[f]()}</div>${el.dataset.cap?bar(el.dataset.cap):""}`};
+W.efig=el=>{el.className="widget";const f=el.dataset.f;const o={};if(el.dataset.k!=null)o.k=+el.dataset.k;if(el.dataset.o)try{Object.assign(o,JSON.parse(el.dataset.o))}catch(e){}el.innerHTML=`<div class="ew-fig">${E[f](o)}</div>${el.dataset.cap?bar(el.dataset.cap):""}`};
 
 /* 1-1: ممارسات مستدامة وغير مستدامة */
 const SU=[["الصيد الجائر لثور البيسون الأمريكي",0,"أدى إلى فقدان شبه كلي للنوع حتى شارف على الانقراض."],["التخلص من القمامة في الأنهار والمحيطات",0,"يلوّث المياه العذبة والمناطق الساحلية التي توفر الغذاء للإنسان."],["انبعاثات المصانع ومحطات الطاقة",0,"تلوّث الهواء فيصبح ضارًا بالتنفس."],["القطع السريع الجائر للغابات",0,"إزالة الغابات تفقدنا تنقية الماء والهواء والمواطن البيئية."],["إعادة تشجير المناطق المقطوعة",1,"محاولة لإصلاح الضرر الذي سببته إزالة الغابات."],["استخدام طاقة الرياح والطاقة الشمسية",1,"مصدران يمكن توليدهما باستمرار، بدل الفحم والنفط اللذين يستغرق تكوّنهما نحو 300 مليون سنة."],["قطع الأشجار مع خطة لإعادة زراعتها وإدارة معدل قطعها",1,"إدارة الغابات: نستفيد من الخشب ونحمي الغابة."],["الاستخدام المفرط للفحم الحجري والنفط",0,"ستنفد الإمدادات قبل إعادة تكوّنها."]];
@@ -128,7 +128,8 @@ const CLS={
   ["تقدير حجم جماعة البط في بحيرة",4,"حيوانات متنقلة يصعب عدّها كلها (مؤشر لينكولن)."],["البرنقيل والمحار على شاطئ صخري",0,"كائنات ثابتة."],
   ["الحلازين البطيئة الحركة على الصخور",0,"تتحرك ببطء شديد."],["تقدير عدد أسماك القرش المطرقة حول جزيرة",4,"إمساك ووسم ثم إعادة إمساك."]]}
 };
-W.cls=el=>{el.className="widget";const D=CLS[el.dataset.k];let n=0;
+window.CLSDATA=Object.assign(window.CLSDATA||{},CLS);
+W.cls=el=>{el.className="widget";const D=window.CLSDATA[el.dataset.k];let n=0;
   el.innerHTML=`<p class="ew-q">${D.q}</p><div class="ew-sust">${D.it.map((s,i)=>`<div class="ew-sc" data-i="${i}"><p>${s[0]}</p><div class="ew-b">${D.c.map((c,j)=>`<button class="btn ghost sm" data-v="${j}">${c}</button>`).join("")}</div><div class="ew-why" hidden></div></div>`).join("")}</div>${bar(`<span class="cls-s">أجبتِ عن 0 من ${D.it.length}</span>`)}`;
   let ok=0;el.querySelectorAll(".ew-sc").forEach(c=>c.onclick=e=>{const b=e.target.closest("button");if(!b||c.dataset.done)return;const it=D.it[+c.dataset.i],good=+b.dataset.v===it[1];c.dataset.done=1;n++;if(good)ok++;c.classList.add(good?"ok":"no");const w=$q(c,".ew-why");w.hidden=false;w.innerHTML=`<b>${good?"صحيح.":"الإجابة: "+D.c[it[1]]+"."}</b> ${it[2]}`;$q(el,".cls-s").textContent=`أجبتِ عن ${n} من ${D.it.length} • الصحيح ${ok}`})};
 
@@ -229,4 +230,88 @@ W.techs=el=>{el.className="widget";let k=0;
     $q(el,".tq-b").innerHTML=`<div class="ew-two"><div class="ew-fig">${E[t[1]]()}</div><div><h4 style="font-family:var(--display);margin:0 0 6px">${t[0]}</h4><p><b>لجمع:</b> ${t[2]}</p><p><b>الطريقة:</b> ${t[3]}</p></div></div><div class="ew-two" style="margin-top:10px"><div class="ew-card" style="background:color-mix(in srgb,#3F8A5E 10%,transparent)"><h4>الفوائد</h4><ul>${t[4].map(x=>`<li>${x}</li>`).join("")}</ul></div><div class="ew-card" style="background:color-mix(in srgb,#C8473A 9%,transparent)"><h4 style="color:#B03A2E">المحددات</h4><ul>${t[5].map(x=>`<li>${x}</li>`).join("")}</ul></div></div>`};
   el.innerHTML=`<div class="ew-tabs">${TQ.map((t,i)=>`<button class="btn ghost sm" data-t="${i}">${t[0]}</button>`).join("")}</div><div class="tq-b"></div>${bar("الجدول 2-5 والصفحات 62-67 من كتاب الطالب.")}`;
   el.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{k=+b.dataset.t;draw()});draw()};
+})();
+
+/* ===== رسومات تفاعلية: العلوم البيئية، الوحدة الثالثة (التفاعلات في النظم البيئية البحرية) ===== */
+(function(){
+if(!window.ENVART||!window.ENVART.symb)return;
+const E=window.ENVART,W=window.WIDGETS;
+const bar=cap=>`<div class="w-bar"><span class="w-cap">${cap}</span></div>`;
+const $q=(el,s)=>el.querySelector(s);
+Object.assign(window.CLSDATA=window.CLSDATA||{},{
+ rel:{q:"ما نوع العلاقة التكافلية؟",c:["تطفل","تعايش","تبادل"],it:[
+  ["قمل البحر يتغذى على مخاط السلمون وأنسجته ودمه",0,"المتكافل يستفيد والعائل يتضرر."],["الريمورا تلتصق بشيطان البحر لتنتقل دون استهلاك طاقة",1,"الريمورا تستفيد وشيطان البحر لا يتأثر (رَحَلان)."],
+  ["سرطان البحر الملاكم يمسك شقائق النعمان للدفاع، وتلتقط هي بقايا طعامه",2,"كلاهما يستفيد."],["الريمورا تأكل الطفيليات عن جلد شيطان البحر",2,"هنا تصبح العلاقة تبادلية: كلاهما يستفيد."],
+  ["دودة شريطية تعيش داخل أمعاء سمكة",0,"طفيل داخلي يتضرر منه العائل."],["الرَّحَلان: كائن يلتصق بآخر للانتقال فقط",1,"نوع من التعايش."]]},
+ troph:{q:"ما نوع التغذية؟",c:["آكل أعشاب","قارت","آكل لحوم"],it:[
+  ["سمكة الببغاء تتغذى على الطحالب في الشعاب",0,"تتغذى على منتجات."],["سرطان بحر يأكل الطحالب وصغار الأسماك",1,"نباتات وحيوانات."],["الفقمة تصطاد الحبار والأسماك",2,"تتغذى على حيوانات."],
+  ["مجدافيات الأرجل غير الطفيلية تأكل الدياتومات",0,"عوالق حيوانية آكلة أعشاب."],["الكريل يأكل عوالق نباتية وحيوانية",1,"قارت."],["القرش يفترس الأسماك",2,"مفترس آكل لحوم."]]},
+ auto:{q:"تمثيل ضوئي أم تمثيل كيميائي؟",c:["تمثيل ضوئي","تمثيل كيميائي"],it:[
+  ["العوالق النباتية في الطبقة السطحية",0,"تستخدم ضوء الشمس."],["بكتيريا عند الفوهات المائية الحرارية",1,"تستخدم كبريتيد الهيدروجين."],["طحلب الكلب وحشائش البحر",0,"ذاتية التغذية الضوئية."],
+  ["يحدث على عمق 2000 m إلى 7700 m",1,"لا يصل الضوء."],["يحدث فقط في أعلى 200 m تقريبًا",0,"المنطقة الضوئية."],["الكائنات المحبة للظروف القاسية تبدأ سلسلتها الغذائية",1,"ضغط عالٍ وحرارة حتى 400°C."]]},
+ pyr:{q:"أي هرم؟",c:["الأعداد","الكتلة الحيوية","الطاقة"],it:[
+  ["لا يمكن أن يكون مقلوبًا أبدًا",2,"يقيس معدل الإنتاج على مدار سنة."],["يكون مقلوبًا إذا تغذت طفيليات كثيرة على سمكة كبيرة",0,"لا يراعي حجم الكائنات."],
+  ["يكون مقلوبًا بسبب المحصول القائم للعوالق النباتية",1,"تؤكل بسرعة لكنها تتكاثر بسرعة."],["وحدته kJ m⁻² year⁻¹",2,"طاقة على مدار سنة."],["يُفضّل فيه استخدام الكتلة الجافة",1,"الماء لا يُسهم في الكتلة الحيوية."],["الأصعب في إنتاجه والأكثر فائدة لفهم النظام البيئي",2,"بيانات على مدى سنة."]]},
+ phase:{q:"الطور الحيوي أم غير الحيوي؟",c:["الطور الحيوي","الطور غير الحيوي"],it:[
+  ["الجلوكوز في خلايا العوالق النباتية",0,"مركب عضوي داخل كائن حي."],["أيونات النترات الذائبة في ماء البحر",1,"أيون غير عضوي."],["CO₂ في الغلاف الجوي",1,"غاز غير عضوي."],
+  ["البروتينات في عضلات سمكة",0,"مركب عضوي."],["رواسب قاع المحيط",1,"تتحول إلى صخور."],["الدهون في جسم فقمة",0,"مركب عضوي."]]},
+ nform:{q:"صنّفي المغذي:",c:["غاز","أيون غير عضوي","مركب عضوي"],it:[
+  ["CO₂",0,"غاز."],["Mg²⁺",1,"أيون."],["NO₃⁻",1,"أيون النترات."],["PO₄³⁻",1,"أيون الفوسفات."],["CO₃²⁻",1,"أيون الكربونات."],["الكربوهيدرات",2,"مركب عضوي."],["البروتينات",2,"مركب عضوي."],["N₂",0,"غاز."]]},
+ elem:{q:"أي عنصر يُستخدم في…؟",c:["النيتروجين","الكربون","المغنيسيوم","الكالسيوم","الفوسفور"],it:[
+  ["تكوين الكلوروفيل",2,"Mg في مركز جزيء الكلوروفيل."],["تكوين البروتينات وDNA",0,"الأحماض الأمينية تحوي N."],["تكوين العظام والأصداف والهياكل المرجانية",3,"كربونات الكالسيوم."],
+  ["تكوين DNA والعظام",4,"الفوسفات."],["تكوين كافة المركبات العضوية",1,"هيكل كل جزيء عضوي."]]},
+ proc:{q:"هل تجدد العملية مخزون المغذيات السطحي أم تستنفده؟",c:["تجدد المخزون","تستنفد المخزون"],it:[
+  ["التيارات الصاعدة للمياه",0,"مياه عميقة غنية بالمغذيات."],["امتصاص المنتجات للمغذيات",1,"الطريقة الرئيسية للإزالة."],["الجريان السطحي من اليابسة",0,"يحمل مغذيات التربة."],
+  ["الحصاد (صيد الأسماك وجمع الطحالب)",1,"يزيل المغذيات من المحيط."],["ذوبان CO₂ وN₂ في الماء",0,"من الغلاف الجوي."],["سقوط الثلج البحري إلى الأعماق",1,"ينقل المادة العضوية بعيدًا عن السطح."],["الرماد البركاني يسقط في البحر",0,"نشاط تكتوني يضيف أيونات."],["التيار الهابط للمياه",1,"يزيل المغذيات من السطح."]]}
+});
+
+/* 3-1: جدول تأثير العلاقات (+ − 0) */
+const SY=[["التبادلية","+","+"],["التطفلية","−","+"],["التعايشية","0","+"]];
+W.symbio=el=>{el.className="widget";
+  el.innerHTML=`<p class="ew-q">اختاري التأثير على العائل وعلى المتكافل (+ يستفيد، − يتضرر، 0 لا يتأثر)، ثم اضغطي «تحقّقي».</p><div class="tbl-wrap"><table class="ew-tbl"><thead><tr><th>العلاقة</th><th>العائل</th><th>المتكافل</th></tr></thead><tbody>${SY.map((r,i)=>`<tr><td><b>${r[0]}</b></td>${[1,2].map(j=>`<td><select data-i="${i}" data-j="${j}" aria-label="${r[0]} ${j===1?"العائل":"المتكافل"}"><option value="">؟</option><option>+</option><option>−</option><option>0</option></select></td>`).join("")}</tr>`).join("")}</tbody></table></div><div class="ew-b" style="margin:8px 0"><button class="btn sm" id="syc">تحقّقي</button><button class="btn ghost sm" id="sys">إظهار الحل</button></div><div class="ew-fig">${E.symb()}</div>${bar("الجدول 3-1 من كتاب الطالب • الإجابة من دليل المعلم.")}`;
+  const chk=show=>{let ok=0;el.querySelectorAll("select").forEach(s=>{const a=SY[+s.dataset.i][+s.dataset.j];if(show)s.value=a;const g=s.value===a;if(g)ok++;s.style.outline=s.value?`3px solid ${g?"#3F8A5E":"#C8473A"}`:""});return ok};
+  $q(el,"#syc").onclick=()=>{const k=chk(false);$q(el,"#syc").textContent=`تحقّقي (${k} من 6)`};$q(el,"#sys").onclick=()=>chk(true)};
+
+/* 3-2: طبقات المحيط */
+const ZD=[["المنطقة الضوئية (0-200 m)","يصلها ضوء الشمس فيحدث التمثيل الضوئي، وفيها نحو 90% من الحياة البحرية ومعظم الكتلة الحيوية."],["المنحدر الحراري (تدرّج الكثافة)","منطقة انتقالية بين ماء سطحي دافئ أقل كثافة وماء بارد أكثر كثافة؛ تقلل اختلاط الطبقتين. وأعلى إنتاجية عادة قربه: توازن الضوء والحرارة والمغذيات."],["المياه العميقة","لا ضوء فلا تمثيل ضوئي، لكنها غنية بالمغذيات (بقايا الكائنات الغارقة). وعند الفوهات الحرارية يحدث التمثيل الكيميائي."]];
+W.zones=el=>{el.className="widget";let k=0;
+  const draw=()=>{$q(el,".ew-fig").innerHTML=E.oceanZones({hl:k});$q(el,".ew-card").innerHTML=`<h4>${ZD[k][0]}</h4><p>${ZD[k][1]}</p>`;el.querySelectorAll("[data-z]").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.z===k))};
+  el.innerHTML=`<div class="ew-tabs">${ZD.map((z,i)=>`<button class="btn ghost sm" data-z="${i}">${z[0].split(" (")[0]}</button>`).join("")}</div><div class="ew-fig"></div><div class="ew-card" aria-live="polite"></div>${bar("الشكل 3-1: طبقات الماء في المحيط.")}`;
+  el.querySelectorAll("[data-z]").forEach(b=>b.onclick=()=>{k=+b.dataset.z;draw()});draw()};
+
+/* 3-2: باني الأهرامات */
+const PY={"عام (طاقة)":{t:"الطاقة",L:[["المنتجات",100],["مستهلكات أولية",10],["مستهلكات ثانوية",1],["مستهلكات ثالثية",0.1]]},"سؤال 2 (أ)":{t:"الطاقة",L:[["العوالق النباتية",8000],["العوالق الحيوانية",912],["الأسماك",86]]},"ساحل كاليفورنيا":{t:"الأعداد",L:[["العوالق النباتية",809],["العوالق الحيوانية",37],["الرنجة",11],["الماكريل",1]]},"طفيليات على سمكة":{t:"الأعداد",L:[["عوالق نباتية",5000],["عوالق حيوانية",800],["كريل",120],["سلمون",1],["قمل البحر",400]]},"محصول قائم":{t:"الكتلة الحيوية",L:[["عوالق نباتية",21],["عوالق حيوانية",30]]},"السلسلة (الشكل 3-16)":{t:"الطاقة",L:[["عوالق نباتية",5000],["عوالق حيوانية",589],["سردين",61],["أسماك التونة",4]]}};
+W.pyrbuild=el=>{el.className="widget";let cur=JSON.parse(JSON.stringify(PY["عام (طاقة)"]));
+  const draw=()=>{const L=cur.L;$q(el,".pb-fig").innerHTML=E.pyramid({levels:L,lab:"هرم "+cur.t,log:true,title:"هرم "+cur.t+" (رسم تقريبي)"});
+    const inv=L.some((l,i)=>i&&l[1]>L[i-1][1]);
+    $q(el,".pb-in").innerHTML=L.map((l,i)=>`<label class="ew-rng" style="display:flex;gap:8px;align-items:center"><span style="min-width:130px">${l[0]}</span><input type="number" min="0" step="any" value="${l[1]}" data-i="${i}" style="width:110px"></label>`).join("");
+    el.querySelectorAll(".pb-in input").forEach(inp=>inp.onchange=()=>{cur.L[+inp.dataset.i][1]=Math.max(0,+inp.value||0);draw()});
+    const tr=cur.t==="الطاقة"?L.slice(1).map((l,i)=>`${L[i][0]} ← ${l[0]}: <b dir="ltr">${(l[1]/L[i][1]*100).toFixed(1)}%</b>`).join("<br>"):"";
+    $q(el,".ew-card").innerHTML=`${inv?`<p><b style="color:#C8473A">هرم غير منتظم/مقلوب:</b> ${cur.t==="الأعداد"?"لا يراعي حجم الكائنات (كائن كبير واحد أو طفيليات كثيرة)، أو قيست الأعداد بعد أن أُكلت العوالق.":cur.t==="الكتلة الحيوية"?"المحصول القائم للعوالق النباتية صغير لأنها تؤكل بسرعة، لكنها تتكاثر بسرعة.":"هرم الطاقة لا يكون مقلوبًا أبدًا: راجعي الأرقام."}</p>`:`<p>هرم منتظم: كل مستوى أصغر من الذي تحته.</p>`}${tr?`<p><b>كفاءة الانتقال</b> (الطاقة في المستوى ÷ الطاقة في السابق × 100):<br>${tr}</p>`:""}<p class="soft">الأشرطة مرسومة تقريبيًا (مقياس لوغاريتمي) لأن الفروق كبيرة جدًا.</p>`};
+  el.innerHTML=`<div class="ew-tabs">${Object.keys(PY).map(k=>`<button class="btn ghost sm" data-p="${k}">${k}</button>`).join("")}</div><div class="ew-two"><div><div class="pb-in"></div></div><div class="ew-fig pb-fig"></div></div><div class="ew-card" aria-live="polite"></div>${bar("غيّري الأرقام ولاحظي شكل الهرم وكفاءة الانتقال.")}`;
+  el.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{cur=JSON.parse(JSON.stringify(PY[b.dataset.p]));draw()});draw()};
+
+/* 3-2: ازدهار الطحالب */
+W.bloom=el=>{el.className="widget";
+  el.innerHTML=`<label class="ew-rng">كمية المغذيات الداخلة (نترات وفوسفات): <b id="bv"></b><input type="range" id="bn" min="0" max="100" value="30"></label><div class="ew-card" aria-live="polite"></div>${bar("ازدهار الطحالب: زيادة سريعة في أعداد العوالق النباتية والطحالب (حتى 5 ملايين خلية لكل لتر).")}`;
+  const f=()=>{const n=+$q(el,"#bn").value;$q(el,"#bv").textContent=n<20?"قليلة":n<55?"معتدلة":n<75?"كثيرة":"مفرطة";
+    const phy=Math.min(100,15+n*1.1),ox=n<55?90-n*.2:Math.max(5,90-(n-50)*1.7),fish=n<20?30+n*1.5:n<55?60+(n-20)*.6:Math.max(3,80-(n-55)*1.9);
+    const row=(t,v,c)=>`<div style="display:flex;gap:8px;align-items:center;margin:4px 0"><span style="min-width:150px">${t}</span><div class="ew-meter" style="flex:1"><div><i style="width:${v}%;background:${c}"></i></div></div></div>`;
+    $q(el,".ew-card").innerHTML=row("العوالق النباتية",phy,"#3F8A5E")+row("الأكسجين المذاب",ox,"#2E7DB5")+row("الأسماك والمستهلكات",fish,"#D9822B")+`<p>${n<20?"مغذيات قليلة: الإنتاجية محدودة، فالمغذيات عامل محدد.":n<55?"مغذيات معتدلة: إنتاجية أعلى، فتدعم مستهلكات أكثر وسلاسل غذائية أطول.":"ازدهار الطحالب: تسد الخياشيم، ثم تموت فتحللها البكتيريا التي تستهلك الأكسجين المذاب في تنفسها، فتموت المستهلكات. وإن كانت سامة تسمم الدلافين والحيتان والإنسان. (منطقة بحرية ميتة)"}</p>`};
+  $q(el,"#bn").oninput=f;f()};
+
+/* 3-2: حسابات تدفق الطاقة */
+const EF=[["الشكل 3-7: X (تنفس المستهلكات الثانوية)","in",598,[67],"X = 598 − 67 = 531"],["الشكل 3-7: Y (تنفس المستهلكات الأولية)","in",6421,[598,2389],"Y = 6421 − 598 − 2389 = 3434 (الخارج: 598 إلى المستهلكات الثانوية + 2389 إلى المحللات + Y)"],["الشمس ← المنتجات","pct",1600000,72567,"(72567 ÷ 1.6×10⁶) × 100 = 4.54%"],["المنتجات ← المستهلكات الأولية","pct",72567,6421,"(6421 ÷ 72567) × 100 = 8.85%"],["العوالق الحيوانية ← الأسماك","pct",912,86,"(86 ÷ 912) × 100 = 9.4%"],["العوالق النباتية ← العوالق الحيوانية (س10)","pct",5000,589,"(589 ÷ 5000) × 100 = 11.8%"]];
+W.eflow=el=>{el.className="widget";let k=0;
+  const draw=()=>{const e=EF[k];el.querySelectorAll("[data-e]").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.e===k));
+    $q(el,".ew-card").innerHTML=e[1]==="in"?`<p><b>القاعدة:</b> الطاقة الداخلة إلى الصندوق = مجموع الطاقة الخارجة منه.</p><p>الداخل: <b dir="ltr">${e[2]}</b> • الخارج المعروف: <b dir="ltr">${e[3].join(" + ")}</b></p><label class="ew-rng">احسبي المفقود: <input type="number" id="ea" style="width:120px"></label> <button class="btn sm" id="ec">تحقّقي</button><p class="ef-r"></p>`:`<p><b>القاعدة:</b> النسبة = (الطاقة في المستوى ÷ الطاقة في المستوى السابق) × 100</p><p>السابق: <b dir="ltr">${e[2].toLocaleString("en")}</b> • التالي: <b dir="ltr">${e[3].toLocaleString("en")}</b></p><label class="ew-rng">النسبة %: <input type="number" step="0.01" id="ea" style="width:120px"></label> <button class="btn sm" id="ec">تحقّقي</button><p class="ef-r"></p>`;
+    $q(el,"#ec").onclick=()=>{const v=+$q(el,"#ea").value,ans=e[1]==="in"?e[2]-e[3].reduce((a,b)=>a+b,0):e[3]/e[2]*100,ok=Math.abs(v-ans)<=Math.max(.06,ans*.01);$q(el,".ef-r").innerHTML=`<b style="color:${ok?"#2D6B47":"#B03A2E"}">${ok?"صحيح!":"ليس بعد."}</b> <span dir="ltr">${e[4]}</span>`}};
+  el.innerHTML=`<div class="ew-tabs">${EF.map((e,i)=>`<button class="btn ghost sm" data-e="${i}">${e[0]}</button>`).join("")}</div><div class="ew-card" aria-live="polite"></div>${bar("أمثلة الكتاب صفحة 100-101 وسؤال نهاية الوحدة 10.")}`;
+  el.querySelectorAll("[data-e]").forEach(b=>b.onclick=()=>{k=+b.dataset.e;draw()});draw()};
+
+/* 3-3: عمليات تجديد المخزون */
+W.replen=el=>{el.className="widget";let k=null;
+  const draw=()=>{$q(el,".ew-fig").innerHTML=E.replenish({hl:k});$q(el,".ew-card").innerHTML=k==null?"<p>اضغطي على أي عملية لتقرئي كيف تضيف المغذيات إلى الطبقة السطحية.</p>":`<h4 style="color:${E.PROC[k][2]}">${E.PROC[k][0]}</h4><p>${E.PROC[k][1]}</p>`;
+    el.querySelectorAll(".rpn").forEach(g=>{g.setAttribute("tabindex","0");g.onclick=g.onkeydown=ev=>{if(ev.type==="keydown"&&ev.key!=="Enter")return;k=+g.dataset.i;draw()}})};
+  el.innerHTML=`<div class="ew-fig"></div><div class="ew-card" aria-live="polite"></div>${bar("خمس عمليات تجدد المخزون، وامتصاص المنتجات يستنفده.")}`;draw()};
 })();

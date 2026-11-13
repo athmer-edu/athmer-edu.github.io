@@ -499,6 +499,99 @@ function sampleRep(){const dots=(cx,cy,r,n,seed)=>{let s=seed,g="";const rr=()=>
 return {smethod,SM,plants,ivdv,graphs,GT,field,FIELD,transect,quadrats,pitfall,sweep,kick,mrr,simpsonScale,sampleRep};
 })());
 
+/* ===== رسومات الوحدة الثالثة: التفاعلات في النظم البيئية البحرية (تُضاف إلى window.ENVART) ===== */
+Object.assign(window.ENVART,(function(){
+const K="#16302B",SEA="#2E7DB5",DEEP="#0b2a45",LEAF="#3F8A5E";
+const T=(x,y,t,fs=22,c=K,ex="")=>`<text x="${x}" y="${y}" font-family="Baloo Bhaijaan 2, Tahoma, sans-serif" font-weight="700" font-size="${fs}" fill="${c}" text-anchor="middle" ${ex}>${t}</text>`;
+const mk=c=>`<marker id="u3-${c.replace('#','')}" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${c}"/></marker>`;
+const ar=(d,c,w=5,dash="")=>`<path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" ${dash?`stroke-dasharray="${dash}"`:""} marker-end="url(#u3-${c.replace('#','')})"/>`;
+const svg=(w,h,lab,body,cols=[])=>`<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:auto" role="img" aria-label="${lab}"><defs>${cols.map(mk).join("")}</defs>${body}</svg>`;
+const fish=(x,y,s,c,flip=0)=>`<g transform="translate(${x} ${y}) scale(${flip?-s:s} ${s})"><path d="M-60 0C-30-34 30-34 52 0C30 34-30 34-60 0z" fill="${c}"/><path d="M48 0l34-26v52z" fill="${c}"/><circle cx="-36" cy="-8" r="6" fill="#fff"/><circle cx="-36" cy="-8" r="3" fill="${K}"/></g>`;
+const sign=(x,y,t,c)=>`<circle cx="${x}" cy="${y}" r="24" fill="${c}"/>${T(x,y+10,t,30,"#fff")}`;
+
+/* 1) العلاقات التكافلية الثلاث (k: 0 تطفل، 1 تعايش، 2 تبادل؛ بلا k: الثلاث) */
+const REL=[["التطفل","قمل البحر على السلمون","#C8473A","−","+"],["التعايش","الريمورا على شيطان البحر","#2E7DB5","0","+"],["التبادل","سرطان البحر الملاكم وشقائق النعمان","#3F8A5E","+","+"]];
+function relPic(k){
+  if(k===0)return `${fish(150,120,1.25,"#E8A87C")}${[[110,100],[150,92],[180,128],[125,140]].map(p=>`<g transform="translate(${p[0]} ${p[1]})"><ellipse rx="9" ry="6" fill="#7A4B2A"/><path d="M-6 4l-4 6M6 4l4 6" stroke="#7A4B2A" stroke-width="2"/></g>`).join("")}`;
+  if(k===1)return `<g transform="translate(150 118)"><path d="M-130 0C-80-40 -40-50 0-50C40-50 80-40 130 0C80 10 40 30 0 30C-40 30-80 10-130 0z" fill="#33475B"/><path d="M-10 30l-6 60" stroke="#33475B" stroke-width="5"/><circle cx="-60" cy="-20" r="5" fill="#fff"/></g>${fish(150,166,.55,"#8C9AA8")}`;
+  return `<g transform="translate(150 125)"><ellipse rx="44" ry="30" fill="#E07A5F"/><circle cx="-14" cy="-24" r="5" fill="${K}"/><circle cx="14" cy="-24" r="5" fill="${K}"/>${[-1,1].map(s=>`<path d="M${s*40} -10l${s*40}-34" stroke="#E07A5F" stroke-width="9" stroke-linecap="round"/><g transform="translate(${s*86} -52)">${[0,1,2,3,4,5,6,7].map(i=>`<path d="M0 0l${Math.cos(i*.8)*22} ${Math.sin(i*.8)*22-6}" stroke="#F2B632" stroke-width="5" stroke-linecap="round"/>`).join("")}<circle r="9" fill="#D9822B"/></g>`).join("")}${[-30,-12,12,30].map(x=>`<path d="M${x} 24l${x>0?14:-14} 22" stroke="#E07A5F" stroke-width="6" stroke-linecap="round"/>`).join("")}</g>`}
+function symb(o={}){const one=k=>{const r=REL[k];return `<g><rect x="0" y="0" width="300" height="330" rx="22" fill="#fff" stroke="${r[2]}" stroke-width="5"/>${T(150,40,r[0],30,r[2])}<rect x="14" y="54" width="272" height="160" rx="16" fill="#E3F1FB"/>${relPic(k)}${T(150,240,r[1],18,"#4E6B62")}${T(80,276,"العائل",19)}${sign(80,306,r[3],r[3]==="−"?"#C8473A":r[3]==="0"?"#8C9AA8":"#3F8A5E")}${T(220,276,"المتكافل",19)}${sign(220,306,r[4],"#3F8A5E")}</g>`};
+  if(o.k!=null)return svg(300,340,REL[o.k][0]+": "+REL[o.k][1],one(o.k));
+  return svg(960,340,"ثلاث علاقات تكافلية: التطفل يستفيد فيه المتكافل ويتضرر العائل، والتعايش يستفيد المتكافل ولا يتأثر العائل، والتبادل يستفيد الطرفان",[2,1,0].map((k,i)=>`<g transform="translate(${i*330} 0)">${one(k)}</g>`).join(""))}
+
+/* 2) طبقات المحيط (الشكل 3-1) */
+function oceanZones(o={}){const hl=o.hl;return svg(900,520,"طبقات المحيط: المنطقة الضوئية حتى 200 m، ثم المنحدر الحراري حتى 1000 m، ثم المياه العميقة حتى قاع المحيط 5000 m",
+ `<defs><linearGradient id="u3z" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7EC8E3"/><stop offset=".25" stop-color="#2E7DB5"/><stop offset=".6" stop-color="#174D78"/><stop offset="1" stop-color="#0b2a45"/></linearGradient></defs>
+ <rect x="300" y="40" width="560" height="440" fill="url(#u3z)"/><rect x="300" y="470" width="560" height="40" fill="#8C7B63"/>
+ <circle cx="830" cy="26" r="20" fill="#F2B632"/>${[0,1,2,3].map(i=>`<path d="M${800-i*50} 40l-30 70" stroke="#FFE38A" stroke-width="5" opacity=".8"/>`).join("")}
+ <path d="M300 110H860" stroke="#fff" stroke-width="3" stroke-dasharray="10 8"/><path d="M300 250H860" stroke="#fff" stroke-width="3" stroke-dasharray="10 8"/>
+ <g opacity="${hl==null||hl===0?1:.35}"><rect x="40" y="48" width="240" height="56" rx="14" fill="#7EC8E3"/>${T(160,84,"المنطقة الضوئية",24,DEEP)}</g>
+ <g opacity="${hl==null||hl===1?1:.35}"><rect x="40" y="152" width="240" height="56" rx="14" fill="#2E7DB5"/>${T(160,188,"المنحدر الحراري",24,"#fff")}</g>
+ <g opacity="${hl==null||hl===2?1:.35}"><rect x="40" y="330" width="240" height="56" rx="14" fill="#174D78"/>${T(160,366,"المياه العميقة",24,"#fff")}</g>
+ ${T(160,502,"قاع المحيط",22,"#6B5B45")}
+ ${T(580,84,"90% من الحياة البحرية • تمثيل ضوئي",20,DEEP)}${T(580,190,"تدرج الكثافة: ماء دافئ فوق بارد",20,"#fff")}${T(580,360,"لا ضوء • مياه غنية بالمغذيات",20,"#fff")}
+ ${[["200 m",110],["1000 m",250],["5000 m",470]].map(d=>T(340,d[1]-8,d[0],17,"#fff",'direction="ltr"')).join("")}
+ ${[[420,80],[690,70],[760,95]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#3F8A5E"/>`).join("")}`)}
+
+/* 3) الفوهة المائية الحرارية والتمثيل الكيميائي */
+function vent(){return svg(900,420,"فوهة مائية حرارية في قاع المحيط: بكتيريا ذاتية التغذية الكيميائية تستخدم كبريتيد الهيدروجين لصنع جزيئات عضوية، وتبدأ بها سلسلة غذائية بلا ضوء",
+ `<rect width="900" height="420" rx="22" fill="#0b2a45"/><path d="M0 360Q200 330 420 350T900 340V420H0z" fill="#3A3A3A"/>
+ <path d="M420 350l26-170h40l26 170z" fill="#4A3B33"/><path d="M466 180c-30-40 30-60 0-100c-30-40 40-60 10-90" stroke="#9AA3AD" stroke-width="22" fill="none" opacity=".55" stroke-linecap="round"/>
+ ${T(470,40,"H₂S + مياه حارة جدًا (حتى 400°C)",21,"#FFD58A")}
+ ${[560,600,640,680].map((x,i)=>`<path d="M${x} 355v-${70+i*12}" stroke="#E9E4D8" stroke-width="12" stroke-linecap="round"/><circle cx="${x}" cy="${285-i*12}" r="11" fill="#D64545"/>`).join("")}${T(625,210,"ديدان أنبوبية",20,"#fff")}
+ ${[[300,330],[330,345],[360,325],[280,350],[390,340]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="6" fill="#8BD17C"/>`).join("")}${T(330,300,"بكتيريا",20,"#8BD17C")}
+ <rect x="40" y="90" width="330" height="150" rx="16" fill="rgba(255,255,255,.1)" stroke="#8BD17C" stroke-width="3"/>${T(205,128,"التمثيل الكيميائي",26,"#8BD17C")}${T(205,166,"طاقة كيميائية (كبريتيد الهيدروجين)",18,"#fff")}${T(205,196,"+ CO₂ ذائب ← جزيئات عضوية",18,"#fff")}${T(205,226,"بلا ضوء • بداية السلسلة الغذائية",18,"#FFD58A")}
+ ${T(780,300,"سرطان",18,"#fff")}<g transform="translate(780 330)"><ellipse rx="26" ry="16" fill="#E8E2D0"/><path d="M-24 0l-16-14M24 0l16-14" stroke="#E8E2D0" stroke-width="5"/></g>`)}
+
+/* 4) هرم عام: levels=[[الاسم,القيمة]] من الأسفل إلى الأعلى؛ log: مقياس لوغاريتمي تقريبي */
+function pyramid(o={}){const L=o.levels||[["منتجات",1000],["مستهلكات أولية",100],["مستهلكات ثانوية",10],["مستهلكات ثالثية",1]];const cols=o.cols||["#3F8A5E","#7FA032","#D9822B","#B5487A","#6A5ACD"];
+ const max=Math.max(...L.map(l=>l[1]));const W=o.w||820,bh=Math.min(70,320/L.length),H=L.length*bh+60;
+ const wid=v=>{const r=o.log?Math.log10(v+1)/Math.log10(max+1):v/max;return Math.max(30,r*(W-260))};
+ return svg(W,H,(o.lab||"هرم بيئي")+": "+L.map(l=>l[0]+" "+l[1]).join("، "),L.map((l,i)=>{const w=wid(l[1]),y=H-30-(i+1)*bh,x=(W-80)/2-w/2+80;return `<rect x="${x}" y="${y}" width="${w}" height="${bh-6}" rx="6" fill="${cols[i%cols.length]}"/>${T(x+w/2,y+bh/2+4,o.noval?"":l[1],18,"#fff",'direction="ltr"')}${T(70,y+bh/2+5,l[0],18,K)}`}).join("")+(o.title?T((W+80)/2,H-6,o.title,18,"#4E6B62"):""))}
+
+/* 5) مصير الطاقة في المستهلك (الشكل 3-3): C = R + F + U + P */
+function energyFate(o={}){const p=o.p||{R:60,F:20,U:5,P:15};const parts=[["R","التنفس (حرارة)","#C8473A"],["F","البراز","#8C7B63"],["U","البول والفضلات","#D9822B"],["P","كتلة حيوية جديدة","#3F8A5E"]];let x=820;
+ return svg(900,330,"الطاقة المستهلكة C تتوزع: R في التنفس، F في البراز، U في البول، P للنمو وتنتقل إلى المستوى التالي",
+ `<rect width="900" height="330" rx="22" fill="#F6FBF9"/>${T(450,44,"C = R + F + U + P",30,DEEP,'direction="ltr"')}<rect x="80" y="70" width="740" height="40" rx="10" fill="${SEA}"/>${T(450,98,"C: الطاقة في الطعام المستهلك (100%)",20,"#fff")}
+ ${parts.map(q=>{const w=740*p[q[0]]/100;x-=w;return `<rect x="${x}" y="130" width="${w}" height="60" rx="8" fill="${q[2]}"/>${T(x+w/2,168,q[0],26,"#fff",'direction="ltr"')}`}).join("")}
+ ${parts.map((q,i)=>{const sx=i%2?420:830,sy=218+(i>>1)*34;return `<rect x="${sx-12}" y="${sy-12}" width="24" height="24" rx="6" fill="${q[2]}"/>${T(sx-150,sy+6,q[0]+": "+q[1]+" "+p[q[0]]+"%",17,K)}`}).join("")}${T(450,312,"P وحدها تنتقل إلى المستوى الغذائي التالي",18,"#2D6B47")}`,["#3F8A5E"])}
+
+/* 6) دورة مغذٍّ عامة: الطور الحيوي وغير الحيوي (الشكل 3-8) */
+function nutCycle(o={}){return svg(900,440,"دورة مغذٍّ عامة: المغذيات في الطور غير الحيوي تمتصها المنتجات فتنتقل إلى الطور الحيوي، ثم المستهلكات، ثم المحللات تعيدها إلى الطور غير الحيوي",
+ `<rect width="900" height="440" rx="22" fill="#F6FBF9"/><rect x="20" y="20" width="860" height="210" rx="20" fill="#EAF5EC"/>${T(800,58,"الطور الحيوي",26,LEAF)}${T(800,84,"مركبات عضوية",17,"#4E6B62")}
+ <rect x="20" y="250" width="860" height="170" rx="20" fill="#E3F1FB"/>${T(790,404,"الطور غير الحيوي",26,SEA)}
+ ${[["منتجات",620,140,"#3F8A5E"],["مستهلكات",400,140,"#D9822B"],["محللات",180,140,"#8C7B63"]].map(b=>`<rect x="${b[1]-90}" y="${b[2]-36}" width="180" height="72" rx="18" fill="${b[3]}"/>${T(b[1],b[2]+9,b[0],26,"#fff")}`).join("")}
+ ${ar("M525 140H500","#16302B",6)}<path d="M528 140H496" stroke="#16302B" stroke-width="6"/>${ar("M305 140H282","#16302B",6)}<path d="M308 140H276" stroke="#16302B" stroke-width="6"/>${T(512,112,"تغذية",17)}
+ <path d="M620 176Q620 210 620 200" stroke="none"/>${ar("M560 330C640 320 640 230 625 182","#3F8A5E",6)}${T(690,300,"امتصاص وتمثيل غذائي",18,LEAF)}
+ ${ar("M180 182C170 260 260 330 330 335","#8C7B63",6)}${T(150,300,"تحلل",18,"#6B5B45")}${ar("M400 180C420 230 420 280 440 318","#8C7B63",4,"10 7")}${T(470,240,"إخراج",17,"#6B5B45")}
+ <rect x="330" y="310" width="240" height="96" rx="16" fill="#fff" stroke="${SEA}" stroke-width="3"/>${T(450,340,"أيونات ذائبة في الماء",18,SEA)}${T(450,368,"غازات في الغلاف الجوي",18,SEA)}${T(450,396,"رواسب وصخور",18,SEA)}`,["#16302B","#3F8A5E","#8C7B63"])}
+
+/* 7) التيار الصاعد للمياه الساحلية (الشكل 3-10) */
+function upwelling(){return svg(900,420,"التيار الصاعد للمياه الساحلية: رياح سطحية تدفع الطبقة السطحية الدافئة بعيدًا عن الشاطئ، فترتفع مياه عميقة باردة غنية بالمغذيات",
+ `<rect width="900" height="420" rx="22" fill="#F6FBF9"/><path d="M0 120H660L900 70V420H0z" fill="#2E7DB5"/><path d="M660 120L900 70V420H780z" fill="#C9A66B"/><path d="M0 120H660V160H0z" fill="#7EC8E3"/>
+ ${T(780,52,"الشاطئ",22,"#6B5B45")}${ar("M600 60H380","#16302B",6)}${T(490,44,"رياح سطحية",20)}
+ ${ar("M560 140H300","#D9822B",6)}${T(330,196,"طبقة سطحية دافئة تُدفع بعيدًا",18,"#fff")}
+ ${ar("M260 380C460 380 620 330 640 180","#fff",7,"14 9")}${T(420,290,"مياه عميقة باردة غنية بالمغذيات تصعد",19,"#fff")}
+ ${[[520,200],[560,230],[600,170],[480,250],[620,220]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="5" fill="#8BD17C"/>`).join("")}${T(130,360,"25% من صيد الأسماك",20,"#FFD58A")}${T(130,388,"في 5% من المحيط",20,"#FFD58A")}`,["#16302B","#D9822B","#fff"])}
+
+/* 8) خمس عمليات تجدد مخزون المغذيات + الإزالة */
+const PROC=[["ذوبان غازات الغلاف الجوي","N₂ و CO₂ تذوب في الماء؛ يعتمد على الحرارة وتركيز الغاز والأمواج.","#6A5ACD"],["الإخراج والتحلل","CO₂ من الخياشيم، والأمونيا واليوريا، والمحللات تعيد الأيونات.","#8C7B63"],["التيارات الصاعدة","مياه عميقة باردة غنية بالمغذيات ترتفع إلى السطح.","#2E7DB5"],["الجريان السطحي","الماء من اليابسة يحمل مغذيات التربة إلى البحر.","#D9822B"],["النشاط التكتوني","الفوهات الحرارية، وتعرية الصخور الجديدة، والرماد البركاني.","#C8473A"]];
+function replenish(o={}){const hl=o.hl;const P=[[450,60],[780,150],[720,330],[180,330],[120,150]];
+ return svg(900,420,"خمس عمليات تجدد مخزون المغذيات الذائبة في الطبقة السطحية: ذوبان الغازات، والإخراج والتحلل، والتيارات الصاعدة، والجريان السطحي، والنشاط التكتوني؛ وتمتصها المنتجات فتنضب",
+ `<rect width="900" height="420" rx="22" fill="#F6FBF9"/><ellipse cx="450" cy="215" rx="190" ry="80" fill="#7EC8E3"/>${T(450,205,"مخزون المغذيات الذائبة",24,DEEP)}${T(450,236,"في الطبقة السطحية",20,DEEP)}
+ ${PROC.map((p,i)=>{const [x,y]=P[i],on=hl==null||hl===i;return `<g class="rpn" data-i="${i}" style="cursor:pointer;opacity:${on?1:.3}"><rect x="${x-110}" y="${y-30}" width="220" height="60" rx="16" fill="${p[2]}"/>${T(x,y+(p[0].length>16?-2:7),p[0].length>16?p[0].split(" ").slice(0,2).join(" "):p[0],p[0].length>16?18:21,"#fff")}${p[0].length>16?T(x,y+20,p[0].split(" ").slice(2).join(" "),18,"#fff"):""}</g>${ar(`M${x+(450-x)*.32} ${y+(215-y)*.32}L${x+(450-x)*.6} ${y+(215-y)*.6}`,p[2],5)}`}).join("")}
+ ${ar("M450 296V380","#3F8A5E",6)}${T(450,405,"تنضب: تمتصها المنتجات (ثم الحصاد والثلج البحري)",18,"#2D6B47")}`,["#6A5ACD","#8C7B63","#2E7DB5","#D9822B","#C8473A","#3F8A5E"])}
+
+/* 9) الثلج البحري */
+function marineSnow(){let s=3;const r=()=>(s=(s*9301+49297)%233280)/233280;const pts=Array.from({length:60},()=>[30+r()*840,60+r()*300,2+r()*5]);
+ return svg(900,420,"الثلج البحري: جسيمات عضوية (براز وكائنات ميتة) تسقط من السطح إلى عمق المحيط فتغذي كائنات الأعماق ويترسب بعضها في القاع",
+ `<defs><linearGradient id="u3s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E7DB5"/><stop offset="1" stop-color="#0b2a45"/></linearGradient></defs><rect width="900" height="420" rx="22" fill="url(#u3s)"/><rect y="380" width="900" height="40" fill="#5A4E40"/>
+ ${pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="${p[2]}" fill="#fff" opacity=".8"/>`).join("")}${ar("M80 70V330","#fff",5,"10 8")}
+ ${T(450,40,"براز + عوالق ميتة + حيوانات ميتة",22,"#fff")}${T(720,250,"غذاء لكائنات الأعماق",20,"#FFD58A")}${T(450,405,"رواسب القاع (سنوات طويلة)",20,"#fff")}`,["#fff"])}
+
+return {REL,symb,oceanZones,vent,pyramid,energyFate,nutCycle,upwelling,PROC,replenish,marineSnow};
+})());
+
 </script>
 <script>
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
