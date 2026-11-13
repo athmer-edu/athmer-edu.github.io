@@ -577,7 +577,6 @@ select.no{border-color:var(--chem);box-shadow:0 0 0 1px var(--chem)}
 </style>
 </head>
 <body>
-<div class="note-bar">نسخة معاينة للتصميم. تسجيل الدخول هنا تجريبي حتى نربطه بحساب Google.</div>
 <header class="topbar">
   <div class="wrap">
     <a class="brand" href="#home" aria-label="منصة أثمر، الصفحة الرئيسية">
@@ -709,7 +708,22 @@ function tree(sk,w=210){
 /* ===== أدوات ===== */
 const $=s=>document.querySelector(s);
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2600)}
-function login(){S.user={name:"طالبة تجريبية"};save();toast("مرحبًا بكِ. شجرتكِ جاهزة لأول ثمرة");render()}
+function login(){
+  const FB=window.ATHMER_FB;
+  if(!FB){toast("الخدمة ما اشتغلت، حدّثي الصفحة (Ctrl+F5)");return}
+  FB.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+    .then(()=>toast("مرحبًا بكِ. شجرتكِ جاهزة لأول ثمرة"))
+    .catch(e=>{if(e.code!=="auth/popup-closed-by-user")toast("تعذّر تسجيل الدخول، حاولي مرة ثانية")});
+}
+function logout(){const FB=window.ATHMER_FB;if(FB)FB.auth.signOut().then(()=>toast("تم تسجيل الخروج"))}
+// تزامن حالة الدخول من Firebase مع الواجهة (يعمل عند فتح الصفحة وعند الدخول والخروج)
+function watchAuth(){
+  const FB=window.ATHMER_FB;if(!FB)return;
+  FB.auth.onAuthStateChanged(u=>{
+    S.user=u?{name:u.displayName||u.email||"طالبة",uid:u.uid}:null;
+    save();render();
+  });
+}
 function needLogin(){if(!S.user){toast("سجّلي الدخول ليُحفظ تقدّمك");return true}return false}
 function chrome(route){const r0=route;
   $("#nav").innerHTML=`
@@ -722,7 +736,7 @@ function chrome(route){const r0=route;
   const th=$("#theme");th.innerHTML=isDark()?IC.sun:IC.moon;th.onclick=()=>{S.theme=isDark()?"light":"dark";save();applyTheme();th.innerHTML=isDark()?IC.sun:IC.moon};
   $("#mbar").innerHTML=[["home","الرئيسية",IC.home],["chem10","الكيمياء",IC.cards],["env11","البيئية",IC.book],["saved","محفوظاتي",IC.bm(false)]].map(x=>`<a href="#${x[0]}" class="${(x[0]==="home"?r0==="home":r0.startsWith(x[0]))?"on":""}">${x[2]}${x[1]}</a>`).join("");
   const i=$("#in");if(i)i.onclick=login;
-  const o=$("#out");if(o)o.onclick=()=>{S.user=null;save();toast("تم تسجيل الخروج");render()};
+  const o=$("#out");if(o)o.onclick=logout;
 }
 
 /* ===== الرئيسية ===== */
@@ -1001,6 +1015,7 @@ function bind(r){
 }
 window.addEventListener("hashchange",()=>{tab="explain";PLAY=null;render();window.scrollTo(0,0)});
 render();
+watchAuth();
 </script>
 </body>
 </html>
