@@ -753,7 +753,7 @@ function chrome(route){const r0=route;
   $("#nav").innerHTML=`
     <a class="hide ${route.startsWith("chem10")?"on":""}" href="#chem10">الكيمياء</a>
     <a class="hide ${route.startsWith("env11")?"on":""}" href="#env11">العلوم البيئية</a>
-    <a class="${route==="saved"?"on":""}" href="#saved">محفوظاتي</a>`;
+    <a class="${route==="saved"?"on":""}" href="#saved">محفوظاتي</a>${isTeacher()?`<a class="${route==="teacher"?"on":""}" href="#teacher">نتائج الطالبات</a>`:""}`;
   $("#acct").innerHTML=S.user
     ?`<button class="me" id="out" title="تسجيل الخروج"><span class="nm">${S.user.name}</span><span class="av">${S.user.name[0]}</span></button>`
     :`<button class="btn sm" id="in">${IC.g}تسجيل الدخول</button>`;
@@ -1025,12 +1025,43 @@ function render(){
   if(r==="home")h=vHome();
   else if(SUBJECTS[r])h=vSubject(r);
   else if(r==="saved")h=vSaved();
+  else if(r==="teacher")h=vTeacher();
   else if(/^(chem10|env11)-review-\d$/.test(r)){const[sk,,n]=r.split("-");h=vReview(sk,`مراجعة الوحدة ${ORD[n]}`)}
   else if(/^(chem10|env11)-big-\d$/.test(r)){const[sk,,n]=r.split("-");h=vReview(sk,SUBJECTS[sk].stops[n-1][0])}
   else h=vLesson(r);
   $("#app").innerHTML=h;bind(r);fixFormulas($("#app"));
 }
+/* ===== صفحة المعلمة: نتائج الطالبات ===== */
+const TEACHER_EMAIL = "ralrasbi35@gmail.com";
+function isTeacher(){const u=window.ATHMER_FB&&window.ATHMER_FB.auth.currentUser;return !!(u&&u.email===TEACHER_EMAIL&&u.emailVerified)}
+const escH=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function vTeacher(){
+  return `<header class="page-head"><div class="wrap"><div><nav class="crumbs"><a href="#home">الرئيسية</a><span>/</span><span>نتائج الطالبات</span></nav><h1>نتائج الطالبات</h1><p class="lede">✓ تعني أن الطالبة أثمرت كل دروس الوحدة (وحصلت على شهاداتها). والرقم يعني عدد الدروس المكتملة من الوحدة.</p></div></div></header>
+  <div class="wrap" id="tch"><p class="soft">جارٍ تحميل النتائج…</p></div>`;
+}
+function tchTable(sk,rows){
+  const s=SUBJECTS[sk];
+  const list=rows.filter(r=>Object.keys(r.status||{}).some(k=>k.startsWith(sk+"-")));
+  const head=s.units.map(u=>`<th>الوحدة ${ORD[u.n]}</th>`).join("");
+  const body=list.length?list.map(r=>`<tr><th>${escH(r.name||"طالبة")}</th>${s.units.map(u=>{
+      const ids=u.lessons.map(l=>lid(sk,l[0]));
+      const done=ids.filter(id=>(r.status||{})[id]==="fruit").length;
+      const ok=done===ids.length;
+      return `<td class="${ok?"ok":""}">${ok?"✓":`${done} من ${ids.length}`}</td>`}).join("")}</tr>`).join("")
+    :`<tr><td colspan="${s.units.length+1}">لا توجد بيانات بعد</td></tr>`;
+  return `<h2 class="tch-h">${s.name}، ${s.grade}</h2><div class="tbl"><table class="tch"><thead><tr><th>الطالبة</th>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+}
+async function loadTeacher(){
+  const FB=window.ATHMER_FB, box=$("#tch"); if(!box)return;
+  if(!isTeacher()){box.innerHTML='<p class="soft">هذه الصفحة للمعلمة فقط. سجّلي الدخول بحسابك المعتمد.</p>';return}
+  try{
+    const snap=await FB.db.collection("users").get();
+    const rows=snap.docs.map(d=>({uid:d.id,...d.data()}));
+    box.innerHTML=tchTable("chem10",rows)+tchTable("env11",rows);
+  }catch(e){box.innerHTML=`<p class="soft">تعذّر تحميل النتائج (${escH(e.code||e.message)}). تأكدي من قواعد Firestore.</p>`}
+}
 function bind(r){
+  if(r==="teacher")loadTeacher();
   document.querySelectorAll(".unit-head").forEach(b=>b.onclick=()=>{const u=b.closest(".unit");u.classList.toggle("open");S.open[r][u.dataset.u]=u.classList.contains("open");b.setAttribute("aria-expanded",S.open[r][u.dataset.u]);save()});
   document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{tab=t.dataset.t;render()});
   if(document.querySelector(".lesson-main"))hydrate(r);
