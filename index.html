@@ -593,6 +593,10 @@ select.no{border-color:var(--chem);box-shadow:0 0 0 1px var(--chem)}
 <footer><div class="wrap"><span><span class="hand">أثمِر</span>  كلُّ درسٍ بذرة، وكلُّ نجاحٍ ثمرة</span><div class="school"><span>منهج سلطنة عُمان، الفصل الدراسي الأول</span><b>مدرسة صحلنوت (9-12)</b><span>مديرة المدرسة: أ. مروة إسطنبولي</span><span>المعلم الأول: أ. أمل بيت علي سليمان</span><span>مشرفة المادة: أ. الخيار المهري</span></div></div></footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="js/firebase-init.js"></script>
 <script src="content/chem10-1-1.js"></script>
 <script src="content/chem10-1-2.js"></script>
 <script src="content/chem10-1-3.js"></script>
@@ -789,7 +793,7 @@ function vSubject(sk){
       </button>
       <div class="unit-body">
         ${u.lessons.map(l=>{const id=lid(sk,l[0]);return `<a class="lesson" href="#${id}"><span class="code">${l[0]}</span><span class="t">${l[1]}</span>${S.saved[id]?`<span class="bm" title="محفوظ">${IC.bm(true)}</span>`:""}<span class="lead"></span>${stateTag(st(id))}</a>`}).join("")}
-        <a class="unit-review" href="#${sk}-review-${u.n}"><span class="t"><b>مراجعة الوحدة ${ORD[u.n]}</b><small>ملخص الوحدة في صفحة واحدة، وأسئلة على كل دروسها</small></span><span class="go">${IC.back}</span></a>
+        ${u.n===1?`<a class="unit-review" href="#${sk}-review-${u.n}"><span class="t"><b>مراجعة الوحدة ${ORD[u.n]}</b><small>ملخص الوحدة في صفحة واحدة، وأسئلة على كل دروسها</small></span><span class="go">${IC.back}</span></a>`:""}
       </div>
     </section>`}).join("");
   return `<header class="page-head ${s.kind}"><div class="wrap">
