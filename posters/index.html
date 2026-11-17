@@ -36,7 +36,7 @@
   .card h3{margin:0;font-size:15px;font-weight:700;line-height:1.4}
   .lang{align-self:flex-start;font-size:12.5px;font-weight:700;padding:2px 10px;border-radius:999px;background:var(--sky);color:var(--navy)}
   .lang.en{background:#e6effc;color:#1f4f9e} .lang.ur{background:#e9f6ee;color:#1d6b3d}
-  .lang.bn{background:#fdf0e3;color:#94520f} .lang.ta{background:#f3eafb;color:#6a2f99}
+  .lang.bn{background:#fdf0e3;color:#94520f} .lang.ta{background:#f3eafb;color:#6a2f99} .lang.ml{background:#fdeaea;color:#a12b2b}
 
   /* single poster view */
   #single{display:none}
@@ -89,7 +89,7 @@
 <footer>مركز الوافي الصحي — نحو صحة مستدامة للجميع</footer>
 
 <script>
-const LANGS = {en:"الإنجليزية", ur:"الأردية", bn:"البنغالية", ta:"التاميلية"};
+const LANGS = {en:"الإنجليزية", ur:"الأردية", bn:"البنغالية", ta:"التاميلية", ml:"المالايالامية"};
 const POSTERS = [
   ["الفحوصات المخبرية","en"],
   ["التهاب المفاصل","ur"],
@@ -109,7 +109,8 @@ const POSTERS = [
   ["سلامة المرضى في قسم الأشعة","ta"],
   ["الوثيقة الوطنية لحقوق المرضى ومسؤولياتهم","en"],
   ["الوثيقة الوطنية لحقوق المرضى ومسؤولياتهم","ta"],
-  ["الوثيقة الوطنية لحقوق المرضى ومسؤولياتهم","bn"]
+  ["الوثيقة الوطنية لحقوق المرضى ومسؤولياتهم","bn"],
+  ["الوثيقة الوطنية لحقوق المرضى ومسؤولياتهم","ml"]
 ].map(([title,lang],i)=>({id:"p"+String(i+1).padStart(2,"0"), n:i+1, title, lang}));
 
 const grid = document.getElementById("grid");
