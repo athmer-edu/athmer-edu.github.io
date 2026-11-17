@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>بوسترات مبادرة سلامة المرضى</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#14306b; --blue:#1f5fbf; --sky:#e8f1fb; --ink:#1b2333; --muted:#5b6678;
+    --line:#dbe3ee; --bg:#f6f8fb; --card:#fff;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:"Tajawal",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+  header{background:var(--navy);color:#fff;padding:28px 20px 22px}
+  .wrap{max-width:1100px;margin:0 auto}
+  header .kicker{font-size:14px;opacity:.8;font-weight:500;letter-spacing:.2px}
+  header h1{margin:4px 0 6px;font-size:clamp(24px,5vw,34px);font-weight:800;line-height:1.25}
+  header p{margin:0;opacity:.85;font-size:15px}
+  main{padding:20px}
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+  .chip{border:1px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-size:15px;font-weight:500;
+        padding:6px 14px;border-radius:999px;cursor:pointer}
+  .chip[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+  .chip .n{opacity:.7;font-size:13px;margin-inline-start:4px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+        text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
+  .card:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(20,48,107,.12)}
+  .card .thumb{aspect-ratio:1071/1469;background:var(--sky);overflow:hidden}
+  .card img{width:100%;height:100%;object-fit:cover;display:block}
+  .card .meta{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px}
+  .num{font-size:12px;color:var(--muted);font-weight:700}
+  .card h3{margin:0;font-size:15px;font-weight:700;line-height:1.4}
+  .lang{align-self:flex-start;font-size:12.5px;font-weight:700;padding:2px 10px;border-radius:999px;background:var(--sky);color:var(--navy)}
+  .lang.en{background:#e6effc;color:#1f4f9e} .lang.ur{background:#e9f6ee;color:#1d6b3d}
+  .lang.bn{background:#fdf0e3;color:#94520f} .lang.ta{background:#f3eafb;color:#6a2f99}
+
+  /* single poster view */
+  #single{display:none}
+  body.single #single{display:block}
+  body.single #gallery{display:none}
+  .poster-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:14px}
+  .poster-head h2{margin:0;font-size:clamp(20px,4.4vw,26px);font-weight:800;flex:1 1 100%}
+  .poster{background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px;max-width:760px;margin:0 auto}
+  .poster img{width:100%;display:block;border-radius:8px}
+  .nav{display:flex;justify-content:space-between;gap:10px;max-width:760px;margin:16px auto 0}
+  .btn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-weight:700;font-size:15px;
+       padding:9px 16px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--navy)}
+  .btn.primary{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .btn[aria-disabled="true"]{visibility:hidden}
+  .tip{max-width:760px;margin:10px auto 0;text-align:center;color:var(--muted);font-size:13.5px}
+  footer{text-align:center;color:var(--muted);font-size:13px;padding:24px 20px 36px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="kicker">مركز الوافي الصحي · وزارة الصحة</div>
+    <h1 id="hTitle">مبادرة سلامة المرضى</h1>
+    <p id="hSub">بوسترات توعوية بعدة لغات، اختر البوستر لعرضه بالحجم الكامل</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="gallery">
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="single">
+    <div class="poster-head">
+      <span class="num" id="sNum"></span>
+      <span class="lang" id="sLang"></span>
+      <h2 id="sTitle"></h2>
+    </div>
+    <div class="poster"><img id="sImg" alt=""></div>
+    <p class="tip">يمكنك تكبير الصورة بإصبعين لقراءة التفاصيل</p>
+    <div class="nav">
+      <a class="btn" id="prev">→ السابق</a>
+      <a class="btn primary" href="#all">كل البوسترات</a>
+      <a class="btn" id="next">التالي ←</a>
+    </div>
+  </section>
+</main>
+
+<footer>مركز الوافي الصحي — نحو صحة مستدامة للجميع</footer>
+
+<script>
+const LANGS = {en:"الإنجليزية", ur:"الأردية", bn:"البنغالية", ta:"التاميلية"};
+const POSTERS = [
+  ["الفحوصات المخبرية","en"],
+  ["التهاب المفاصل","ur"],
+  ["التهاب المفاصل","en"],
+  ["علاجات الأسنان في مركز الوافي الصحي","en"],
+  ["تسوس الأسنان عند الأطفال","en"],
+  ["سلامة المرضى في قسم الأشعة","en"],
+  ["المختبر الطبي وأقسامه","en"],
+  ["سلامة المرضى في قسم الأشعة","bn"],
+  ["التهاب المفاصل","bn"],
+  ["الفحوصات المخبرية","bn"],
+  ["علاجات الأسنان في مركز الوافي الصحي","ta"],
+  ["المختبر الطبي وأقسامه","ta"],
+  ["تسوس الأسنان عند الأطفال","ta"],
+  ["الفحوصات المخبرية","ta"],
+  ["التهاب المفاصل","ta"],
+  ["سلامة المرضى في قسم الأشعة","ta"],
+  ["الوثيقة الوطنية لحقوق المرضى ومسؤولياتهم","en"],
+  ["الوثيقة الوطنية لحقوق المرضى ومسؤولياتهم","ta"],
+  ["الوثيقة الوطنية لحقوق المرضى ومسؤولياتهم","bn"]
+].map(([title,lang],i)=>({id:"p"+String(i+1).padStart(2,"0"), n:i+1, title, lang}));
+
+const grid = document.getElementById("grid");
+const filters = document.getElementById("filters");
+let current = "all";
+
+function renderFilters(){
+  const counts = {};
+  POSTERS.forEach(p=>counts[p.lang]=(counts[p.lang]||0)+1);
+  const opts = [["all","الكل",POSTERS.length], ...Object.keys(LANGS).filter(k=>counts[k]).map(k=>[k,LANGS[k],counts[k]])];
+  filters.innerHTML = "";
+  opts.forEach(([k,label,n])=>{
+    const b = document.createElement("button");
+    b.className="chip"; b.type="button";
+    b.setAttribute("aria-pressed", String(k===current));
+    b.innerHTML = `${label}<span class="n">${n}</span>`;
+    b.onclick = ()=>{ current=k; renderFilters(); renderGrid(); };
+    filters.appendChild(b);
+  });
+}
+function renderGrid(){
+  grid.innerHTML = "";
+  POSTERS.filter(p=>current==="all"||p.lang===current).forEach(p=>{
+    const a = document.createElement("a");
+    a.className="card"; a.href="#"+p.id;
+    a.innerHTML = `<div class="thumb"><img loading="lazy" src="img/t${p.id.slice(1)}.jpg" alt="${p.title}"></div>
+      <div class="meta"><span class="num">بوستر رقم ${p.n}</span><h3>${p.title}</h3>
+      <span class="lang ${p.lang}">${LANGS[p.lang]}</span></div>`;
+    grid.appendChild(a);
+  });
+}
+function route(){
+  const id = location.hash.replace("#","");
+  const idx = POSTERS.findIndex(p=>p.id===id);
+  if(idx<0){ document.body.classList.remove("single"); return; }
+  const p = POSTERS[idx];
+  document.body.classList.add("single");
+  document.getElementById("sNum").textContent = "بوستر رقم " + p.n;
+  const l = document.getElementById("sLang"); l.textContent = "اللغة: " + LANGS[p.lang]; l.className = "lang " + p.lang;
+  document.getElementById("sTitle").textContent = p.title;
+  const img = document.getElementById("sImg"); img.src = "img/" + p.id + ".jpg"; img.alt = p.title + " — " + LANGS[p.lang];
+  const prev = document.getElementById("prev"), next = document.getElementById("next");
+  if(idx>0){ prev.href="#"+POSTERS[idx-1].id; prev.removeAttribute("aria-disabled"); } else prev.setAttribute("aria-disabled","true");
+  if(idx<POSTERS.length-1){ next.href="#"+POSTERS[idx+1].id; next.removeAttribute("aria-disabled"); } else next.setAttribute("aria-disabled","true");
+  window.scrollTo(0,0);
+}
+renderFilters(); renderGrid(); route();
+window.addEventListener("hashchange", route);
+</script>
+</body>
+</html>
